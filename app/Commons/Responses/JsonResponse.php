@@ -11,4 +11,11 @@ class JsonResponse{
             'data' => $data
         ], $code);
     }
+
+    Public static function error($status,$message,$code){
+        return response()->json([
+            'status' => $status,
+            'message' => $message,
+        ],$code);
+    }
 }

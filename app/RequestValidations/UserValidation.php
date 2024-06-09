@@ -2,71 +2,64 @@
 
 namespace App\RequestValidations;
 
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Validator;
+
 class UserValidation{
-    // public function create()
-    // {
-    //     $rules = [
-    //         'email' => 'required|unique:users,username|min:1',
-    //         'full_name' => 'required|min:1',
-    //         'password' => 'required|min:6|max:100',
-    //     ];
-    //     $messages = [
-    //         'email.unique' => 'Tên tài khoản đã được sử dụng',
-    //         'email.required' => 'Tên đăng nhập không được bỏ trống',
-    //         'password.required' => 'Mật khẩu không được bỏ trống và phải có ít nhất 6 ký tự',
-    //     ];
-    //     $validator = Validator::make(
-    //         Request::all(),
-    //         $rules,
-    //         $messages
-    //     );
-    //     return $validator;
-    // }
 
-    // public function update($id)
-    // {
-    //     $rules = [
+    public function create()
+    {
+        $rules = [
+            'email' => 'required|unique:users|max:100',
+            'name' => 'required|max:100',
+            'password' => 'required|min:6|max:100',
+            'phone_number' => 'required|unique:users|numeric',
+            'birthday' => 'required',
+        ];
+        $messages = [
+            'name.required' => 'Tên không được bỏ trống',
+            'name.max' => 'Tên không được quá 100 kí tự',
+            'email.max' => 'Email đã vượt quá 100 kí tự',
+            'email.unique' => 'Email đã được sử dụng',
+            'email.required' => 'Email không được bỏ trống',
+            'password.required' => 'Mật khẩu không được bỏ trống và phải có ít nhất 6 ký tự',
+            'phone_number.unique' => 'Số điện thoại đã được sử dụng',
+            'phone_number.required' => 'Số điện thoại không được rỗng',
+            'phone_number.numeric' => 'Số điện thoại phải là số'
+        ];
+        $validator = Validator::make(
+            request()->all(), // Sử dụng request()->all() thay vì Request::all()
+            $rules,
+            $messages
+        );
+        return $validator;
+    }
 
-    //         'email' => "required|unique:users,username," . $id . ",id|min:1",
-    //         'full_name' => 'required|min:1',
-    //         'password' => 'required|min:6|max:100',
-    //     ];
-    //     $messages = [
-    //         'email.unique' => 'Tên tài khoản đã được sử dụng',
-    //         'email.required' => 'Tên đăng nhập không được bỏ trống',
-    //         'password.required' => 'Mật khẩu không được bỏ trống và phải có ít nhất 6 ký tự',
-    //     ];
-    //     $validator = Validator::make(
-    //         Request::all(),
-    //         $rules,
-    //         $messages
-    //     );
-    //     return $validator;
-    // }
-
-    // public function resetpass()
-    // {
-    //     $user = Auth::user();
-    //     $rules = [
-    //         'current_password' => ['required', function ($attribute, $value, $fail) use ($user) {
-    //             if (!\Hash::check($value, $user->password)) {
-    //                 return $fail(__('Mật khẩu hiện tại không đúng.'));
-    //             }
-    //         }],
-    //         'new_password' => 'required|min:6|max:100',
-    //         're_new_password' => 'required|same:new_password',
-    //     ];
-    //     $messages = [
-    //         'new_password.required' => 'Mật khẩu không được bỏ trống và phải có ít nhất 6 ký tự',
-    //         'new_password.min' => 'Mật khẩu không được bỏ trống và phải có ít nhất 6 ký tự',
-    //         're_new_password.required' => 'Mật khẩu không trung khớp',
-    //         're_new_password.same' => 'Mật khẩu không trung khớp',
-    //     ];
-    //     $validator = Validator::make(
-    //         Request::all(),
-    //         $rules,
-    //         $messages
-    //     );
-    //     return $validator;
-    // }
+   
+    public function update()
+    {
+        $rules = [
+            'email' => 'required|unique:users|max:100',
+            'name' => 'required|max:100',
+            'phone_number' => 'required|unique:users|numeric',
+            'birthday' => 'required',
+        ];
+        $messages = [
+            'name.required' => 'Tên không được bỏ trống',
+            'name.max' => 'Tên không được quá 100 kí tự',
+            'email.max' => 'Email đã vượt quá 100 kí tự',
+            'email.unique' => 'Email đã được sử dụng',
+            'email.required' => 'Email không được bỏ trống',
+            'phone_number.unique' => 'Số điện thoại đã được sử dụng',
+            'phone_number.required' => 'Số điện thoại không được rỗng',
+            'phone_number.numeric' => 'Số điện thoại phải là số'
+        ];
+        $validator = Validator::make(
+            request()->all(), // Sử dụng request()->all() thay vì Request::all()
+            $rules,
+            $messages
+        );
+        return $validator;
+    }
+   
 }

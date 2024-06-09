@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +17,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::prefix('user')->group(function () {
+    Route::get('/', [UserController::class, 'getUsers']);
+    Route::post('/create', [UserController::class, 'createUser']);
+    Route::get('/{id}', [UserController::class, 'findById']);
 });
+
+Route::prefix('customer')->group(function () {
+    Route::get('/',[CustomerController::class,'getCutomer']);
+    Route::post('/create',[CustomerController::class,'createCustomer']);
+});
+
+Route::prefix('category')->group(function () {
+    Route::get('/',[CategoryController::class,'getCategories']);
+    Route::post('/create',[CategoryController::class,'createCategory']);
+});
+
+
+

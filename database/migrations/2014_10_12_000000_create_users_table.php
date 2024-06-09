@@ -14,20 +14,20 @@ return new class extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->string('id',50);
+            $table->uuid('id')->primary();
             $table->string('name',50);
-            $table->string('email',50)->unique();
-            $table->string('phone_number')->unique();
+            $table->string('avatar',100)->nullable();
+            $table->string('email',100)->unique();
+            $table->string('phone_number',20)->unique();
             $table->boolean('gender');
             $table->string('birthday',50);
-            $table->string('address',100);
+            $table->string('address',100)->nullable();
             $table->unsignedBigInteger('role_id');
-            $table->timestamp('email_verified_at')->nullable();
+            // $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
-
         });
     }
 
