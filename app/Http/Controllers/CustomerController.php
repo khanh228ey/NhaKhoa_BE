@@ -7,6 +7,7 @@ use App\Commons\Responses\JsonResponse;
 use App\Models\Customer;
 use App\Repositories\CustomerRepository;
 use App\RequestValidations\CustomerValidation;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -47,7 +48,7 @@ class CustomerController extends Controller
 
 
     Public function createCustomer(Request $request){
-        $validator = $this->customerValidation->create();
+        $validator = $this->customerValidation->customerValidation();
         if ($validator->fails()) {
             return JsonResponse::error(400,$validator->messages(),400);
         }
@@ -56,5 +57,25 @@ class CustomerController extends Controller
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
         return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $customer, 201);
+    }
+    Public function findById($id){
+        try {
+            $customer = Customer::findOrFail($id); 
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $customer, 200);
+        } catch (ModelNotFoundException $e) {
+            return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+        }
+    }
+
+    Public function updateCustomer(Request $request ){
+        $validator = $this->customerValidation->customerValidation();
+        if ($validator->fails()) {
+            return JsonResponse::error(400,$validator->messages(),400);
+        }
+        $category = $this->customerRepository->Update($request->all());
+        if ($category == false) {
+                return JsonResponse::error(401,ConstantsMessage::ERROR,401);
+        }
+        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $category, 201);
     }
 }

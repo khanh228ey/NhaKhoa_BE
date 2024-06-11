@@ -39,9 +39,9 @@ class UserValidation{
     public function update()
     {
         $rules = [
-            'email' => 'required|unique:users|max:100',
+            'email' => 'required|unique:users,email,'.request()->id.'|max:100',
             'name' => 'required|max:100',
-            'phone_number' => 'required|unique:users|numeric',
+            'phone_number' => 'required|unique:users,phone_number,'.request()->id.'|numeric',
             'birthday' => 'required',
         ];
         $messages = [

@@ -38,11 +38,14 @@ Route::prefix('user')->group(function () {
     Route::get('/', [UserController::class, 'getUsers']);
     Route::post('/create', [UserController::class, 'createUser']);
     Route::get('/{id}', [UserController::class, 'findById']);
+    Route::put('update',[UserController::class, 'updateUser']);
 });
 
 Route::prefix('customer')->group(function () {
     Route::get('/',[CustomerController::class,'getCutomer']);
     Route::post('/create',[CustomerController::class,'createCustomer']);
+    Route::get('/{id}', [CustomerController::class, 'findById']);
+    Route::put('update',[CustomerController::class, 'updateCustomer']);
 });
 
 Route::prefix('category')->group(function () {

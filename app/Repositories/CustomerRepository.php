@@ -22,4 +22,24 @@ class CustomerRepository{
             return false;
         }
     }
+
+    
+    Public function Update($data){
+        $user = Customer::find($data['id']);
+        $user->name = $data['name'];
+        $user->phone_number = $data['phone_number'];
+        $user->email = $data['email'];
+        $user->gender = $data['gender'];
+        $user->address = $data['address'];
+        $user->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+        $user->birthday = $data['birthday'];
+        if ($user->save()) {
+            return $user; 
+        } else {
+            
+            return false;
+        }
+    }
+
+
 }

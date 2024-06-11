@@ -17,6 +17,7 @@ class UserRepository{
         $user->password = Hash::make($data['password']);
         $user->gender = $data['gender'];
         $user->address = $data['address'];
+        $user->description = $data['description'];
         $user->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $user->birthday = $data['birthday'];
         $user->role_id = $data['role_id'];
@@ -30,14 +31,13 @@ class UserRepository{
     }
 
     Public function Update($data){
-        $data = $_REQUEST;
         $user = User::find($data['id']);
         $user->name = $data['name'];
         $user->phone_number = $data['phone_number'];
         $user->email = $data['email'];
-        $user->password = Hash::make($data['password']);
         $user->gender = $data['gender'];
         $user->address = $data['address'];
+        $user->description = $data['description'];
         $user->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
         $user->birthday = $data['birthday'];
         $user->role_id = $data['role_id'];
