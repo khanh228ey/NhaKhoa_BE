@@ -17,6 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('name',50);
             $table->unsignedBigInteger('category_id');
+            $table->string('image',100);
+            $table->text('description');
+            $table->integer('min_price');
+            $table->integer('max_price');
+            $table->string('unit');
+            $table->integer('quantity_sold');
+            $table->boolean('status')->comment('0 là ẩn và 1 là hiện ');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });

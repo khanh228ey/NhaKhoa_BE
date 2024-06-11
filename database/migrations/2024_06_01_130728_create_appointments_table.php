@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('date',20);
             $table->string('time',20);
-            $table->integer('status');
+            $table->uuid('doctor_id')->nullable();
+            $table->integer('status')->comment('0 là chưa xác nhận , 1 là đã xác nhận , 2 là đã hủy');
             $table->timestamps();
         });
     }

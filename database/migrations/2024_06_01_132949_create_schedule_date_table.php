@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('schedule_date', function (Blueprint $table) {
             $table->id();
+            $table->string('start_time');
+            $table->string('end_time');
             $table->timestamps();
         });
     }

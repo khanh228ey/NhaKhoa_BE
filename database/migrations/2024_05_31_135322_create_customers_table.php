@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('birthday',50);
             $table->string('email')->nullable()->unique();
             $table->boolean('gender');
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }

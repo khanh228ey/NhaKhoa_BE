@@ -30,7 +30,7 @@ Route::group([
 ], function ($router) {
     Route::post('login', [AuthController::class,'login']);
     Route::post('logout', [AuthController::class,'logout']);
-    // Route::post('refresh', 'AuthController@refresh');
+    Route::post('refresh', [AuthController::class,'refresh']);
     Route::get('profile', [AuthController::class,'profile']);
 });
 
@@ -48,6 +48,9 @@ Route::prefix('customer')->group(function () {
 Route::prefix('category')->group(function () {
     Route::get('/',[CategoryController::class,'getCategories']);
     Route::post('/create',[CategoryController::class,'createCategory']);
+    Route::get('/{id}',[CategoryController::class,'findById']);
+    Route::put('/update',[CategoryController::class,'updateCategory']);
+    Route::delete('/delete/{id}',[CategoryController::class,'deleteCategory']);
 });
 
 

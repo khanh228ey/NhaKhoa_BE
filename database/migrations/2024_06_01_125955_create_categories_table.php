@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name',50);
             $table->string('description')->nullable();
-            $table->boolean('status');
+            $table->boolean('status')->comment('0 là ẩn 1 là hiển thị');
             $table->timestamps();
         });
     }

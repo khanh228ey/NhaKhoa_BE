@@ -55,7 +55,7 @@ class UserValidation{
             'phone_number.numeric' => 'Số điện thoại phải là số'
         ];
         $validator = Validator::make(
-            request()->all(), // Sử dụng request()->all() thay vì Request::all()
+            request()->all(), 
             $rules,
             $messages
         );
