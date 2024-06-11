@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('date',20);
             $table->string('time',20);
+            $table->integer('status');
             $table->timestamps();
         });
     }

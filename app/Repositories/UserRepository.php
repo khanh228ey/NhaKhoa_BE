@@ -41,10 +41,7 @@ class UserRepository{
         $user->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
         $user->birthday = $data['birthday'];
         $user->role_id = $data['role_id'];
-        $url = $data['avatar'];
-        if(isset($url)){
-            $user->avatar = $url;
-        }
+        $user->avatar = $data['avatar'];
         if ($user->save()) {
             return $user; 
         } else {
