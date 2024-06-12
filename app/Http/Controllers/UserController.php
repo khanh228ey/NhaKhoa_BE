@@ -7,9 +7,9 @@ use App\Commons\Responses\JsonResponse;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\RequestValidations\UserValidation;
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -29,7 +29,7 @@ class UserController extends Controller
         $role = $request->get('role_id');
         $name = $request->get('name');
         $phone = $request->get('phone');
-        $query = User::query();
+        $query = User::with('role');
         if ($role) {
             $query->where('role_id', $role);
         }
@@ -51,7 +51,7 @@ class UserController extends Controller
 
     Public function findById($id){
         try {
-            $user = User::findOrFail($id); // Sử dụng findOrFail để ném ngoại lệ nếu không tìm thấy
+            $user = User::findOrFail($id); 
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $user, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
@@ -64,7 +64,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return JsonResponse::error(400,$validator->messages(),400);
         }
-        $user = $this->userRepository->AddUser($request->all());
+        $user = $this->userRepository->AddUser($request);
         if ($user == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }

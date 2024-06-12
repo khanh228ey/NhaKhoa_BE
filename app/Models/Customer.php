@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'id'; // Đặt khóa chính là cột id
-    public $incrementing = false; // Khóa chính không tự tăng
-    protected $keyType = 'string'; // Khóa chính là kiểu chuỗi
+    protected $primaryKey = 'id'; 
+    public $incrementing = false;
+    protected $keyType = 'string'; 
     public $timestamps = false;
 
     protected static function boot()

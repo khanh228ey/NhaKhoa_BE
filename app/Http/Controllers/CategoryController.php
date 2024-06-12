@@ -80,7 +80,7 @@ class CategoryController extends Controller
             $category = Category::findOrFail($id); 
             $check = Service::where('category_id',$id)->first();
             if($check){
-                return JsonResponse::error(404, 'ràng buộc khóa ngoại', 404);
+                return JsonResponse::error(409, 'ràng buộc khóa ngoại', 409);
             }
             $category->delete();
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $category, 200);

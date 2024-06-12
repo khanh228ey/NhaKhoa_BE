@@ -71,9 +71,9 @@ class User extends Authenticatable implements JWTSubject
         return $prefix . '00001'; 
     }
     //Thiet lap quan he vs role
-    public function user()
+    public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class)->select('id','name');
     }
 
 

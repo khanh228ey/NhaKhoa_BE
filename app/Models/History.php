@@ -9,13 +9,13 @@ use Tymon\JWTAuth\Claims\Custom;
 class History extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     
     public function Customer(){
-        return $this->belongsTo(Customer::class,'customer_id');
+        return $this->belongsTo(Customer::class,'customer_id')->select('id','name');
     }
     
     public function Doctor(){
-        return $this->belongsTo(User::class,'doctor_id');
+        return $this->belongsTo(User::class,'doctor_id')->select('id','name');
     }
 }
