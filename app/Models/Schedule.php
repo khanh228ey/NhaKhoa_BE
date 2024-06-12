@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Schedule extends Model
 {
     use HasFactory;
-    public $timestamps = false;
 
-    public function Service()
+    public function time()
     {
-        return $this->hasMany(Service::class,'category_id');
+        return $this->belongsTo(Schedule_time::class,);
     }
- 
+
 }

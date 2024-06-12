@@ -15,12 +15,8 @@ return new class extends Migration
     {
         Schema::create('schedule_time', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('appoiment_id');
-            $table->unsignedBigInteger('service_id');
-            $table->foreign('appoiment_id')->references('id')->on('appointments')->onDelete('cascade');
-            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
-            $table->string('date');
-            $table->boolean('status')->comment('0 là ẩn và 1 là hiện');
+            $table->string('start_time');
+            $table->string('end_time');
             $table->timestamps();
         });
     }

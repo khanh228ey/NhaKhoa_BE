@@ -13,10 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('schedule_date', function (Blueprint $table) {
+        Schema::create('schedule', function (Blueprint $table) {
             $table->id();
-            $table->string('start_time');
-            $table->string('end_time');
+            $table->unsignedBigInteger('time_id');
+            $table->uuid('doctor_id');
+            $table->foreign('time_id')->references('id')->on('schedule_time')->onDelete('cascade');
+            $table->foreign('doctor_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('date',50);
+            $table->boolean('status')->comment('0 là ẩn và 1 là hiện');
             $table->timestamps();
         });
     }
