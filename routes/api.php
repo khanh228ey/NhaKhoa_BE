@@ -53,12 +53,16 @@ Route::prefix('customer')->group(function () {
     Route::put('update',[CustomerController::class, 'updateCustomer']);
 });
 
-Route::prefix('category')->group(function () {
-    Route::get('/',[CategoryController::class,'getCategories']);
-    Route::post('/create',[CategoryController::class,'createCategory']);
-    Route::get('/{id}',[CategoryController::class,'findById']);
-    Route::put('/update',[CategoryController::class,'updateCategory']);
-    Route::delete('/delete/{id}',[CategoryController::class,'deleteCategory']);
+// Route::prefix('category')->group(function () {
+//     Route::get('/',[CategoryController::class,'getCategories'])->middleware();
+//     Route::post('/create',[CategoryController::class,'createCategory']);
+//     Route::get('/{id}',[CategoryController::class,'findById']);
+//     Route::put('/update',[CategoryController::class,'updateCategory']);
+//     Route::delete('/delete/{id}',[CategoryController::class,'deleteCategory']);
+// });
+
+Route::prefix('category')->controller(CategoryController::class)->group(function(){
+    Route::get('/','getCategories')->middleware('check_permission:view category');
 });
 
 Route::prefix('service')->group(function () {

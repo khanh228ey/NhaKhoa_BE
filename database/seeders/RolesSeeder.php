@@ -18,20 +18,17 @@ class RolesSeeder extends Seeder
     {
         //
         DB::table('roles')->insert([
-            'name' => 'Nha sĩ',
-            'description' => 'Nha sĩ',
+            'name' => 'Doctor',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
         DB::table('roles')->insert([
-            'name' => 'Nhân viên',
-            'description' => 'Nhân viên',
+            'name' => 'Employee',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
         DB::table('roles')->insert([
-            'name' => 'Quản trị viên',
-            'description' => 'Quản trị viên',
+            'name' => 'Admin',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
