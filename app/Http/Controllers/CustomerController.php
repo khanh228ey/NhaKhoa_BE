@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Repositories\CustomerRepository;
 use App\RequestValidations\CustomerValidation;
@@ -41,8 +42,7 @@ class CustomerController extends Controller
         } else {
             $customer = $query->get();
         }
-    
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $customer, 200);
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $customer, 200);
     }
 
 
@@ -61,7 +61,8 @@ class CustomerController extends Controller
     Public function findById($id){
         try {
             $customer = Customer::findOrFail($id); 
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $customer, 200);
+            $result = new CustomerResource($customer);
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
         }

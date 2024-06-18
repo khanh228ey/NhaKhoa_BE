@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('date',20);
             $table->string('time',20);
+            $table->string('note')->nullable();
             $table->uuid('doctor_id')->nullable();
+            $table->foreign('doctor_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('status')->comment('0 là chưa xác nhận , 1 là đã xác nhận , 2 là đã hủy');
             $table->timestamps();
         });

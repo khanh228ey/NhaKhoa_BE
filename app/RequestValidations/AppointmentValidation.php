@@ -1,8 +1,5 @@
 <?php
-namespace App\Repositories;
-
-use App\Models\Category;
-use Carbon\Carbon;
+namespace App\RequestValidations;
 use Illuminate\Support\Facades\Validator;
 
 class AppointmentValidation{
@@ -11,8 +8,7 @@ class AppointmentValidation{
     {
         $rules = [
             'name' => 'required|max:100',
-            'phone' => 'required|unique:customers,phone,'.request()->id.'|numeric',
-            'birthday' => 'required',
+            'phone' => 'required|numeric',
         ];
         $messages = [
             'name.required' => 'Tên không được bỏ trống',

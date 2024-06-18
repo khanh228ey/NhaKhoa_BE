@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule_time extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+    protected $table = 'schedule_time';
+    
 }

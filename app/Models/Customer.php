@@ -36,4 +36,10 @@ class Customer extends Model
         }
         return $prefix . '00001'; 
     }
+
+    
+    public function Histories(){
+        return $this->hasMany(History::class);
+    }
+ 
 }

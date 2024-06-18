@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Models\Service;
 use App\Models\Sevice;
@@ -38,7 +39,6 @@ class CategoryController extends Controller
         } else {
             $category = $query->get();
         }
-    
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $category, 200);
     }
     Public function createCategory(Request $request){
@@ -52,12 +52,13 @@ class CategoryController extends Controller
         }
         return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $category, 201);
     }
-
+    
     
     Public function findById($id){
         try {
-            $category = Category::findOrFail($id); 
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $category, 200);
+            $category = Category::with('Services')->findOrFail($id); 
+            $result = new CategoryResource($category);
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
         }

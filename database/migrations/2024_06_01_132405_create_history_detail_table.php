@@ -17,9 +17,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('history_id');
             $table->unsignedBigInteger('service_id');
+            $table->integer('quantity');
+            $table->integer('price');
             $table->foreign('history_id')->references('id')->on('histories')->onDelete('cascade');
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

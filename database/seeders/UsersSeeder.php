@@ -19,7 +19,7 @@ class UsersSeeder extends Seeder
     {
         //
         DB::table('users')->insert([
-            'id' => 'NS00001',
+            'id' => 'DH00001',
             'name' => 'Hà Nhật Khánh',
             'email' => 'khanh@gmail.com',
             'password' => Hash::make('123456'),
@@ -32,7 +32,7 @@ class UsersSeeder extends Seeder
             'updated_at' => Carbon::now(),
         ]);
         DB::table('users')->insert([
-            'id' => 'NV00001',
+            'id' => 'DH00002',
             'name' => 'Hà Nhật Khánh',
             'email' => 'khanh1@gmail.com',
             'password' => Hash::make('123456'),
@@ -45,7 +45,7 @@ class UsersSeeder extends Seeder
             'updated_at' => Carbon::now(),
         ]);
         DB::table('users')->insert([
-            'id' => 'QTV00001',
+            'id' => 'DHV00003',
             'name' => 'Hà Nhật Khánh',
             'email' => 'khanh2@gmail.com',
             'password' => Hash::make('123456'),

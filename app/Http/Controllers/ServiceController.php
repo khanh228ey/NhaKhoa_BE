@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
+use App\Http\Resources\ServiceResource;
 use App\Models\Appointment_detail;
+use App\Models\Category;
 use App\Models\History_detail;
 use App\Models\Service;
 use App\Repositories\ServiceRepository;
 use App\RequestValidations\ServiceValidation;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    //
+    
     protected $serviceRepository;
     protected $serviceValidation;
     public function __construct(ServiceValidation $serviceValidation, ServiceRepository $serviceRepository)
@@ -42,8 +45,8 @@ class ServiceController extends Controller
         } else {
             $service = $query->get();
         }
-    
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $service, 200);
+        $result =ServiceResource::collection( $service);
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
         
     }
 

@@ -8,9 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class History_detail extends Model
 {
     use HasFactory;
-
-    
-    public function History_detail(){
-        return $this->belongsToMany(History::class,'History_detail','history_id','service_id');
-    }
+    public $timestamps = false;
+    protected $table = 'history_detail';
 }

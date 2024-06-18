@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -68,11 +71,33 @@ Route::prefix('service')->group(function () {
 
 Route::prefix('history')->group(function () {
     Route::get('/',[HistoryController::class,'getHistory']);
+    Route::get('/list-meeting',[HistoryController::class,'listMeeting']);
     Route::post('/transfer-information',[HistoryController::class,'transferInformation']);
     Route::post('/create',[HistoryController::class,'createHistory']);
-    // Route::get('/{id}',[ServiceController::class,'findById']);
-    // Route::put('/update',[ServiceController::class,'updateService']);
-    // Route::delete('/delete/{id}',[ServiceController::class,'deleteService']);
+    Route::get('/{id}',[HistoryController::class,'findById']);
+    Route::put('/update',[HistoryController::class,'updateHistory']);
 });
 
+Route::prefix('appointment')->group(function () {
+    Route::get('/',[AppointmentController::class,'getAppointment']);
+    Route::post('/create',[AppointmentController::class,'createAppointment']);
+    Route::get('/{id}',[AppointmentController::class,'findById']);
+    Route::put('/update',[AppointmentController::class,'updateAppointment']);
+    Route::delete('/delete/{id}',[AppointmentController::class,'deleteAppointment']);
+});
 
+Route::prefix('schedule')->group(function () {
+    Route::get('/',[ScheduleController::class,'getSchedule']);
+    Route::post('/create',[ScheduleController::class,'createSchedule']);
+    // Route::get('/{id}',[ScheduleController::class,'findById']);
+    // Route::put('/update',[ScheduleController::class,'updateAppointment']);
+    Route::delete('/delete/{id}',[ScheduleController::class,'deleteAppointment']);
+});
+
+Route::prefix('invoice')->group(function () {
+    Route::get('/',[InvoiceController::class,'getInvoice']);
+    Route::post('/create',[InvoiceController::class,'createInvoice']);
+    Route::get('/{id}',[InvoiceController::class,'findById']);
+    // Route::put('/update',[InvoiceController::class,'updateInvoice']);
+    // Route::delete('/delete/{id}',[InvoiceController::class,'deleteInvoice']);
+});

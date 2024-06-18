@@ -10,8 +10,7 @@ class Category extends Model
     use HasFactory;
     public $timestamps = false;
 
-    public function Service()
-    {
+    public function Services(){
         return $this->hasMany(Service::class,'category_id');
     }
  

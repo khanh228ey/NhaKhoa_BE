@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\RequestValidations\UserValidation;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -45,14 +47,15 @@ class UserController extends Controller
         } else {
             $users = $query->get();
         }
-    
+        // $result =UserResource::collection($users);
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $users, 200);
     }
 
     Public function findById($id){
         try {
-            $user = User::findOrFail($id); 
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $user, 200);
+            $user = User::with('schedule','role')->findOrFail($id); 
+            $result = new UserResource($user);
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
         }
@@ -82,6 +85,8 @@ class UserController extends Controller
         }
          return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $user, 201);
     }
+
 }
+
     
 

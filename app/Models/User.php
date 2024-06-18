@@ -70,12 +70,20 @@ class User extends Authenticatable implements JWTSubject
         }
         return $prefix . '00001'; 
     }
-    //Thiet lap quan he vs role
+
+
+    //Thiet lap quan he 
     public function role()
     {
         return $this->belongsTo(Role::class)->select('id','name');
     }
-
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+    Public function schedule(){
+        return $this->hasMany(Schedule::class,'doctor_id');
+    }
 
     public function getJWTIdentifier()
     {

@@ -15,4 +15,13 @@ class Service extends Model
         return $this->belongsTo(Category::class,'category_id')->select(['id', 'name']);;
     }
 
+    public function histories()
+    {
+        return $this->belongsToMany(History::class, 'history_detail', 'service_id', 'history_id');
+    }
+
+    public function appointment()
+    {
+        return $this->belongsToMany(Appointment::class, 'Appointment_detail', 'service_id', 'appointment_id');
+    }
 }

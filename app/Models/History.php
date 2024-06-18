@@ -12,10 +12,14 @@ class History extends Model
     public $timestamps = false;
     
     public function Customer(){
-        return $this->belongsTo(Customer::class,'customer_id')->select('id','name');
+        return $this->belongsTo(Customer::class,'customer_id');
     }
     
     public function Doctor(){
-        return $this->belongsTo(User::class,'doctor_id')->select('id','name');
+        return $this->belongsTo(User::class,'doctor_id');
+    }
+
+    public function Services(){
+        return $this->belongsToMany(Service::class,'history_detail','history_id','service_id')->withPivot('quantity','price');
     }
 }
