@@ -15,11 +15,10 @@ class AppointmentRepository{
             ->whereHas('time', function ($query) use ($data) {
                 $query->where('time', $data['time']); 
             })->count();
-    
         // Kiểm tra số lượng cuộc hẹn đã có
         $quantityAppointment = Appointment::where('date',  $date)->where('time', $data['time'])->count();
         // Kiểm tra điều kiện để thêm cuộc hẹn
-        if ($quantityAppointment < $quantityDoctor) {
+        if($quantityDoctor == 0){
             $appointment = new Appointment();
             $appointment->name = $data['name'];
             $appointment->phone = $data['phone'];
@@ -29,7 +28,20 @@ class AppointmentRepository{
             $appointment->status = $data['status'];
             $appointment->note = $data['note'];
             $appointment->created_at = Carbon::now('Asia/Ho_Chi_Minh');
-    
+        }
+        else if ($quantityAppointment < $quantityDoctor) {
+            $appointment = new Appointment();
+            $appointment->name = $data['name'];
+            $appointment->phone = $data['phone'];
+            $appointment->date =  $date;
+            $appointment->time = $data['time'];
+            $appointment->email = $data['email'];
+            $appointment->status = $data['status'];
+            $appointment->note = $data['note'];
+            $appointment->created_at = Carbon::now('Asia/Ho_Chi_Minh');
+        } else{
+            return ['success' => false, 'message' => "Lịch hẹn trong thời gian này đã đầy"];
+        }
             // Gán doctor_id nếu có
             if (isset($data['doctor_id'])) {
                 $schedule = Schedule::with('time')->where('date',  $date)
@@ -40,8 +52,7 @@ class AppointmentRepository{
                 $schedule->save();
                 $appointment->doctor_id = $data['doctor_id'];
             }
-    
-            // Lưu cuộc hẹn và kiểm tra xem có lưu thành công không
+               
             if ($appointment->save()) {
                 // Gán dịch vụ nếu có
                 if (isset($data['service'])) {
@@ -49,9 +60,7 @@ class AppointmentRepository{
                 }
                 return ['success' => true, 'appointment' => $appointment];
             }
-        }else{
-            return ['success' => false, 'message' => "Lịch hẹn trong thời gian này đã đầy"];
-        }
+      
     
         return ['success' => false, 'message' => "Đã xảy ra lỗi khi thêm cuộc hẹn"];
         
@@ -64,6 +73,14 @@ class AppointmentRepository{
             $appointment->date = $data['date'];
             $appointment->time = $data['time'];
             $appointment->email = $data['email'];
+            if($data['status'] == 2){
+                $schedule = Schedule::with('time')->where('date',  $data['date'])
+                ->whereHas('time', function ($query) use ($data) {
+                    $query->where('time', $data['time']); 
+                })->where('doctor_id',$data['doctor_id'])->first();
+                $schedule->status=0;
+                $schedule->save();
+            }
             $appointment->status = $data['status'];
             $appointment->note = $data['note'];
             $appointment->updated_at =  Carbon::now('Asia/Ho_Chi_Minh');

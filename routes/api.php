@@ -80,7 +80,7 @@ Route::prefix('history')->controller(HistoryController::class)->group(function (
 });
 
 Route::prefix('appointment')->controller(AppointmentController::class)->group(function () {
-    Route::get('/','getAppointment')->middleware('check_permission:view appointment');
+    Route::get('/','getAppointment');
     Route::post('/create','createAppointment')->middleware('check_permission:create appointment');
     Route::get('/{id}','findById')->middleware('check_permission:view appointment');
     Route::put('/update','updateAppointment')->middleware('check_permission:update appointment');

@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\Appointment; 
 use App\Models\Category;
 use App\Models\Schedule;
+use App\Models\User;
 use Carbon\Carbon;
 
 class ScheduleRepository{
@@ -24,6 +25,10 @@ class ScheduleRepository{
     // }
 
     public function addSchedule($data) {
+        $user = User::with('role')->find($data['doctor_id']);
+        if($user->role->name != 'Doctor'){
+                
+        } 
         if (!isset($data['schedule']) || !isset($data['doctor_id'])) {
             return response()->json(['error' => 'Dữ liệu không hợp lệ'], 400);
         }
