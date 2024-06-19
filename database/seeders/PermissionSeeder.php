@@ -60,6 +60,7 @@ class PermissionSeeder extends Seeder
             'delete schedule',
 
             'create meeting',
+            
     
         ];
         foreach ($permissions as $permission) {

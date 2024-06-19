@@ -1,17 +1,21 @@
 <?php
 namespace App\Repositories;
 
+use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role as ModelsRole;
 
 class UserRepository{
 
     Public function AddUser($data){
         $data = $_REQUEST;
+        $roleId = $data['role_id'];
+        $role = Role::find($roleId);
         $user = new User();
         $user->name = $data['name'];
         $user->phone_number = $data['phone_number'];
@@ -24,32 +28,18 @@ class UserRepository{
         $user->birthday = $data['birthday'];
         $user->role_id = $data['role_id'];
         if ($user->save()) {
+            $user->assignRole($role->name);
             return $user; 
         } else {
             
             return false;
         }
     }
-    // public function AddUser(Request $request){
-    //     $user = new User();
-    //     $user->name = $request->input('name');
-    //     $user->phone_number = $request->input('phone_number');
-    //     $user->email = $request->input('email');
-    //     $user->password = Hash::make($request->input('password'));
-    //     $user->gender = $request->input('gender');
-    //     $user->address = $request->input('address');
-    //     $user->description = $request->input('description');
-    //     $user->created_at = Carbon::now('Asia/Ho_Chi_Minh');
-    //     $user->birthday = $request->input('birthday');
-    //     $user->role_id = $request->input('role_id');
-    //     if ($user->save()) {
-    //         return $user; 
-    //     } else {
-    //         return false;
-    //     }
-    // }
+
     Public function Update($data){
+        $roleId = $data['role_id'];
         $user = User::find($data['id']);
+        $role = ModelsRole::find($roleId);
         $user->name = $data['name'];
         $user->phone_number = $data['phone_number'];
         $user->email = $data['email'];
@@ -61,6 +51,9 @@ class UserRepository{
         $user->role_id = $data['role_id'];
         $user->avatar = $data['avatar'];
         if ($user->save()) {
+            $user->roles()->detach();
+            $user->assignRole($role->name);
+            $user->role_id = $roleId;
             return $user; 
         } else {
             
