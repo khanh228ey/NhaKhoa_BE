@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\UserResource;
+use App\Models\Schedule;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\RequestValidations\UserValidation;
@@ -98,10 +99,56 @@ class UserController extends Controller
     }
 
 
-
-    Public function getAllDoctor(Request $request){
-        $doctor = User::with('schedule','time')->where('role_id',1)->get();
-        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$doctor,200);
+    Public function getDoctor(){
+        $doctor = User::where('role_id',1)->get();
+        $result = $doctor->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'email' => $item->email,
+                'phone' => $item->phone_number,
+                'avatar' => $item->avatar,
+            ];
+        });
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
+
+
+    Public function getDoctorId($id){
+        $doctor = User::where('role_id',1)->find($id);
+        $Schedule = Schedule::where('doctor_id', $id)
+        ->select('date')->distinct()->orderBy('date', 'Asc')->get();    
+        $result =  [
+                'id' => $doctor->id,
+                'name' => $doctor->name,
+                'email' => $doctor->email,
+                'phone' => $doctor->phone_number,
+                'avatar' => $doctor->avatar,
+                'schedule' => $Schedule,
+            ];
+    
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
+    }
+
+    Public function getDoctorTimeslotsByDate($id, $date)
+{
+    $schedule = Schedule::with('time')
+        ->where('doctor_id', $id)
+        ->where('date', $date)
+        ->get();
+
+    if ($schedule->isEmpty()) {
+        return JsonResponse::handle(404, 'No timeslots found for this doctor on the given date', null, 404);
+    }
+
+    $timeslots = $schedule->map(function ($item) {
+        return [
+            'id' => $item->time->id,
+            'time' => $item->time->time,
+        ];
+    });
+
+    return JsonResponse::handle(200, ConstantsMessage::SUCCESS, ['date' => $date, 'timeslots' => $timeslots], 200);
+}
 }
     
