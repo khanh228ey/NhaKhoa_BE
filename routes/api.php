@@ -43,71 +43,71 @@ Route::group([
 
 Route::prefix('user')->controller(UserController::class)->group(function(){
     Route::get('/','getUsers');
-    Route::post('/create','createUser')->middleware('check_permission:create user');
+    Route::post('/create','createUser');
     Route::get('/{id}','findById');
-    Route::put('update/{id}','updateUser')->middleware('check_permission:update user');
+    Route::put('update/{id}','updateUser');
 });
 
 Route::prefix('customer')->controller(CustomerController::class)->group(function () {
-    Route::get('/','getCutomer')->middleware('check_permission:view customer');
-    Route::post('/create','createCustomer')->middleware('check_permission:create customer');
-    Route::get('/{id}','findById')->middleware('check_permission:view customer');;
-    Route::put('update/{id}','updateCustomer')->middleware('check_permission:update customer');
+    Route::get('/','getCutomer');
+    Route::post('/create','createCustomer');
+    Route::get('/{id}','findById');
+    Route::put('update/{id}','updateCustomer');
 });
 
 Route::prefix('category')->controller(CategoryController::class)->group(function(){
     Route::get('/','getCategories');
     Route::get('/{id}','findById');
-    Route::post('/create','createCategory')->middleware('check_permission:create category');
-    Route::put('/update/{id}','updateCategory')->middleware('check_permission:update category');
-    Route::delete('/delete/{id}','deleteCategory')->middleware('check_permission:delete category');
+    Route::post('/create','createCategory');
+    Route::put('/update/{id}','updateCategory');
+    Route::delete('/delete/{id}','deleteCategory');
 });
 
 Route::prefix('service')->controller(ServiceController::class)->group(function () {
     Route::get('/','getServices');
-    Route::post('/create','createService')->middleware('check_permission:create service');
+    Route::post('/create','createService');
     Route::get('/{id}','findById');
-    Route::put('/update/{id}','updateService')->middleware('check_permission:update service');
-    Route::delete('/delete/{id}','deleteService')->middleware('check_permission:delete service');
+    Route::put('/update/{id}','updateService');
+    Route::delete('/delete/{id}','deleteService');
 });
 
 Route::prefix('history')->controller(HistoryController::class)->group(function () {
-    Route::get('/','getHistory')->middleware('check_permission:view history');
+    Route::get('/','getHistory');
     Route::get('/list-meeting','listMeeting');
-    Route::post('/transfer-information','transferInformation')->middleware('check_permission:create meeting');
-    Route::post('/create','createHistory')->middleware('check_permission:create history');
-    Route::get('/{id}','findById')->middleware('check_permission:view history');
-    Route::put('/update/{id}','updateHistory')->middleware('check_permission:update history');
+    Route::post('/transfer-information','transferInformation');
+    Route::post('/create','createHistory');
+    Route::get('/{id}','findById');
+    Route::put('/update/{id}','updateHistory');
 });
 
 Route::prefix('appointment')->controller(AppointmentController::class)->group(function () {
-    Route::get('/','getAppointment')->middleware('check_permission:view appointment');
+    Route::get('/','getAppointment');
     Route::post('/create','createAppointment');
-    Route::get('/{id}','findById')->middleware('check_permission:view appointment');
-    Route::put('/update/{id}','updateAppointment')->middleware('check_permission:update appointment');
-    Route::delete('/delete/{id}','deleteAppointment')->middleware('check_permission:delete appointment');
+    Route::get('/{id}','findById');
+    Route::put('/update/{id}','updateAppointment');
+    Route::delete('/delete/{id}','deleteAppointment');
 });
 
 Route::prefix('schedule')->controller(ScheduleController::class)->group(function () {
     Route::get('/','getSchedule');
-    Route::post('/create','createSchedule')->middleware('check_permission:create schedule');
+    Route::post('/create','createSchedule');
     // Route::get('/{id}','findById');
     // Route::put('/update','updateAppointment');
-    Route::delete('/delete/{id}','deleteAppointment')->middleware('check_permission:delete schedule');
+    Route::delete('/delete/{id}','deleteAppointment');
 });
 
 Route::prefix('invoice')->controller(InvoiceController::class)->group(function () {
-    Route::get('/','getInvoice')->middleware('check_permission:view invoice');
-    Route::post('/create','createInvoice')->middleware('check_permission:create invoice');
-    Route::get('/{id}',[InvoiceController::class,'findById'])->middleware('check_permission:view invoice');
+    Route::get('/','getInvoice');
+    Route::post('/create','createInvoice');
+    Route::get('/{id}',[InvoiceController::class,'findById']);
     Route::put('/update/{id}',[InvoiceController::class,'updateInvoice']);
     // Route::delete('/delete/{id}',[InvoiceController::class,'deleteInvoice']);
 });
 
 Route::prefix('role')->controller(RoleController::class)->group(function(){
-    Route::get('/','getRoles')->middleware('check_permission:view role');
-    Route::get('/{id}','findByID')->middleware('check_permission:view role');
-    Route::put('/update/{id}','updatePermissions')->middleware('check_permission:update role');
+    Route::get('/','getRoles');
+    Route::get('/{id}','findByID');
+    Route::put('/update/{id}','updatePermissions');
 });
 
 Route::post('/upload', [UploadController::class, 'upload']);
