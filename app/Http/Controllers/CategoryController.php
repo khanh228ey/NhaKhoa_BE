@@ -7,7 +7,6 @@ use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Models\Service;
-use App\Models\Sevice;
 use App\Repositories\CategoryRepository;
 use App\RequestValidations\CategoryValidation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -39,14 +38,22 @@ class CategoryController extends Controller
         } else {
             $category = $query->get();
         }
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $category, 200);
+        $result = $category->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'image' => $item->image,
+                'status' => $item->status
+            ];
+        });
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
     }
     Public function createCategory(Request $request){
         $validator = $this->categoryValidation->categoryValidate();
         if ($validator->fails()) {
             return JsonResponse::error(400,$validator->messages(),400);
         }
-        $category = $this->categoryRepository->addCategory($request->all());
+        $category = $this->categoryRepository->addCategory($request);
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
@@ -64,12 +71,12 @@ class CategoryController extends Controller
         }
     }
 
-    Public function updateCategory(Request $request ){
+    Public function updateCategory(Request $request,$id ){
         $validator = $this->categoryValidation->categoryValidate();
         if ($validator->fails()) {
             return JsonResponse::error(400,$validator->messages(),400);
         }
-        $category = $this->categoryRepository->updateCategory($request->all());
+        $category = $this->categoryRepository->updateCategory($request,$id);
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }

@@ -131,4 +131,10 @@
     </body>
     <img src="http://127.0.0.1:9000/luanvantotnghiep/a.png
 " alt="ảnh nằm day">
+
+<form action="/upload" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="file">
+    <button type="submit">Upload</button>
+</form>
 </html>

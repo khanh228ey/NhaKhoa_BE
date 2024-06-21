@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email',100)->unique();
             $table->string('phone_number',20)->unique();
             $table->boolean('gender')->comment('0 là nam và 1 là nữ');
-            $table->string('birthday',50);
+            $table->date('birthday');
             $table->string('address',100)->nullable();
             $table->string('description')->nullable();
             $table->unsignedBigInteger('role_id');

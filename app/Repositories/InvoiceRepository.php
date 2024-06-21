@@ -29,7 +29,7 @@ class InvoiceRepository{
         return false;
     }
 
-    Public function update($data){
+    Public function update($data,$id){
         $invoice = Invoices::find($data['id']);
         $invoice->method_payment = $data['method_payment'];
         $invoice->status = $data['status'];

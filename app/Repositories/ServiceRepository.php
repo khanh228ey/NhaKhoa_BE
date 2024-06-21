@@ -24,8 +24,8 @@ class ServiceRepository{
         }
         return false;
     }
-    Public function updateService($data){
-        $service = Service::find($data['id']);
+    Public function updateService($data,$id){
+        $service = Service::find($id);
         $service->name = $data['name'];
         $service->description = $data['description'];
         $service->status= $data['status'];

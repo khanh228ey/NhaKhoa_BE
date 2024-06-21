@@ -18,11 +18,11 @@ class TimeSeeder extends Seeder
         //
        
 $startHour = 8;
-$endHour = 23; // Kết thúc lúc 17h
+$endHour = 20; // Kết thúc lúc 17h
 
 for ($hour = $startHour; $hour < $endHour; $hour++) {
     // Bỏ qua khoảng 12:00 đến 13:00
-    if ($hour == 12) {
+    if ($hour == 12 || $hour == 13) {
         continue;
     }
 

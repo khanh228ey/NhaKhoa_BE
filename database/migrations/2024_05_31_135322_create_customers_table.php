@@ -17,7 +17,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name',50);
             $table->string('phone_number',20)->unique();
-            $table->string('birthday',50);
+            $table->date('birthday');
             $table->string('email')->nullable()->unique();
             $table->boolean('gender');
             $table->string('address')->nullable();

@@ -42,7 +42,17 @@ class CustomerController extends Controller
         } else {
             $customer = $query->get();
         }
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $customer, 200);
+        $result = $customer->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'birthday' => $item->birthday,
+                'email' => $item->email,
+                'phone' => $item->phone_number,
+                
+            ];
+        });
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
     }
 
 
@@ -68,12 +78,12 @@ class CustomerController extends Controller
         }
     }
 
-    Public function updateCustomer(Request $request ){
+    Public function updateCustomer(Request $request,$id ){
         $validator = $this->customerValidation->customerValidation();
         if ($validator->fails()) {
             return JsonResponse::error(400,$validator->messages(),400);
         }
-        $category = $this->customerRepository->Update($request->all());
+        $category = $this->customerRepository->Update($request->all(),$id);
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }

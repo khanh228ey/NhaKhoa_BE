@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name',50);
             $table->string('phone',20);
             $table->string('email')->nullable();
-            $table->string('date',20);
+            $table->date('date');
             $table->string('time',20);
             $table->string('note')->nullable();
             $table->uuid('doctor_id')->nullable();

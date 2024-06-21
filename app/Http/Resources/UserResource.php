@@ -28,14 +28,6 @@ class UserResource extends JsonResource
                 'id' => $this->role->id,
                 'name' => $this->role->name,
             ],
-            'schedule' => $this->schedule->map(function ($schedule) {
-                return [
-                    'id' => $schedule->id,
-                    'name' => $schedule->date,
-                    'time' => $schedule->time->time
-                ];
-            }),
-          
         ];
     }
 }

@@ -25,7 +25,7 @@ class UsersSeeder extends Seeder
             'password' => Hash::make('123456'),
             'gender' => 1, // 1 là nam 2 là nữ
             'address' => '180 cao lỗ phường 4 quận 8 TPHCM',
-            'birthday' => '22/8/2002',
+            'birthday' => '2002-08-25',
             'role_id' => 1,
             'phone_number' => '0338230318',
             'created_at' => Carbon::now(),
@@ -38,7 +38,7 @@ class UsersSeeder extends Seeder
             'password' => Hash::make('123456'),
             'gender' => 1, // 1 là nam 2 là nữ
             'address' => '180 cao lỗ phường 4 quận 8 TPHCM',
-            'birthday' => '22/8/2002',
+            'birthday' => '2002-08-25',
             'role_id' => 2,
             'phone_number' => '0338230319',
             'created_at' => Carbon::now(),
@@ -51,7 +51,7 @@ class UsersSeeder extends Seeder
             'password' => Hash::make('123456'),
             'gender' => 1, // 1 là nam 2 là nữ
             'address' => '180 cao lỗ phường 4 quận 8 TPHCM',
-            'birthday' => '22/8/2002',
+            'birthday' => '2002-08-25',
             'role_id' => 3,
             'phone_number' => '0338230317',
             'created_at' => Carbon::now(),

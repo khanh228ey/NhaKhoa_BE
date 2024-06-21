@@ -45,7 +45,16 @@ class ServiceController extends Controller
         } else {
             $service = $query->get();
         }
-        $result =ServiceResource::collection( $service);
+        $result = $service->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'img' => $item->image,
+                'quantity_sold' => $item->quantity_sold,
+                'status' => $item->status,
+                'category' => $item->category->name,
+            ];
+         });
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
         
     }
@@ -64,19 +73,20 @@ class ServiceController extends Controller
      
     Public function findById($id){
         try {
-            $category = Service::findOrFail($id); 
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $category, 200);
+            $service = Service::findOrFail($id); 
+            $result = new ServiceResource($service);
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::error(404, ConstantsMessage::Not_Found, 404);
         }
     }
 
-    Public function updateService(Request $request ){
+    Public function updateService(Request $request,$id){
         $validator = $this->serviceValidation->Service();
         if ($validator->fails()) {
             return JsonResponse::error(400,$validator->messages(),400);
         }
-        $category = $this->serviceRepository->updateService($request->all());
+        $category = $this->serviceRepository->updateService($request->all(),$id);
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }

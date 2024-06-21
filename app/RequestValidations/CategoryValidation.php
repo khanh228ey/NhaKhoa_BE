@@ -13,7 +13,7 @@ class CategoryValidation{
             
             'name.max' => 'Không được quá 100 kí tự',
             'name.required'=>'Tên danh mục không được để trống',
-            'name.unique' =>'Danh mục đã tồn tại'
+            'name.unique' =>'Danh mục đã tồn tại',
         ];
         $validator = Validator::make(
             request()->all(), 

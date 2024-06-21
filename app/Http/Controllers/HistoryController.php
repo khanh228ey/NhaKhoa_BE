@@ -101,12 +101,12 @@ class HistoryController extends Controller
 }
 
     
-    Public function updateHistory(Request $request){
+    Public function updateHistory(Request $request,$id){
         $validator = $this->historyValidation->history();
         if ($validator->fails()) {
             return JsonResponse::error(400,$validator->messages(),400);
         }
-        $history = $this->historyRepository->updateHistory($request->all());
+        $history = $this->historyRepository->updateHistory($request->all(),$id);
         if ($history == false) {
                 return JsonResponse::error(500,ConstantsMessage::ERROR,500);
         }

@@ -19,12 +19,10 @@ class PermissionSeeder extends Seeder
             'view role',
             'update role',
 
-            'view category',
             'create category',
             'update category',
             'delete category',
 
-            'view service',
             'create service',
             'update service',
             'delete service',
@@ -54,12 +52,13 @@ class PermissionSeeder extends Seeder
             'update user',
             'delete user',
 
-            'view schedule',
             'create schedule',
             'update schedule',
             'delete schedule',
 
             'create meeting',
+
+            'up load',
             
     
         ];

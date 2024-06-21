@@ -28,14 +28,6 @@ class CustomerResource extends JsonResource
                     'date' => $history->date,
                     'time' => $history->time,
                     'noted' => $history->noted,
-                    'services' => $history->services->map(function ($service) {
-                        return [
-                            'id' => $service->id,
-                            'name' => $service->name,
-                            'quantity' => $service->pivot->quantity,
-                            'price' => $service->pivot->price,
-                        ];
-                    }),
                 ];
             }),
         ];

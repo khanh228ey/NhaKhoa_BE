@@ -59,7 +59,17 @@ class AppointmentController extends Controller
         } else {
             $appointment = $query->get();
         }
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $appointment, 200);
+        $result = $appointment->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'phone' => $item->phone,
+                'date' => $item->date,
+                'time' => $item->time,
+                'status' => $item->status,
+            ];
+        });
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
     }
     
     Public function findById($id){
@@ -71,12 +81,12 @@ class AppointmentController extends Controller
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
         }
     }
-    Public function updateAppointment(Request $request){
+    Public function updateAppointment(Request $request,$id){
         $validator = $this->appointmentValidation->Appointment();
         if ($validator->fails()) {
             return JsonResponse::error(400,$validator->messages(),400);
         }
-        $history = $this->appointmentRepository->update($request->all());
+        $history = $this->appointmentRepository->update($request->all(),$id);
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }

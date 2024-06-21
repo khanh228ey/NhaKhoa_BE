@@ -27,6 +27,7 @@ class UserRepository{
         $user->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $user->birthday = $data['birthday'];
         $user->role_id = $data['role_id'];
+        $user->avatar = $data['avatar'];
         if ($user->save()) {
             $user->assignRole($role->name);
             return $user; 
@@ -36,9 +37,9 @@ class UserRepository{
         }
     }
 
-    Public function Update($data){
+    Public function Update($data,$id){
         $roleId = $data['role_id'];
-        $user = User::find($data['id']);
+        $user = User::find($id);
         $role = ModelsRole::find($roleId);
         $user->name = $data['name'];
         $user->phone_number = $data['phone_number'];

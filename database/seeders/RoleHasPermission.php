@@ -24,12 +24,10 @@ class RoleHasPermission extends Seeder
                 'view role',
                 'update role',
 
-                'view category',
                 'create category',
                 'update category',
                 'delete category',
 
-                'view service',
                 'create service',
                 'update service',
                 'delete service',
@@ -56,7 +54,6 @@ class RoleHasPermission extends Seeder
                 'create user',
                 'update user',
 
-                'view schedule',
                 'create schedule',
                 'update schedule',
                 'delete schedule',

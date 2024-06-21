@@ -24,8 +24,8 @@ class CustomerRepository{
     }
 
     
-    Public function Update($data){
-        $user = Customer::find($data['id']);
+    Public function Update($data,$id){
+        $user = Customer::find($id);
         $user->name = $data['name'];
         $user->phone_number = $data['phone_number'];
         $user->email = $data['email'];

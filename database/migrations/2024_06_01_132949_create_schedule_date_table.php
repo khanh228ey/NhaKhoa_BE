@@ -19,7 +19,7 @@ return new class extends Migration
             $table->uuid('doctor_id');
             $table->foreign('time_id')->references('id')->on('schedule_time')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('date',50);
+            $table->date('date');
             $table->boolean('status')->comment('0 là ẩn và 1 là hiện');
             $table->timestamps();
         });

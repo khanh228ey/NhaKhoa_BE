@@ -47,8 +47,19 @@ class UserController extends Controller
         } else {
             $users = $query->get();
         }
-        // $result =UserResource::collection($users);
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $users, 200);
+        $result = $users->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'birthday' => $item->birthday,
+                'email' => $item->email,
+                'phone' => $item->phone_number,
+                'avatar' => $item->avatar,
+                'role' => $item->role->name,
+                
+            ];
+        });
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS,$result, 200);
     }
 
     Public function findById($id){
@@ -74,19 +85,23 @@ class UserController extends Controller
         return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $user, 201);
     }
 
-    Public function updateUser(Request $request){
+    Public function updateUser(Request $request,$id){
         $validator = $this->userValidation->update();
         if ($validator->fails()) {
             return JsonResponse::error(400,$validator->messages(),400);
         }
-        $user = $this->userRepository->update($request->all());
+        $user = $this->userRepository->update($request->all(),$id);
         if ($user == false) {
             return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
          return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $user, 201);
     }
 
+
+
+    Public function getAllDoctor(Request $request){
+        $doctor = User::with('schedule','time')->where('role_id',1)->get();
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$doctor,200);
+    }
 }
-
     
-

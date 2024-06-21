@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('customer_id');
             $table->uuid('doctor_id');
-            $table->string('date',50)->nullable();
+            $table->date('date')->nullable();
             $table->string('time',50)->nullable();
             $table->string('noted')->nullable();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');

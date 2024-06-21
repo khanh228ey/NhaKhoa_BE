@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Models\History;
+use App\Models\Service;
 use Carbon\Carbon;
 
 class HistoryRepository{
@@ -11,8 +12,7 @@ class HistoryRepository{
         $history->customer_id = $data['customer_id'];
         $history->doctor_id = $data['doctor_id'];
         if(count($data) > 2){
-            $date = Carbon::createFromFormat('d/m/Y', $data['date'])->format('Y-m-d');
-            $history->date = $date;
+            $history->date = $data['date'];
             $history->time = $data['time'];
             $history->noted = $data['noted'];
             $history->created_at = Carbon::now('Asia/Ho_Chi_Minh');
@@ -28,23 +28,21 @@ class HistoryRepository{
                     $price = $data['price'][$i];
                     // Thêm vào bảng pivot giữa History và Service
                     $history->services()->attach($serviceId, ['quantity' => $quantity, 'price' => $price]);
-            
+                    $service = Service::find($data['service'][$i]);
+                    $service->quantity_sold = $service->quantity_sold + 1;
+                    $service->save();
                 }
             }
-    
             return $history;
         }
     
         return false;
     }
 
-    public function updateHistory($data){
-        $id = $data['id'];
-       
+    public function updateHistory($data,$id){
         $history = History::find($id);
         if (count($data) > 2) {
-            $date = Carbon::createFromFormat('d/m/Y', $data['date'])->format('Y-m-d');
-            $history->date = $date;
+            $history->date = $data['date'];
             $history->time = $data['time'];
             $history->noted = $data['noted'];
             $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
