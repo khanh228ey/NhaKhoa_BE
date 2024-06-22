@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('birthday');
             $table->string('address',100)->nullable();
             $table->string('description')->nullable();
+            $table->boolean('status')->default(1);
             $table->unsignedBigInteger('role_id');
             // $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

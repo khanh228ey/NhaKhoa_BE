@@ -41,21 +41,21 @@ Route::group([
     Route::get('profile', [AuthController::class,'profile']);
 });
 
-Route::prefix('user')->controller(UserController::class)->group(function(){
+Route::prefix('v1/user')->controller(UserController::class)->group(function(){
     Route::get('/','getUsers');
     Route::post('/create','createUser');
     Route::get('/{id}','findById');
     Route::put('update/{id}','updateUser');
 });
 
-Route::prefix('customer')->controller(CustomerController::class)->group(function () {
+Route::prefix('v1/customer')->controller(CustomerController::class)->group(function () {
     Route::get('/','getCutomer');
     Route::post('/create','createCustomer');
     Route::get('/{id}','findById');
     Route::put('update/{id}','updateCustomer');
 });
 
-Route::prefix('category')->controller(CategoryController::class)->group(function(){
+Route::prefix('v1/category')->controller(CategoryController::class)->group(function(){
     Route::get('/','getCategories');
     Route::get('/{id}','findById');
     Route::post('/create','createCategory');
@@ -63,7 +63,7 @@ Route::prefix('category')->controller(CategoryController::class)->group(function
     Route::delete('/delete/{id}','deleteCategory');
 });
 
-Route::prefix('service')->controller(ServiceController::class)->group(function () {
+Route::prefix('v1/service')->controller(ServiceController::class)->group(function () {
     Route::get('/','getServices');
     Route::post('/create','createService');
     Route::get('/{id}','findById');
@@ -71,7 +71,7 @@ Route::prefix('service')->controller(ServiceController::class)->group(function (
     Route::delete('/delete/{id}','deleteService');
 });
 
-Route::prefix('history')->controller(HistoryController::class)->group(function () {
+Route::prefix('v1/history')->controller(HistoryController::class)->group(function () {
     Route::get('/','getHistory');
     Route::get('/list-meeting','listMeeting');
     Route::post('/transfer-information','transferInformation');
@@ -80,7 +80,7 @@ Route::prefix('history')->controller(HistoryController::class)->group(function (
     Route::put('/update/{id}','updateHistory');
 });
 
-Route::prefix('appointment')->controller(AppointmentController::class)->group(function () {
+Route::prefix('v1/appointment')->controller(AppointmentController::class)->group(function () {
     Route::get('/','getAppointment');
     Route::post('/create','createAppointment');
     Route::get('/{id}','findById');
@@ -88,7 +88,7 @@ Route::prefix('appointment')->controller(AppointmentController::class)->group(fu
     Route::delete('/delete/{id}','deleteAppointment');
 });
 
-Route::prefix('schedule')->controller(ScheduleController::class)->group(function () {
+Route::prefix('v1/schedule')->controller(ScheduleController::class)->group(function () {
     Route::get('/','getSchedule');
     Route::post('/create','createSchedule');
     // Route::get('/{id}','findById');
@@ -96,7 +96,7 @@ Route::prefix('schedule')->controller(ScheduleController::class)->group(function
     Route::delete('/delete/{id}','deleteAppointment');
 });
 
-Route::prefix('invoice')->controller(InvoiceController::class)->group(function () {
+Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(function () {
     Route::get('/','getInvoice');
     Route::post('/create','createInvoice');
     Route::get('/{id}',[InvoiceController::class,'findById']);
@@ -104,10 +104,23 @@ Route::prefix('invoice')->controller(InvoiceController::class)->group(function (
     // Route::delete('/delete/{id}',[InvoiceController::class,'deleteInvoice']);
 });
 
-Route::prefix('role')->controller(RoleController::class)->group(function(){
+Route::prefix('v1/role')->controller(RoleController::class)->group(function(){
     Route::get('/','getRoles');
     Route::get('/{id}','findByID');
     Route::put('/update/{id}','updatePermissions');
 });
+Route::post('v1//upload', [UploadController::class, 'upload']);
 
-Route::post('/upload', [UploadController::class, 'upload']);
+
+
+Route::prefix('v2')->group(function(){
+    Route::get('/category',[CategoryController::class,'getCategories']);
+    Route::get('category/{id}',[CategoryController::class,'findById']);
+    Route::get('/service',[ServiceController::class,'getServices']);
+    Route::get('/service/{id}',[ServiceController::class,'findById']);
+    Route::Get('doctor',[UserController::class,'getDoctor']);
+    Route::get('doctor/{id}',[UserController::class,'getDoctorId']);
+    Route::Get('doctor/{id}/date/{date}',[UserController::class,'getDoctorTimeslotsByDate']);
+    Route::get('appointment/create',[AppointmentController::class,'createAppointment']);
+});
+

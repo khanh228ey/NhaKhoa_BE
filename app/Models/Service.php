@@ -9,7 +9,7 @@ class Service extends Model
 {
     use HasFactory;
     public $timestamps = false;
-
+    protected $fillable = ['name', 'status', 'min_price', 'max_price', 'image','unit', 'category_id','description'];
     public function category()
     {
         return $this->belongsTo(Category::class,'category_id')->select(['id', 'name']);;

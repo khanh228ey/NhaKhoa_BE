@@ -119,11 +119,6 @@ class UserController extends Controller
         $Schedule = Schedule::where('doctor_id', $id)
         ->select('date')->distinct()->orderBy('date', 'Asc')->get();    
         $result =  [
-                'id' => $doctor->id,
-                'name' => $doctor->name,
-                'email' => $doctor->email,
-                'phone' => $doctor->phone_number,
-                'avatar' => $doctor->avatar,
                 'schedule' => $Schedule,
             ];
     
@@ -143,12 +138,11 @@ class UserController extends Controller
 
     $timeslots = $schedule->map(function ($item) {
         return [
-            'id' => $item->time->id,
             'time' => $item->time->time,
         ];
     });
 
-    return JsonResponse::handle(200, ConstantsMessage::SUCCESS, ['date' => $date, 'timeslots' => $timeslots], 200);
+    return JsonResponse::handle(200, ConstantsMessage::SUCCESS, ['timeslots' => $timeslots], 200);
 }
 }
     

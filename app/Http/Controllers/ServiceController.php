@@ -82,11 +82,14 @@ class ServiceController extends Controller
     }
 
     Public function updateService(Request $request,$id){
-        $validator = $this->serviceValidation->Service();
-        if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+        $data = $request->all();
+        if( count($data) > 1){
+            $validator = $this->serviceValidation->Service();
+            if ($validator->fails()) {
+                return JsonResponse::error(400,$validator->messages(),400);
+            }
         }
-        $category = $this->serviceRepository->updateService($request->all(),$id);
+        $category = $this->serviceRepository->updateService($request,$id);
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
@@ -106,7 +109,5 @@ class ServiceController extends Controller
         } catch (\Exception $e) {
         return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
     }
-    }
-
-    
+    }    
 }

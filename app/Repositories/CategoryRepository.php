@@ -26,20 +26,24 @@ class CategoryRepository{
 
     public function updateCategory(Request $request, $id)
     {
-        $data = $request->all();
+        // $data = $request->all();
         $category = Category::find($id);
+        $data = $request->only(['name', 'status', 'description', 'image']);
         if (!$category) {
             return false;
         }
-        $category->name = $data['name'];
-        $category->status = $data['status'];
-        $category->description = $data['description'];
-        $category->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-        $category->image = $data['image'];
+        if (count($data) > 0) {
+            $data['updated_at'] = Carbon::now('Asia/Ho_Chi_Minh');
+        }
+        $category->fill($data);
+        // $category->name = $data['name'];
+        // $category->status = $data['status'];
+        // $category->description = $data['description'];
+        // $category->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+        // $category->image = $data['image'];
         if ($category->save()) {
             return $category;
         }
-    
         return false;
     }
 }

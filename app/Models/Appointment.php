@@ -10,8 +10,7 @@ class Appointment extends Model
     use HasFactory;
     public $timestamps = false;
 
-
-
+    protected $fillable = ['name', 'date', 'time', 'phone'];
 
     public function Services(){
         return $this->belongsToMany(Service::class,'appointment_detail','appointment_id','service_id');

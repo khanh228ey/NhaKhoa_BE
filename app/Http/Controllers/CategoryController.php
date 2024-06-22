@@ -28,9 +28,13 @@ class CategoryController extends Controller
         $perPage = $request->get('limit', 10);
         $page = $request->get('page'); 
         $name = $request->get('name');
+        $status = $request->get('status');
         $query = Category::query();
         if ($name) {
             $query->where('name', 'LIKE', "%{$name}%");
+        }
+        if($status){
+            $query->where('status',  $status);
         }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
@@ -72,9 +76,12 @@ class CategoryController extends Controller
     }
 
     Public function updateCategory(Request $request,$id ){
-        $validator = $this->categoryValidation->categoryValidate();
-        if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+        $data = $request->all();
+        if(count($data)  >1){
+            $validator = $this->categoryValidation->categoryValidate();
+            if ($validator->fails()) {
+                return JsonResponse::error(400,$validator->messages(),400);
+            }
         }
         $category = $this->categoryRepository->updateCategory($request,$id);
         if ($category == false) {

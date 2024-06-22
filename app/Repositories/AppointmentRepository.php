@@ -98,7 +98,7 @@ class AppointmentRepository{
         }
             $appointment->save();
             if (isset($data['service'])) {
-                // Đồng bộ các dịch vụ liên quan, xóa các dịch vụ cũ không còn trong mảng $data['service']
+                // Đồng bộ các dịch vụ liên quan,
                 $appointment->services()->sync($data['service']);
             } else {
                 // Nếu không có dịch vụ nào được cung cấp, xóa tất cả các dịch vụ liên quan
