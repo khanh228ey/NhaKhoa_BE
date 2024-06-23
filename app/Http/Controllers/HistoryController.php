@@ -83,8 +83,16 @@ class HistoryController extends Controller
             $history = $query->get();
         }
         
-        $formattedHistory =HistoryResource::collection($history);
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $formattedHistory, 200);
+        $result = $history->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'customer_name' => $item->customer->name,
+                'doctor_name' => $item->doctor->name,
+                'date' => $item->date,
+                'time' => $item->time,
+            ];
+        });
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
     }
 
 
@@ -99,7 +107,6 @@ class HistoryController extends Controller
         return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
     }
 }
-
     
     Public function updateHistory(Request $request,$id){
         $validator = $this->historyValidation->history();

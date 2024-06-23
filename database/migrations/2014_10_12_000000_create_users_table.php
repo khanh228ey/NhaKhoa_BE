@@ -22,7 +22,8 @@ return new class extends Migration
             $table->boolean('gender')->comment('0 là nam và 1 là nữ');
             $table->date('birthday');
             $table->string('address',100)->nullable();
-            $table->string('description')->nullable();
+            $table->text('education')->nullable();
+            $table->text('certificate')->nullable();
             $table->boolean('status')->default(1);
             $table->unsignedBigInteger('role_id');
             // $table->timestamp('email_verified_at')->nullable();

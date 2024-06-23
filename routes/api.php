@@ -3,6 +3,7 @@
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\InvoiceController;
@@ -113,14 +114,27 @@ Route::post('v1//upload', [UploadController::class, 'upload']);
 
 
 
-Route::prefix('v2')->group(function(){
-    Route::get('/category',[CategoryController::class,'getCategories']);
-    Route::get('category/{id}',[CategoryController::class,'findById']);
-    Route::get('/service',[ServiceController::class,'getServices']);
-    Route::get('/service/{id}',[ServiceController::class,'findById']);
-    Route::Get('doctor',[UserController::class,'getDoctor']);
-    Route::get('doctor/{id}',[UserController::class,'getDoctorId']);
-    Route::Get('doctor/{id}/date/{date}',[UserController::class,'getDoctorTimeslotsByDate']);
-    Route::get('appointment/create',[AppointmentController::class,'createAppointment']);
+// Route::prefix('v2')->group(function(){
+//     Route::get('/category',[CategoryController::class,'getCategories']);
+//     Route::get('category/{id}',[CategoryController::class,'findById']);
+//     Route::get('/service',[ServiceController::class,'getServices']);
+//     Route::get('/service/{id}',[ServiceController::class,'findById']);
+//     Route::Get('doctor',[UserController::class,'getDoctor']);
+//     Route::get('doctor/{id}',[UserController::class,'getDoctorId']);
+//     Route::Get('doctor/{id}/date/{date}',[UserController::class,'getDoctorTimeslotsByDate']);
+//     Route::get('appointment/create',[AppointmentController::class,'createAppointment']);
+// });
+
+Route::prefix('v2')->controller(ClientController::class)->group(function(){
+    Route::prefix('doctor')->group(function(){
+        Route::get('/','getDoctor');
+        Route::Get('/{id}','getDoctorDetail');
+        Route::get('{id}/schedule','getDoctorSchedule');
+        Route::get('{id}/schedule/{date}','getDoctorTimeslotsByDate');
+    });
+    Route::post('/Appointment/create','createAppointment');
+
+
+
 });
 

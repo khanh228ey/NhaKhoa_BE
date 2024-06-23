@@ -23,7 +23,10 @@ class UserRepository{
         $user->password = Hash::make($data['password']);
         $user->gender = $data['gender'];
         $user->address = $data['address'];
-        $user->description = $data['description'];
+        if($roleId == 1){
+            $user->education = $data['education'];
+            $user->certificate = $data['certificate'];
+        }
         $user->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $user->birthday = $data['birthday'];
         $user->role_id = $data['role_id'];
@@ -46,9 +49,14 @@ class UserRepository{
         $user->email = $data['email'];
         $user->gender = $data['gender'];
         $user->address = $data['address'];
-        $user->description = $data['description'];
         $user->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
         $user->birthday = $data['birthday'];
+        if($roleId == 1){
+            $user->education = $data['education'];
+            $user->certificate = $data['certificate'];
+        }
+        $user->education = null;
+        $user->certificate = null;
         $user->role_id = $data['role_id'];
         $user->avatar = $data['avatar'];
         if ($user->save()) {
