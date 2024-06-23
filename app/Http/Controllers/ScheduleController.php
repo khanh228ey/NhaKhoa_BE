@@ -63,4 +63,6 @@ class ScheduleController extends Controller
             return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
         }
     }
+
+    
 }

@@ -133,6 +133,7 @@ Route::prefix('v2')->controller(ClientController::class)->group(function(){
         Route::get('{id}/schedule/{date}','getDoctorTimeslotsByDate');
     });
     Route::post('/Appointment/create','createAppointment');
+    Route::get('/time','getTime');
 
 
 
