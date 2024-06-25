@@ -79,14 +79,12 @@ class AppointmentRepository{
             $appointment->date = $data['date'];
             $appointment->time = $data['time'];
             $appointment->email = $data['email'];
-            if($data['status'] == 2){
                 $schedule = Schedule::with('time')->where('date',  $data['date'])
                 ->whereHas('time', function ($query) use ($data) {
                     $query->where('time', $data['time']); 
                 })->where('doctor_id',$data['doctor_id'])->first();
                 $schedule->status=0;
                 $schedule->save();
-            }
             $appointment->status = $data['status'];
             $appointment->note = $data['note'];
             $appointment->updated_at =  Carbon::now('Asia/Ho_Chi_Minh');

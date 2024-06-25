@@ -21,4 +21,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/upload',[UploadController::class,'upload']);
+Route::post('/upload',[UploadController::class,'uploadImage']);

@@ -4,10 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ServiceResource;
+use App\Models\Category;
 use App\Models\Schedule;
 use App\Models\Schedule_time;
+use App\Models\Service;
 use App\Models\User;
 use App\RequestValidations\AppointmentValidation;
+use Exception;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -82,7 +87,7 @@ class ClientController extends Controller
     return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $timeslots, 200);
 }
 
-
+// đặt lịch
     Public function createAppointment(Request $request){
         $validator = $this->appointmentValidation->Appointment();
         if ($validator->fails()) {
@@ -94,7 +99,7 @@ class ClientController extends Controller
         }
         return JsonResponse::error(401,$appointment['message'],401);
     }
-
+/// Thời gian
         Public function getTime(){
                 $time = Schedule_time::all();
                 $timeslots = $time->map(function ($item) {
@@ -104,6 +109,76 @@ class ClientController extends Controller
                 });
             
                 return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $timeslots, 200);
+        }
+// Danh sách danh mục
+        public function getCategories(Request $request)
+        {
+            $perPage = $request->get('limit', 10);
+            $page = $request->get('page'); 
+            $query = Category::where('status',1);
+            if (!is_null($page)) {
+                $data = $query->paginate($perPage, ['*'], 'page', $page);
+                $category = $data->items();
+            } else {
+                $category = $query->get();
+            }
+            $result = $category->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'image' => $item->image,
+                ];
+            });
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+        }
+
+
+        Public function categoryfindById($id){
+            try {
+                $category = Category::with('Services')->findOrFail($id); 
+                $result = new CategoryResource($category);
+                return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
+            } catch (Exception $e) {
+                return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+            }
+        }
+
+/// danh sach dich vu 
+        public function getServices(Request $request)
+        {
+            $perPage = $request->get('limit', 10);
+            $page = $request->get('page'); 
+            $name = $request->get('name');
+            $category = $request->get('category_id');
+            $query = Service::with('category')->where('status',1);
+            if (!is_null($page)) {
+                $data = $query->paginate($perPage, ['*'], 'page', $page);
+                $service = $data->items();
+            } else {
+                $service = $query->get();
+            }
+            $result = $service->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'img' => $item->image,
+                    'quantity_sold' => $item->quantity_sold,
+                    'status' => $item->status,
+                    'category' => $item->category->name,
+                ];
+            });
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+            
+        }
+        
+        Public function serviceFindById($id){
+            try {
+                $service = Service::findOrFail($id); 
+                $result = new ServiceResource($service);
+                return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+            } catch (Exception $e) {
+                return JsonResponse::error(404, ConstantsMessage::Not_Found, 404);
+            }
         }
 
 }

@@ -110,7 +110,7 @@ Route::prefix('v1/role')->controller(RoleController::class)->group(function(){
     Route::get('/{id}','findByID');
     Route::put('/update/{id}','updatePermissions');
 });
-Route::post('v1//upload', [UploadController::class, 'upload']);
+Route::post('v1/upload', [UploadController::class, 'uploadImage']);
 
 
 
@@ -134,8 +134,16 @@ Route::prefix('v2')->controller(ClientController::class)->group(function(){
     });
     Route::post('/Appointment/create','createAppointment');
     Route::get('/time','getTime');
-
-
-
+    Route::prefix('category')->group(function(){
+        Route::get('/','getCategories');
+        Route::Get('/{id}','categoryfindById');
+       
+    });
+    Route::prefix('service')->group(function(){
+        Route::get('/','getServices');
+        Route::Get('/{id}','serviceFindById');
+       
+    });
 });
+
 
