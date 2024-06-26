@@ -78,7 +78,7 @@ class HistoryController extends Controller
         }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
-            $history = $data->items();
+            $history = collect($data->items());
         } else {
             $history = $query->get();
         }

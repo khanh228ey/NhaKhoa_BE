@@ -45,7 +45,7 @@ class InvoiceController extends Controller
         // }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
-            $invoices = $data->items();
+            $invoices = collect($data->items());
         } else {
             $invoices = $query->get();
         }   

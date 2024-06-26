@@ -38,7 +38,7 @@ class CustomerController extends Controller
         }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
-            $customer = $data->items();
+            $customer = collect($data->items());
         } else {
             $customer = $query->get();
         }

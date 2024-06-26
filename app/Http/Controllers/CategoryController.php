@@ -38,7 +38,7 @@ class CategoryController extends Controller
         }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
-            $category = $data->items();
+            $category = collect($data->items());
         } else {
             $category = $query->get();
         }

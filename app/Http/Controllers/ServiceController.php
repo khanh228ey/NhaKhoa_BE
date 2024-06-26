@@ -41,7 +41,7 @@ class ServiceController extends Controller
         }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
-            $service = $data->items();
+            $service = collect($data->items());
         } else {
             $service = $query->get();
         }

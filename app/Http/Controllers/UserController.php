@@ -44,7 +44,7 @@ class UserController extends Controller
         }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
-            $users = $data->items();
+            $users = collect($data->items());
         } else {
             $users = $query->get();
         }
