@@ -44,57 +44,57 @@ Route::group([
 
 Route::prefix('v1/user')->controller(UserController::class)->group(function(){
     Route::get('/','getUsers');
-    Route::post('/create','createUser');
+    Route::post('/','createUser');
     Route::get('/{id}','findById');
-    Route::put('update/{id}','updateUser');
+    Route::put('/{id}','updateUser');
 });
 
 Route::prefix('v1/customer')->controller(CustomerController::class)->group(function () {
     Route::get('/','getCutomer');
-    Route::post('/create','createCustomer');
+    Route::post('/','createCustomer');
     Route::get('/{id}','findById');
-    Route::put('update/{id}','updateCustomer');
+    Route::put('/{id}','updateCustomer');
 });
 
 Route::prefix('v1/category')->controller(CategoryController::class)->group(function(){
     Route::get('/','getCategories');
     Route::get('/{id}','findById');
-    Route::post('/create','createCategory');
-    Route::put('/update/{id}','updateCategory');
-    Route::delete('/delete/{id}','deleteCategory');
+    Route::post('/','createCategory');
+    Route::put('/{id}','updateCategory');
+    Route::delete('/{id}','deleteCategory');
 });
 
 Route::prefix('v1/service')->controller(ServiceController::class)->group(function () {
     Route::get('/','getServices');
-    Route::post('/create','createService');
+    Route::post('/','createService');
     Route::get('/{id}','findById');
-    Route::put('/update/{id}','updateService');
-    Route::delete('/delete/{id}','deleteService');
+    Route::put('/{id}','updateService');
+    Route::delete('/{id}','deleteService');
 });
 
 Route::prefix('v1/history')->controller(HistoryController::class)->group(function () {
     Route::get('/','getHistory');
     Route::get('/list-meeting','listMeeting');
     Route::post('/transfer-information','transferInformation');
-    Route::post('/create','createHistory');
+    Route::post('/','createHistory');
     Route::get('/{id}','findById');
-    Route::put('/update/{id}','updateHistory');
+    Route::put('/{id}','updateHistory');
 });
 
 Route::prefix('v1/appointment')->controller(AppointmentController::class)->group(function () {
     Route::get('/','getAppointment');
-    Route::post('/create','createAppointment');
+    Route::post('/','createAppointment');
     Route::get('/{id}','findById');
-    Route::put('/update/{id}','updateAppointment');
-    Route::delete('/delete/{id}','deleteAppointment');
+    Route::put('/{id}','updateAppointment');
+    Route::delete('/{id}','deleteAppointment');
 });
 
 Route::prefix('v1/schedule')->controller(ScheduleController::class)->group(function () {
     Route::get('/','getSchedule');
-    Route::post('/create','createSchedule');
+    Route::post('/','createSchedule');
     // Route::get('/{id}','findById');
     // Route::put('/update','updateAppointment');
-    Route::delete('/delete/{id}','deleteAppointment');
+    Route::delete('/{id}','deleteAppointment');
 });
 
 Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(function () {
