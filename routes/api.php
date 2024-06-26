@@ -134,6 +134,7 @@ Route::prefix('v2')->controller(ClientController::class)->group(function(){
     });
     Route::post('/Appointment/create','createAppointment');
     Route::get('/time','getTime');
+    
     Route::prefix('category')->group(function(){
         Route::get('/','getCategories');
         Route::Get('/{id}','categoryfindById');

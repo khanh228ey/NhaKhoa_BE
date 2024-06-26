@@ -23,7 +23,7 @@ class UploadController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 400);
+            return JsonResponse::error(400,$validator->messages(),400);
         }
         if ($request->hasFile('file') && $request->file('file')->isValid()) {
             $file = $request->file('file');
