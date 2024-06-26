@@ -132,7 +132,7 @@ Route::prefix('v2')->controller(ClientController::class)->group(function(){
         Route::get('{id}/schedule','getDoctorSchedule');
         Route::get('{id}/schedule/{date}','getDoctorTimeslotsByDate');
     });
-    Route::post('/Appointment/create','createAppointment');
+    Route::post('/Appointment','createAppointment');
     Route::get('/time','getTime');
     
     Route::prefix('category')->group(function(){
