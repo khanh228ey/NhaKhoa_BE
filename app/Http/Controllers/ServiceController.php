@@ -45,16 +45,7 @@ class ServiceController extends Controller
         } else {
             $service = $query->get();
         }
-        $result = $service->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'image' => $item->image,
-                'quantity_sold' => $item->quantity_sold,
-                'status' => $item->status,
-                'category_name' => $item->category->name,
-            ];
-         });
+        $result = ServiceResource::collection($service);
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
         
     }
@@ -83,6 +74,7 @@ class ServiceController extends Controller
 
     Public function updateService(Request $request,$id){
         try{
+            $service = Service::findOrFail($id);
             $data = $request->all();
             if( count($data) > 1){
                 $validator = $this->serviceValidation->Service();
@@ -90,14 +82,17 @@ class ServiceController extends Controller
                     return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
                 }
             }
-            $category = $this->serviceRepository->updateService($request,$id);
-            if ($category == false) {
-                    return JsonResponse::error(401,ConstantsMessage::ERROR,401);
-            }
+            $category = $this->serviceRepository->updateService($request,$service);
             return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
         } catch (ModelNotFoundException $e) {
+
             return JsonResponse::handle(404, "Dịch vụ không tồn tại", null, 404);
-        } 
+
+        } catch (\Exception $e) {
+
+            return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
+
+        }
     }
     
     Public function deleteService($id){

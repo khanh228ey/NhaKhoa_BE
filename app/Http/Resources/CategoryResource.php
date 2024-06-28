@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 
 class CategoryResource extends JsonResource
 {
@@ -14,12 +15,19 @@ class CategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-         return [
+        $data = [
             'id' => $this->id,
             'name' => $this->name,
-            'description' => $this->description,
-            'status' => $this->status,
             'image' => $this->image,
+            'status' => $this->status,
         ];
+    
+        if($request->route()->getName() === 'category.detail')  {
+            $data = array_merge($data, [
+                'description' => $this->description,
+            ]);
+        }
+    
+        return $data;
     }
 }

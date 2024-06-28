@@ -27,12 +27,8 @@ class ServiceRepository{
         }
         return false;
     }
-    Public function updateService(Request $request,$id){
-        $service = Service::find($id);
+    Public function updateService(Request $request,$service){
         $data = $request->only(['name', 'status', 'min_price', 'max_price', 'image','unit', 'category_id','description']);
-        if (!$service) {
-            throw new ModelNotFoundException("Dịch vụ không tồn tại");
-        }
             $data['updated_at'] = Carbon::now('Asia/Ho_Chi_Minh');
             // $service->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
             $service->fill($data);

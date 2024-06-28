@@ -14,19 +14,26 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $data = [
             'id' => $this->id,
-            'date' => $this->name,
-            'birthday' => $this->birthday,
+            'name' => $this->name,
+            'avatar' => $this->avatar,
             'phone_number' => $this->phone_number,
             'email' => $this->email,
-            'gender' => $this->gender,
-            'avatar' => $this->avatar,
-            'address' => $this->address,
-            'education' => $this->education,
-            'certificate' => $this->certificate,
-            'role_id' => $this->role->id,
             'role_name' => $this->role->name,
+            'status' => $this->status,
         ];
+        if($request->route()->getName() === 'user.detail')  {
+            $data = array_merge($data, [
+                'gender' => $this->gender,
+                'address' => $this->address,
+                'education' => $this->education,
+                'certificate' => $this->certificate,
+                'role_id' => $this->role->id,
+            ]);
+        }
+    
+        return $data;
     }
 }
+

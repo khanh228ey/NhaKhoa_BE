@@ -48,18 +48,7 @@ class UserController extends Controller
         } else {
             $users = $query->get();
         }
-        $result = $users->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'birthday' => $item->birthday,
-                'email' => $item->email,
-                'phone' => $item->phone_number,
-                'avatar' => $item->avatar,
-                'role' => $item->role->name,
-                'status' => $item->status
-            ];
-        });
+        $result = UserResource::collection($users);
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS,$result, 200);
     }
 
@@ -88,18 +77,24 @@ class UserController extends Controller
 
     Public function updateUser(Request $request,$id){
         try{
-            $validator = $this->userValidation->update();
-            if ($validator->fails()) {
-                return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+            $user = User::findOrFail($id);
+            if(count($request->all()) > 1 ){
+                    $validator = $this->userValidation->update();
+                    if ($validator->fails()) {
+                        return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+                    }
             }
-            $user = $this->userRepository->update($request->all(),$id);
-            if ($user == false) {
-                return JsonResponse::error(500,ConstantsMessage::ERROR,500);
-            }
+            $user = $this->userRepository->update($request,$user);
             return JsonResponse::handle(201, ConstantsMessage::Update, $user, 201);
         } catch (ModelNotFoundException $e) {
+
             return JsonResponse::handle(404, "Người dùng không tồn tại", null, 404);
-        } 
+
+        } catch (\Exception $e) {
+
+            return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
+
+        }
     }
 
    

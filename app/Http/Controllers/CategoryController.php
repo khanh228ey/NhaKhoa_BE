@@ -42,14 +42,7 @@ class CategoryController extends Controller
         } else {
             $category = $query->get();
         }
-        $result = $category->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'image' => $item->image,
-                'status' => $item->status
-            ];
-        });
+        $result = CategoryResource::collection($category);
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
     }
     
@@ -77,7 +70,8 @@ class CategoryController extends Controller
     }
 
     Public function updateCategory(Request $request,$id ){
-            try{
+        try{
+                $category = Category::findOrFail($id);
                 $data = $request->all();
                 if(count($data)  >1){
                     $validator = $this->categoryValidation->categoryValidate();
@@ -85,10 +79,7 @@ class CategoryController extends Controller
                         return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
                     }
                 }  
-                $category = $this->categoryRepository->updateCategory($request,$id);
-                if ($category == false) {
-                        return JsonResponse::error(401,ConstantsMessage::ERROR,401);
-                }
+                $category = $this->categoryRepository->updateCategory($request,$category);
                 return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
             }catch (ModelNotFoundException $e){
                 return JsonResponse::handle(404, "Danh mục không tồn tại", null, 404);

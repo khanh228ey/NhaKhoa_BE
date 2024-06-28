@@ -25,24 +25,12 @@ class CategoryRepository{
         return false;
     }
 
-    public function updateCategory(Request $request, $id){
-        $category = Category::find($id);
-        if (!$category) {
-            throw new ModelNotFoundException("Danh mục không tồn tại");
-        }
+    public function updateCategory(Request $request,$category){
         $data = $request->only(['name', 'status', 'description', 'image']);
-        if (!$category) {
-            return false;
-        }
         if (count($data) > 0) {
             $data['updated_at'] = Carbon::now('Asia/Ho_Chi_Minh');
         }
         $category->fill($data);
-        // $category->name = $data['name'];
-        // $category->status = $data['status'];
-        // $category->description = $data['description'];
-        // $category->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-        // $category->image = $data['image'];
         if ($category->save()) {
             return $category;
         }
