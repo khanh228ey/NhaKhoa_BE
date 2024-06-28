@@ -34,7 +34,7 @@ class ClientController extends Controller
             return [
                 'id' => $item->id,
                 'name' => $item->name,
-                'educatipn' => $item->education,
+                'education' => $item->education,
                 'avatar' => $item->avatar,
             ];
         });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Commons\Responses\JsonResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,9 +21,15 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['phone_number', 'password']);
-
+        $user =User::where('phone_number', $credentials['phone_number'])->first();
+        if (!$user) {
+            return JsonResponse::handle(401, 'Không tìm thấy tài khoản', null, 401);
+        }
+        if($user->status != 1){
+            return JsonResponse::handle(401,'Tài khoản đã bị khóa',null,401);
+        }
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return JsonResponse::handle(401,'Tài khoản mật khẩu chưa chính xác',null,401);
         }
         // $refreshToken = $this->createRefreshToken();
         return $this->respondWithToken($token);
@@ -38,7 +45,9 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-        return response()->json(['message' => 'Successfully logged out']); 
+        // return response()->json(['message' => 'Successfully logged out']); 
+        return JsonResponse::handle(200,'Đăng xuất thành công',null,200);
+        
     }
 
     // public function refresh()

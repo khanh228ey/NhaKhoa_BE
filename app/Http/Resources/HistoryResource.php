@@ -19,15 +19,11 @@ class HistoryResource extends JsonResource
             'date' => $this->date,
             'time' => $this->time,
             'noted' => $this->noted,
-            'customer' => [
-                'id' => $this->customer->id,
-                'name' => $this->customer->name,
-                'birthday' => $this->customer->birthday,
-            ],
-            'doctor' => [
-                'id' => $this->doctor->id,
-                'name' => $this->doctor->name,
-            ],
+            'customer_id' => $this->customer->id,
+            'customer_name' => $this->customer->name,
+            'customer_birthday' => $this->customer->birthday,
+            'doctor_id' => $this->doctor->id,
+            'doctor_name' => $this->doctor->name,
             'services' =>$this->services ?  $this->services->map(function ($service) {
                 return [
                     'id' => $service->id,

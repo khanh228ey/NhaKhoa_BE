@@ -99,6 +99,8 @@ class AppointmentController extends Controller
             $appointment->services()->detach();
             $appointment->delete();
             return JsonResponse::handle(200, ConstantsMessage::Delete, null, 200);
+        } catch (ModelNotFoundException $e) {
+            return JsonResponse::handle(404, "Lịch hẹn không tồn tại", null, 404);
         } catch (\Exception $e) {
             return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
         }

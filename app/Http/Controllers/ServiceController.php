@@ -49,10 +49,10 @@ class ServiceController extends Controller
             return [
                 'id' => $item->id,
                 'name' => $item->name,
-                'img' => $item->image,
+                'image' => $item->image,
                 'quantity_sold' => $item->quantity_sold,
                 'status' => $item->status,
-                'category' => $item->category->name,
+                'category_name' => $item->category->name,
             ];
          });
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
@@ -77,23 +77,27 @@ class ServiceController extends Controller
             $result = new ServiceResource($service);
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
         } catch (ModelNotFoundException $e) {
-            return JsonResponse::error(404, ConstantsMessage::Not_Found, 404);
+            return JsonResponse::handle(404, "Dịch vụ không tồn tại",null, 404);
         }
     }
 
     Public function updateService(Request $request,$id){
-        $data = $request->all();
-        if( count($data) > 1){
-            $validator = $this->serviceValidation->Service();
-            if ($validator->fails()) {
-                  return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+        try{
+            $data = $request->all();
+            if( count($data) > 1){
+                $validator = $this->serviceValidation->Service();
+                if ($validator->fails()) {
+                    return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+                }
             }
-        }
-        $category = $this->serviceRepository->updateService($request,$id);
-        if ($category == false) {
-                return JsonResponse::error(401,ConstantsMessage::ERROR,401);
-        }
-        return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
+            $category = $this->serviceRepository->updateService($request,$id);
+            if ($category == false) {
+                    return JsonResponse::error(401,ConstantsMessage::ERROR,401);
+            }
+            return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
+        } catch (ModelNotFoundException $e) {
+            return JsonResponse::handle(404, "Dịch vụ không tồn tại", null, 404);
+        } 
     }
     
     Public function deleteService($id){
@@ -102,10 +106,12 @@ class ServiceController extends Controller
                 $checkHistory = History_detail::where('service_id',$id)->first();
                 $checkAppointment = Appointment_detail::where('service_id',$id)->first();
             if($checkHistory || $checkAppointment){
-                    return JsonResponse::error(409, 'ràng buộc khóa ngoại', 409);
+                    return JsonResponse::error(409, 'Ràng buộc khóa ngoại', 409);
             }
             $service->delete();
             return JsonResponse::handle(200, ConstantsMessage::Delete,null, 200);
+        } catch (ModelNotFoundException $e) {
+            return JsonResponse::handle(404, "Dịch vụ không tồn tại", null, 404);
         } catch (\Exception $e) {
         return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
     }

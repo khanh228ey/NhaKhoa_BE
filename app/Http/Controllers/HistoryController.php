@@ -95,7 +95,6 @@ class HistoryController extends Controller
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
     }
 
-
     public function findById($id){
         try {
         $history = History::with(['Customer', 'Doctor', 'services'])->whereNotNull('date')->whereNotNull('noted')->findOrFail($id);

@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -41,8 +42,11 @@ class UserRepository{
     }
 
     Public function Update($data,$id){
+        $user = User::findOrFail($id);
+        if (!$user) {
+            throw new ModelNotFoundException("Người dùng không tồn tại");
+        }
         $roleId = $data['role_id'];
-        $user = User::find($id);
         $role = ModelsRole::find($roleId);
         $user->name = $data['name'];
         $user->phone_number = $data['phone_number'];

@@ -3,6 +3,7 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,10 +25,11 @@ class CategoryRepository{
         return false;
     }
 
-    public function updateCategory(Request $request, $id)
-    {
-        // $data = $request->all();
+    public function updateCategory(Request $request, $id){
         $category = Category::find($id);
+        if (!$category) {
+            throw new ModelNotFoundException("Danh mục không tồn tại");
+        }
         $data = $request->only(['name', 'status', 'description', 'image']);
         if (!$category) {
             return false;

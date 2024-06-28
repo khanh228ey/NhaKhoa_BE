@@ -5,8 +5,8 @@ use Error;
 
 class ConstantsMessage {
     const SUCCESS = "Successfully.";
-    const ERROR = "Error";
-    const Not_Found = "Not Found";
+    const ERROR = "Đã xảy ra lỗi.";
+    const Not_Found = "Không tìm thấy dữ liệu";
     const Add = "Thêm thành công";
     const Update = "Cập nhật thành công";
     const Delete = "Xóa thành công";

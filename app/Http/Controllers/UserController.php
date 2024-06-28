@@ -57,7 +57,7 @@ class UserController extends Controller
                 'phone' => $item->phone_number,
                 'avatar' => $item->avatar,
                 'role' => $item->role->name,
-                
+                'status' => $item->status
             ];
         });
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS,$result, 200);
@@ -69,7 +69,7 @@ class UserController extends Controller
             $result = new UserResource($user);
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
         } catch (ModelNotFoundException $e) {
-            return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+            return JsonResponse::handle(404, "Người dùng không tồn tại", null, 404);
         }
     }
 
@@ -87,17 +87,20 @@ class UserController extends Controller
     }
 
     Public function updateUser(Request $request,$id){
-        $validator = $this->userValidation->update();
-        if ($validator->fails()) {
-              return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
-        }
-        $user = $this->userRepository->update($request->all(),$id);
-        if ($user == false) {
-            return JsonResponse::error(401,ConstantsMessage::ERROR,401);
-        }
-         return JsonResponse::handle(201, ConstantsMessage::Update, $user, 201);
+        try{
+            $validator = $this->userValidation->update();
+            if ($validator->fails()) {
+                return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+            }
+            $user = $this->userRepository->update($request->all(),$id);
+            if ($user == false) {
+                return JsonResponse::error(500,ConstantsMessage::ERROR,500);
+            }
+            return JsonResponse::handle(201, ConstantsMessage::Update, $user, 201);
+        } catch (ModelNotFoundException $e) {
+            return JsonResponse::handle(404, "Người dùng không tồn tại", null, 404);
+        } 
     }
-
 
    
 }

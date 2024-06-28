@@ -5,6 +5,7 @@ use App\Models\History;
 use App\Models\Service;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ServiceRepository{
@@ -29,14 +30,9 @@ class ServiceRepository{
     Public function updateService(Request $request,$id){
         $service = Service::find($id);
         $data = $request->only(['name', 'status', 'min_price', 'max_price', 'image','unit', 'category_id','description']);
-            // $service->name = $data['name'];
-            // $service->description = $data['description'];
-            // $service->status= $data['status'];
-            // $service->image = $data['image'];
-            // $service->category_id = $data['category_id'];
-            // $service->max_price = $data['max_price'];
-            // $service->min_price = $data['min_price'];
-            // $service->unit = $data['unit'];
+        if (!$service) {
+            throw new ModelNotFoundException("Dịch vụ không tồn tại");
+        }
             $data['updated_at'] = Carbon::now('Asia/Ho_Chi_Minh');
             // $service->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
             $service->fill($data);

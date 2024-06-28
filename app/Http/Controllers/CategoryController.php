@@ -72,23 +72,29 @@ class CategoryController extends Controller
             $result = new CategoryResource($category);
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
         } catch (ModelNotFoundException $e) {
-            return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+            return JsonResponse::handle(404, 'Danh mục không tồn tại', null, 404);
         }
     }
 
     Public function updateCategory(Request $request,$id ){
-        $data = $request->all();
-        if(count($data)  >1){
-            $validator = $this->categoryValidation->categoryValidate();
-            if ($validator->fails()) {
-                return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+            try{
+                $data = $request->all();
+                if(count($data)  >1){
+                    $validator = $this->categoryValidation->categoryValidate();
+                    if ($validator->fails()) {
+                        return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+                    }
+                }  
+                $category = $this->categoryRepository->updateCategory($request,$id);
+                if ($category == false) {
+                        return JsonResponse::error(401,ConstantsMessage::ERROR,401);
+                }
+                return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
+            }catch (ModelNotFoundException $e){
+                return JsonResponse::handle(404, "Danh mục không tồn tại", null, 404);
+            } catch (\Exception $e) {
+                return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
             }
-        }
-        $category = $this->categoryRepository->updateCategory($request,$id);
-        if ($category == false) {
-                return JsonResponse::error(401,ConstantsMessage::ERROR,401);
-        }
-        return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
     }
 
     Public function deleteCategory($id){
@@ -96,12 +102,12 @@ class CategoryController extends Controller
             $category = Category::findOrFail($id); 
             $check = Service::where('category_id',$id)->first();
             if($check){
-                return JsonResponse::error(409, 'ràng buộc khóa ngoại', 409);
+                return JsonResponse::error(409, 'Ràng buộc dữ liệu', 409);
             }
             $category->delete();
             return JsonResponse::handle(200, ConstantsMessage::Delete,null, 200);
         } catch (ModelNotFoundException $e) {
-            return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+            return JsonResponse::handle(404, "Danh mục không tồn tại", null, 404);
         } catch (\Exception $e) {
         return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
     }
