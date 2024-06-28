@@ -56,42 +56,50 @@ class ClientController extends Controller
     }
 
 
-    Public function getDoctorSchedule($id){
+    public function getDoctorSchedule($id){
         $doctor = User::where('role_id',1)->find($id);
         $Schedule = Schedule::where('doctor_id', $id)
-        ->select('date')->distinct()->orderBy('date', 'Asc')->get();    
-        $result =  [
-                 $Schedule,
-            ];
+            ->select('date')->distinct()->orderBy('date', 'Asc')->get();
     
-        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
-    }
-
-    Public function getDoctorTimeslotsByDate($id, $date)
-{
-    $schedule = Schedule::with('time')
-        ->where('doctor_id', $id)
-        ->where('date', $date)
-        ->get();
-
-    if ($schedule->isEmpty()) {
-        return JsonResponse::handle(404, 'No timeslots found for this doctor on the given date', null, 404);
-    }
-
-    $timeslots = $schedule->map(function ($item) {
-        return [
-             $item->time->time,
+        // Tạo một mảng chứa các giá trị date
+        $dates = $Schedule->pluck('date')->toArray();
+    
+        $result =  [
+            'dates' => $dates,
         ];
-    });
+    
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+    }
+    
 
-    return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $timeslots, 200);
-}
-
+    public function getDoctorTimeslotsByDate($id, $date)
+    {
+        $schedule = Schedule::with('time')
+            ->where('doctor_id', $id)
+            ->where('date', $date)
+            ->get();
+    
+        if ($schedule->isEmpty()) {
+            return JsonResponse::handle(404, 'No timeslots found for this doctor on the given date', null, 404);
+        }
+    
+        // Sử dụng map để lấy các giá trị time và gom chúng vào một mảng duy nhất
+        $timeslots = $schedule->map(function ($item) {
+            return $item->time->time;
+        })->toArray();
+    
+        $result = [
+            'times' => $timeslots,
+        ];
+    
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+    }
+    
 // đặt lịch
     Public function createAppointment(Request $request){
         $validator = $this->appointmentValidation->Appointment();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {
@@ -148,9 +156,11 @@ class ClientController extends Controller
         {
             $perPage = $request->get('limit', 10);
             $page = $request->get('page'); 
-            $name = $request->get('name');
-            $category = $request->get('category_id');
+            $category = $request->get('category_id');   
             $query = Service::with('category')->where('status',1);
+            if($category){
+                $query->where('category_id',  $category);
+            }
             if (!is_null($page)) {
                 $data = $query->paginate($perPage, ['*'], 'page', $page);
                 $service = $data->items();

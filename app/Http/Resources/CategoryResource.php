@@ -19,12 +19,7 @@ class CategoryResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'status' => $this->status,
-            'services' => $this->services->map(function($service) {
-                return [
-                    'id' => $service->id,
-                    'name' => $service->name,
-                ];
-            }),
+            'image' => $this->image,
         ];
     }
 }

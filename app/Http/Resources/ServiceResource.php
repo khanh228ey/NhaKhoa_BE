@@ -24,10 +24,8 @@ class ServiceResource extends JsonResource
                 'unit' => $this->unit,
                 'quantity_sold' => $this->quantity_sold,
                 'status' => $this->status,
-                'category' => [
-                    'id' => $this->category->id,
-                    'name' => $this->category->name,
-                ],
-            ];
+                'category_id' => $this->category->id,
+                'category_name' => $this->category->name,
+         ];
         }
     }

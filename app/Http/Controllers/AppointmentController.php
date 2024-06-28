@@ -27,11 +27,11 @@ class AppointmentController extends Controller
     Public function createAppointment(Request $request){
         $validator = $this->appointmentValidation->Appointment();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {
-            return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $appointment['appointment'], 201);     
+            return JsonResponse::handle(201, ConstantsMessage::Add, $appointment['appointment'], 201);     
         }
         return JsonResponse::error(401,$appointment['message'],401);
     }
@@ -84,13 +84,13 @@ class AppointmentController extends Controller
     Public function updateAppointment(Request $request,$id){
         $validator = $this->appointmentValidation->Appointment();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $history = $this->appointmentRepository->update($request->all(),$id);
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $history, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Update, $history, 201);
     }
 
     Public function deleteAppointment($id){
@@ -98,7 +98,7 @@ class AppointmentController extends Controller
             $appointment = Appointment::findOrFail($id);
             $appointment->services()->detach();
             $appointment->delete();
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, null, 200);
+            return JsonResponse::handle(200, ConstantsMessage::Delete, null, 200);
         } catch (\Exception $e) {
             return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
         }

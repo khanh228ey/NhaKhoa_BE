@@ -52,16 +52,17 @@ class CategoryController extends Controller
         });
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
     }
+    
     Public function createCategory(Request $request){
         $validator = $this->categoryValidation->categoryValidate();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $category = $this->categoryRepository->addCategory($request);
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $category, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Add, $category, 201);
     }
     
     
@@ -80,14 +81,14 @@ class CategoryController extends Controller
         if(count($data)  >1){
             $validator = $this->categoryValidation->categoryValidate();
             if ($validator->fails()) {
-                return JsonResponse::error(400,$validator->messages(),400);
+                return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
             }
         }
         $category = $this->categoryRepository->updateCategory($request,$id);
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $category, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
     }
 
     Public function deleteCategory($id){
@@ -98,7 +99,7 @@ class CategoryController extends Controller
                 return JsonResponse::error(409, 'ràng buộc khóa ngoại', 409);
             }
             $category->delete();
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $category, 200);
+            return JsonResponse::handle(200, ConstantsMessage::Delete,null, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
         } catch (\Exception $e) {

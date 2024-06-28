@@ -56,7 +56,7 @@ class UploadController extends Controller
             'file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()->first()], 400);
+            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         if ($request->hasFile('file') && $request->file('file')->isValid()) {
             $file = $request->file('file');

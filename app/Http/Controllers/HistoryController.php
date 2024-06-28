@@ -27,7 +27,7 @@ class HistoryController extends Controller
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $history, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Add, $history, 201);
     }
 
     public function listMeeting(Request $request){
@@ -51,13 +51,13 @@ class HistoryController extends Controller
     Public function createHistory(Request $request){
         $validator = $this->historyValidation->history();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+              return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $history = $this->historyRepository->addhistory($request->all());
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $history, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Add, $history, 201);
     }
 
     public function getHistory(Request $request)
@@ -111,13 +111,13 @@ class HistoryController extends Controller
     Public function updateHistory(Request $request,$id){
         $validator = $this->historyValidation->history();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+              return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $history = $this->historyRepository->updateHistory($request->all(),$id);
         if ($history == false) {
                 return JsonResponse::error(500,ConstantsMessage::ERROR,500);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $history, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Update, $history, 201);
     }
 
 }

@@ -77,25 +77,25 @@ class UserController extends Controller
     Public function createUser(Request $request){
         $validator = $this->userValidation->create();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+              return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $user = $this->userRepository->AddUser($request);
         if ($user == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $user, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Add, $user, 201);
     }
 
     Public function updateUser(Request $request,$id){
         $validator = $this->userValidation->update();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+              return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $user = $this->userRepository->update($request->all(),$id);
         if ($user == false) {
             return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-         return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $user, 201);
+         return JsonResponse::handle(201, ConstantsMessage::Update, $user, 201);
     }
 
 

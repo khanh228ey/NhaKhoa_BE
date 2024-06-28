@@ -37,6 +37,6 @@ class RoleController extends Controller
         }
         $permissions = $request->input('permissions');
         $role->syncPermissions($permissions);
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, null, 200);
+        return JsonResponse::handle(200, ConstantsMessage::Update, null, 200);
     }
 }

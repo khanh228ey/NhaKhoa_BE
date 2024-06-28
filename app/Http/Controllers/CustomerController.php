@@ -60,13 +60,13 @@ class CustomerController extends Controller
     Public function createCustomer(Request $request){
         $validator = $this->customerValidation->customerValidation();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+              return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $customer = $this->customerRepository->AddCustomer($request->all());
         if ($customer == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $customer, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Add, $customer, 201);
     }
     Public function findById($id){
         try {
@@ -81,12 +81,12 @@ class CustomerController extends Controller
     Public function updateCustomer(Request $request,$id ){
         $validator = $this->customerValidation->customerValidation();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+              return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $category = $this->customerRepository->Update($request->all(),$id);
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $category, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
     }
 }

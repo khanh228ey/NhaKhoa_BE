@@ -62,13 +62,13 @@ class ServiceController extends Controller
     Public function createService(Request $request){
         $validator = $this->serviceValidation->Service();
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
         $service = $this->serviceRepository->addService($request->all());
         if ($service == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $service, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Add, $service, 201);
     }
      
     Public function findById($id){
@@ -86,14 +86,14 @@ class ServiceController extends Controller
         if( count($data) > 1){
             $validator = $this->serviceValidation->Service();
             if ($validator->fails()) {
-                return JsonResponse::error(400,$validator->messages(),400);
+                  return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
             }
         }
         $category = $this->serviceRepository->updateService($request,$id);
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $category, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
     }
     
     Public function deleteService($id){
@@ -105,7 +105,7 @@ class ServiceController extends Controller
                     return JsonResponse::error(409, 'ràng buộc khóa ngoại', 409);
             }
             $service->delete();
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $service, 200);
+            return JsonResponse::handle(200, ConstantsMessage::Delete,null, 200);
         } catch (\Exception $e) {
         return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
     }

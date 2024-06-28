@@ -24,7 +24,7 @@ class InvoiceController extends Controller
         if ($invoices == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $invoices, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Add, $invoices, 201);
     }
 
     Public function updateInvoice(Request $request,$id){
@@ -32,7 +32,7 @@ class InvoiceController extends Controller
         if ($invoices == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $invoices, 201);
+        return JsonResponse::handle(201, ConstantsMessage::Update, $invoices, 201);
     }
 
     Public function getInvoice(Request $request){
