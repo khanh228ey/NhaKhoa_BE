@@ -20,7 +20,10 @@ class UserResource extends JsonResource
             'avatar' => $this->avatar,
             'phone_number' => $this->phone_number,
             'email' => $this->email,
-            'role_name' => $this->role->name,
+            'role' => [
+                'id' => $this->role_id,
+                'name' => $this->role->name,
+            ],
             'status' => $this->status,
         ];
         if($request->route()->getName() === 'user.detail')  {
