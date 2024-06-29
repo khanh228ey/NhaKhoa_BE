@@ -10,6 +10,7 @@ use App\Repositories\HistoryRepository;
 use App\RequestValidations\HistoryValidation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HistoryController extends Controller
 {
@@ -33,19 +34,21 @@ class HistoryController extends Controller
     public function listMeeting(Request $request){
         $perPage = $request->get('limit', 10);
         $page = $request->get('page'); 
-        $query = History::with(['Customer', 'Doctor'])->whereNull('date')->whereNull('noted');
+        $query = History::with(['Customer', 'Doctor'])->whereNull('date')->whereNull('noted')->where('doctor_id',Auth::user()->id);
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
             $meeting = $data->items();
         } else {
             $meeting = $query->get();
         }
-        $result =HistoryResource::collection($meeting);
+        $result = $meeting->map(function ($item) {
+            return [
+            'customer_id' => $item->customer_id,
+            'customer_name' => $item->Customer->name,
+        ];
+    });
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
     }
-
-
-
 
 
     Public function createHistory(Request $request){
@@ -83,15 +86,7 @@ class HistoryController extends Controller
             $history = $query->get();
         }
         
-        $result = $history->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'customer_name' => $item->customer->name,
-                'doctor_name' => $item->doctor->name,
-                'date' => $item->date,
-                'time' => $item->time,
-            ];
-        });
+        $result = HistoryResource::collection($history);
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
     }
 

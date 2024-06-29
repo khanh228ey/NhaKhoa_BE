@@ -59,16 +59,7 @@ class AppointmentController extends Controller
         } else {
             $appointment = $query->get();
         }
-        $result = $appointment->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'phone' => $item->phone,
-                'date' => $item->date,
-                'time' => $item->time,
-                'status' => $item->status,
-            ];
-        });
+        $result = AppointmentResource::collection($appointment);
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
     }
     
@@ -78,19 +69,25 @@ class AppointmentController extends Controller
             $result = new AppointmentResource($appointment);
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
         } catch (ModelNotFoundException $e) {
-            return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+            return JsonResponse::handle(404, "Lịch đặt hẹn không tồn tại", null, 404);
         }
     }
     Public function updateAppointment(Request $request,$id){
-        $validator = $this->appointmentValidation->Appointment();
-        if ($validator->fails()) {
-            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
-        }
-        $history = $this->appointmentRepository->update($request->all(),$id);
-        if ($history == false) {
-                return JsonResponse::error(401,ConstantsMessage::ERROR,401);
-        }
-        return JsonResponse::handle(201, ConstantsMessage::Update, $history, 201);
+        try{
+                $appointment = Appointment::findOrFail($id);
+                $validator = $this->appointmentValidation->Appointment();
+                if ($validator->fails()) {
+                    return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+                }
+                $history = $this->appointmentRepository->update($request->all(),$appointment);
+                return JsonResponse::handle(201, ConstantsMessage::Update, $history, 201);
+            }
+            catch (ModelNotFoundException $e) {
+                return JsonResponse::handle(404,"Lịch đặt hẹn không tồn tại", null, 404);
+            }catch (\Exception $e) {
+                return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
+            }
+          
     }
 
     Public function deleteAppointment($id){
@@ -100,7 +97,7 @@ class AppointmentController extends Controller
             $appointment->delete();
             return JsonResponse::handle(200, ConstantsMessage::Delete, null, 200);
         } catch (ModelNotFoundException $e) {
-            return JsonResponse::handle(404, "Lịch hẹn không tồn tại", null, 404);
+            return JsonResponse::handle(404, "Lịch đặt hẹn không tồn tại", null, 404);
         } catch (\Exception $e) {
             return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
         }

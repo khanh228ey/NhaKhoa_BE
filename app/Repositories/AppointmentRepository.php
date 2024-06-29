@@ -72,9 +72,8 @@ class AppointmentRepository{
         return ['success' => false, 'message' => "Đã xảy ra lỗi khi thêm cuộc hẹn"];
         
     }
-    public function update($data,$id){
-        $appointment = Appointment::find($id);
-        $appointment->name = $data['name'];
+    public function update($data,$appointment){
+            $appointment->name = $data['name'];
             $appointment->phone = $data['phone'];
             $appointment->date = $data['date'];
             $appointment->time = $data['time'];

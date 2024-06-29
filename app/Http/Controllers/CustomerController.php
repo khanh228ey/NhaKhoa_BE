@@ -42,16 +42,7 @@ class CustomerController extends Controller
         } else {
             $customer = $query->get();
         }
-        $result = $customer->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'birthday' => $item->birthday,
-                'email' => $item->email,
-                'phone' => $item->phone_number,
-                
-            ];
-        });
+        $result = CustomerResource::collection($customer);
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
     }
 

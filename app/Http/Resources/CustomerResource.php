@@ -14,22 +14,37 @@ class CustomerResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        // return [
+        //     'id' => $this->id,
+        //     'name' => $this->name,
+        //     'phone_number' => $this->phone_number,
+        //     'birthday' => $this->birthday,
+        //     'email' => $this->email,
+        //     'gender' => $this->gender,
+        //     'address' => $this->address,
+            // 'histories' => $this->histories->map(function ($history) {
+            //     return [
+            //         'id' => $history->id,
+            //         'date' => $history->date,
+            //         'time' => $history->time,
+            //         'noted' => $history->noted,
+            //     ];
+            // }),
+        // ];
+        $data = [
             'id' => $this->id,
             'name' => $this->name,
             'phone_number' => $this->phone_number,
             'birthday' => $this->birthday,
-            'email' => $this->email,
-            'gender' => $this->gender,
-            'address' => $this->address,
-            'histories' => $this->histories->map(function ($history) {
-                return [
-                    'id' => $history->id,
-                    'date' => $history->date,
-                    'time' => $history->time,
-                    'noted' => $history->noted,
-                ];
-            }),
         ];
+        if($request->route()->getName() === 'customer.detail')  {
+            $data = array_merge($data, [
+                'email' => $this->email,
+                'gender' => $this->gender,
+                'address' => $this->address,
+            ]);
+        }
+    
+        return $data;
     }
 }
