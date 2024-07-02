@@ -19,15 +19,15 @@ class HistoryRepository{
         }
         if ($history->save()) {
             // Kiểm tra nếu tồn tại dữ liệu service và quantity
-            if (isset($data['service']) && isset($data['quantity'])&& isset($data['price'])) {
+            if (isset($data['service']) && isset($data['quantity'])) {
                 // Duyệt qua cả hai mảng service và quantity
                 $count = min(count($data['service']), count($data['quantity'])); 
                 for ($i = 0; $i < $count; $i++) {
                     $serviceId = $data['service'][$i];
                     $quantity = $data['quantity'][$i];
-                    $price = $data['price'][$i];
+    
                     // Thêm vào bảng pivot giữa History và Service
-                    $history->services()->attach($serviceId, ['quantity' => $quantity, 'price' => $price]);
+                    $history->services()->attach($serviceId, ['quantity' => $quantity]);
                     $service = Service::find($data['service'][$i]);
                     $service->quantity_sold = $service->quantity_sold + 1;
                     $service->save();

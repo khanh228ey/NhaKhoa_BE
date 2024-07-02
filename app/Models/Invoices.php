@@ -11,6 +11,7 @@ class Invoices extends Model
 
     public $timestamps = false;
     protected $table = 'Invoices';
+    protected $fillable = ['method_payment','status'];
     public function History(){
         return $this->belongsTo(History::class,'history_id');
     }

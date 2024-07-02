@@ -27,15 +27,10 @@ class CustomerController extends Controller
     {
         $perPage = $request->get('limit', 10);
         $page = $request->get('page'); 
-        $name = $request->get('name');
-        $phone = $request->get('phone');
-        $query = Customer::query();
-        if ($name) {
-            $query->where('name', 'LIKE', "%{$name}%");
-        }
-        if($phone){
-            $query->where('phone_number', 'LIKE', "%{$phone}%");
-        }
+        $query = Customer::with(['Histories' => function ($query) {
+            $query->whereNotNull('date')
+                  ->whereNotNull('time');
+        }]);
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
             $customer = collect($data->items());

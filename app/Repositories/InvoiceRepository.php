@@ -20,8 +20,7 @@ class InvoiceRepository{
         $total = 0;
         foreach($history->services as $service){
             $quantity = $service->pivot->quantity; 
-            $price = $service->pivot->price; 
-            $total += $quantity * $price;
+            $total += $quantity * $service->min_price;
         }
         $invoice->total_price = $total;
         if($invoice->save()){
@@ -30,14 +29,24 @@ class InvoiceRepository{
         return false;
     }
 
-    Public function update(Request $request,$invoice){
-        $data = $request->all();
-        $invoice->method_payment = $data['method_payment'];
-        $invoice->status = $data['status'];
+    // Public function update(Request $request,$invoice){
+    //     $data = $request->all();
+    //     $invoice->method_payment = $data['method_payment'];
+    //     $invoice->status = $data['status'];
+    //     $invoice->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+    //     if($invoice->save()){
+    //         return $invoice;
+    //     }
+    //     return false;
+    // }
+    public function update(Request $request, $invoice){
+        $data = $request->only(['method_payment', 'status']);
+        $invoice->fill($data);
         $invoice->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-        if($invoice->save()){
+        if ($invoice->save()) {
             return $invoice;
         }
+    
         return false;
     }
 }

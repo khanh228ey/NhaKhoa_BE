@@ -36,14 +36,22 @@ class CustomerResource extends JsonResource
             'name' => $this->name,
             'phone_number' => $this->phone_number,
             'birthday' => $this->birthday,
+            'email' => $this->email,
+            'gender' => $this->gender,
+            'address' => $this->address,
+            'histories' => $this->Histories->map(function ($history) {
+                return [
+                    'id' => $history->id,
+                    'date' => $history->date,
+                    'time' => $history->time,
+                ];
+            })->all(),
         ];
-        if($request->route()->getName() === 'customer.detail')  {
-            $data = array_merge($data, [
-                'email' => $this->email,
-                'gender' => $this->gender,
-                'address' => $this->address,
-            ]);
-        }
+        // if($request->route()->getName() === 'customer.detail')  {
+        //     $data = array_merge($data, [
+               
+        //     ]);
+        // }
     
         return $data;
     }
