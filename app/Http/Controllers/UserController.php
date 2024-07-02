@@ -72,7 +72,7 @@ class UserController extends Controller
         if ($user == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Add, $user, 201);
+        return JsonResponse::handle(200, ConstantsMessage::Add, $user, 200);
     }
 
     Public function updateUser(Request $request,$id){
@@ -85,7 +85,7 @@ class UserController extends Controller
                     }
             }
             $user = $this->userRepository->update($request,$user);
-            return JsonResponse::handle(201, ConstantsMessage::Update, $user, 201);
+            return JsonResponse::handle(200, ConstantsMessage::Update, $user, 200);
         } catch (ModelNotFoundException $e) {
 
             return JsonResponse::handle(404, "Người dùng không tồn tại", null, 404);

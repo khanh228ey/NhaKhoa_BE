@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\History;
 use App\Models\Invoices;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class InvoiceRepository{
@@ -29,8 +30,8 @@ class InvoiceRepository{
         return false;
     }
 
-    Public function update($data,$id){
-        $invoice = Invoices::find($data['id']);
+    Public function update(Request $request,$invoice){
+        $data = $request->all();
         $invoice->method_payment = $data['method_payment'];
         $invoice->status = $data['status'];
         $invoice->updated_at = Carbon::now('Asia/Ho_Chi_Minh');

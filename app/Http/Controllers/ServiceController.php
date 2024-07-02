@@ -59,7 +59,7 @@ class ServiceController extends Controller
         if ($service == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Add, $service, 201);
+        return JsonResponse::handle(200, ConstantsMessage::Add, $service, 200);
     }
      
     Public function findById($id){
@@ -83,7 +83,7 @@ class ServiceController extends Controller
                 }
             }
             $category = $this->serviceRepository->updateService($request,$service);
-            return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
+            return JsonResponse::handle(200, ConstantsMessage::Update, $category, 200);
         } catch (ModelNotFoundException $e) {
 
             return JsonResponse::handle(404, "Dịch vụ không tồn tại", null, 404);

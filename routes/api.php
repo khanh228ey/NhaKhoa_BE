@@ -101,7 +101,7 @@ Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(functio
     Route::get('/','getInvoice');
     Route::post('/','createInvoice');
     Route::get('/{id}','findById')->name('invoice.detail');
-    Route::put('/update/{id}','updateInvoice');
+    Route::put('/{id}','updateInvoice');
     // Route::delete('/delete/{id}',[InvoiceController::class,'deleteInvoice']);
 });
 
@@ -137,7 +137,7 @@ Route::prefix('v2')->controller(ClientController::class)->group(function(){
     
     Route::prefix('category')->group(function(){
         Route::get('/','getCategories');
-        Route::Get('/{id}','categoryfindById');
+        Route::Get('/{id}','categoryfindById')->name('category.detail');
        
     });
     Route::prefix('service')->group(function(){

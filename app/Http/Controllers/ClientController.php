@@ -103,7 +103,7 @@ class ClientController extends Controller
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {
-            return JsonResponse::handle(201, ConstantsMessage::SUCCESS, $appointment['appointment'], 201);     
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $appointment['appointment'], 200);     
         }
         return JsonResponse::error(401,$appointment['message'],401);
     }
@@ -143,7 +143,7 @@ class ClientController extends Controller
 
         Public function categoryfindById($id){
             try {
-                $category = Category::with('Services')->findOrFail($id); 
+                $category = Category::where('status',1)->findOrFail($id); 
                 $result = new CategoryResource($category);
                 return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
             } catch (Exception $e) {
@@ -167,23 +167,14 @@ class ClientController extends Controller
             } else {
                 $service = $query->get();
             }
-            $result = $service->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                    'img' => $item->image,
-                    'quantity_sold' => $item->quantity_sold,
-                    'status' => $item->status,
-                    'category' => $item->category->name,
-                ];
-            });
+            $result = ServiceResource::collection($service);
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
             
         }
         
         Public function serviceFindById($id){
             try {
-                $service = Service::findOrFail($id); 
+                $service = Service::where('status',1)->findOrFail($id); 
                 $result = new ServiceResource($service);
                 return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
             } catch (Exception $e) {

@@ -55,7 +55,7 @@ class CategoryController extends Controller
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Add, $category, 201);
+        return JsonResponse::handle(200, ConstantsMessage::Add, $category, 200);
     }
     
     
@@ -80,7 +80,7 @@ class CategoryController extends Controller
                     }
                 }  
                 $category = $this->categoryRepository->updateCategory($request,$category);
-                return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
+                return JsonResponse::handle(200, ConstantsMessage::Update, $category, 200);
             }catch (ModelNotFoundException $e){
                 return JsonResponse::handle(404, "Danh mục không tồn tại", null, 404);
             } catch (\Exception $e) {

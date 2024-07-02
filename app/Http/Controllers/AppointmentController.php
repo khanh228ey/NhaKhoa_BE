@@ -31,7 +31,7 @@ class AppointmentController extends Controller
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {
-            return JsonResponse::handle(201, ConstantsMessage::Add, $appointment['appointment'], 201);     
+            return JsonResponse::handle(200, ConstantsMessage::Add, $appointment['appointment'], 200);     
         }
         return JsonResponse::error(401,$appointment['message'],401);
     }
@@ -80,7 +80,7 @@ class AppointmentController extends Controller
                     return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
                 }
                 $history = $this->appointmentRepository->update($request->all(),$appointment);
-                return JsonResponse::handle(201, ConstantsMessage::Update, $history, 201);
+                return JsonResponse::handle(200, ConstantsMessage::Update, $history, 200);
             }
             catch (ModelNotFoundException $e) {
                 return JsonResponse::handle(404,"Lịch đặt hẹn không tồn tại", null, 404);

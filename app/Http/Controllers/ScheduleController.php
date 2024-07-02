@@ -29,7 +29,7 @@ class ScheduleController extends Controller
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Add, $history, 201);
+        return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
     }
 
     public function getSchedule(Request $request)

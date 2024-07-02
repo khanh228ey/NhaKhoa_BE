@@ -45,7 +45,6 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-        // return response()->json(['message' => 'Successfully logged out']); 
         return JsonResponse::handle(200,'Đăng xuất thành công',null,200);
         
     }
@@ -72,11 +71,12 @@ class AuthController extends Controller
 
     protected function respondWithToken($token)
     {
-        return response()->json([
+        $data = [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 60
-        ]);
+            'expires_in' => Auth::factory()->getTTL() * 60,
+        ];
+        return JsonResponse::handle(200,"Đăng nhập thành công",$data,200);
     }
     
 }

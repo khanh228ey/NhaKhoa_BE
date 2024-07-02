@@ -7,6 +7,7 @@ use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\HistoryResource;
 use App\Models\History;
 use App\Repositories\HistoryRepository;
+use App\Repositories\InvoiceRepository;
 use App\RequestValidations\HistoryValidation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class HistoryController extends Controller
     //
     protected $historyRepository;
     protected $historyValidation;
-    public function __construct(HistoryValidation $historyValidation, HistoryRepository $historyRepository)
+    public function __construct(HistoryValidation $historyValidation, HistoryRepository $historyRepository,InvoiceRepository $invoiceRepository)
     {
         $this->historyValidation = $historyValidation;
         $this->historyRepository = $historyRepository; 
@@ -28,7 +29,7 @@ class HistoryController extends Controller
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Add, $history, 201);
+        return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
     }
 
     public function listMeeting(Request $request){
@@ -60,7 +61,7 @@ class HistoryController extends Controller
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Add, $history, 201);
+        return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
     }
 
     public function getHistory(Request $request)
@@ -111,7 +112,7 @@ class HistoryController extends Controller
         if ($history == false) {
                 return JsonResponse::error(500,ConstantsMessage::ERROR,500);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Update, $history, 201);
+        return JsonResponse::handle(200, ConstantsMessage::Update, $history, 200);
     }
 
 }

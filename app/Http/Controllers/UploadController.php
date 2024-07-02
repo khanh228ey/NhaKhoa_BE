@@ -35,7 +35,7 @@ class UploadController extends Controller
         return JsonResponse::error(400,ConstantsMessage::ERROR,400);
     }
 
-    // Upload ảnh lên cloudinary
+   // Upload ảnh lên cloudinary
     // public function uploadImage(Request $request)
     // {
     //     // Validate the request
@@ -50,27 +50,27 @@ class UploadController extends Controller
     //     return response()->json(['url' => $uploadedFileUrl], 200);
     // }
 
-    public function uploadImage(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        ]);
-        if ($validator->fails()) {
-            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
-        }
-        if ($request->hasFile('file') && $request->file('file')->isValid()) {
-            $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $destinationPath = 'uploads';
+    // public function uploadImage(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    //     ]);
+    //     if ($validator->fails()) {
+    //         return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+    //     }
+    //     if ($request->hasFile('file') && $request->file('file')->isValid()) {
+    //         $file = $request->file('file');
+    //         $fileName = time() . '_' . $file->getClientOriginalName();
+    //         $destinationPath = 'uploads';
 
-            $file->move(public_path($destinationPath), $fileName);
+    //         $file->move(public_path($destinationPath), $fileName);
 
-            $url = asset($destinationPath . '/' . $fileName);
+    //         $url = asset($destinationPath . '/' . $fileName);
 
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, ['url' => $url], 200);
-        }
-        return JsonResponse::error(400, ConstantsMessage::ERROR, 400);
-    }
+    //         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, ['url' => $url], 200);
+    //     }
+    //     return JsonResponse::error(400, ConstantsMessage::ERROR, 400);
+    // }
 
 
 }

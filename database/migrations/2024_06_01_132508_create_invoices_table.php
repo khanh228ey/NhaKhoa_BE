@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('history_id');
-            $table->uuid('user_id');
+            $table->uuid('user_id')->nullable();
             $table->foreign('history_id')->references('id')->on('histories')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('total_price');

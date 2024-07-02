@@ -7,6 +7,7 @@ use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoices;
 use App\Repositories\InvoiceRepository;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -24,15 +25,20 @@ class InvoiceController extends Controller
         if ($invoices == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Add, $invoices, 201);
+        return JsonResponse::handle(200, ConstantsMessage::Add, $invoices, 200);
     }
 
     Public function updateInvoice(Request $request,$id){
-        $invoices = $this->invoiceRepository->update($request->all(),$id);
-        if ($invoices == false) {
-                return JsonResponse::error(401,ConstantsMessage::ERROR,401);
+        try{
+            $invoices = Invoices::findOrFail($id);
+            $invoices = $this->invoiceRepository->update($request,$invoices);
+            return JsonResponse::handle(200, ConstantsMessage::Update, $invoices, 200);
+        }catch(ModelNotFoundException $e){
+            return JsonResponse::handle(200, "Không tìm thấy hóa đơn", null, 200);
+        }catch(Exception $e){
+            return JsonResponse::handle(200, ConstantsMessage::ERROR, null, 200);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Update, $invoices, 201);
+        
     }
 
     Public function getInvoice(Request $request){
@@ -49,17 +55,7 @@ class InvoiceController extends Controller
         } else {
             $invoices = $query->get();
         }   
-        $result = $invoices->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'total_price' => $item->total_price,
-                'method_payment' => $item->method_payment,
-                'customer' => $item->history->customer->name,
-                'status' => $item->status,
-                'user' => $item->user->name,
-
-            ];
-        });
+        $result = InvoiceResource::collection($invoices);
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
     }
     Public function findById($id){

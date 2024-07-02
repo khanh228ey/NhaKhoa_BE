@@ -14,28 +14,49 @@ class InvoiceResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        // return [
+        //     'id' => $this->id,
+        //     'total_price' => $this->total_price,
+        //     'method_payment' => $this->method_payment,
+        //     'status' => $this->status,
+        //     'history' => [
+        //         'id' => $this->history->id,
+        //         'date' => $this->history->date,
+        //         'time' => $this->history->time,
+        //         'customer' => [
+        //             'id' => $this->history->customer->id,
+        //             'name' => $this->history->customer->name,
+        //             'phone_number' => $this->history->customer->phone_number,
+        //             'birthday' => $this->history->customer->birthday,
+        //         ],
+        //     ],
+        //     'user' => [
+        //         'id' => $this->user->id,
+        //         'name' => $this->user->name,
+        //         'phone_number' => $this->user->phone_number,
+        //     ],
+            // 'customer_name' => optional($this->history->customer)->name,
+        // ];
+        $data = [
             'id' => $this->id,
             'total_price' => $this->total_price,
             'method_payment' => $this->method_payment,
             'status' => $this->status,
-            'history' => [
-                'id' => $this->history->id,
-                'date' => $this->history->date,
-                'time' => $this->history->time,
-                'customer' => [
+            'customer' => [
                     'id' => $this->history->customer->id,
                     'name' => $this->history->customer->name,
-                    'phone_number' => $this->history->customer->phone_number,
-                    'birthday' => $this->history->customer->birthday,
-                ],
-            ],
-            'user' => [
+            ]
+        ];
+        if($request->route()->getName() === 'invoice.detail')  {
+            $data = array_merge($data, [
+               'user' => [
                 'id' => $this->user->id,
                 'name' => $this->user->name,
-                'phone_number' => $this->user->phone_number,
+                'phone_number' => $this->user->phone_number
             ],
-            // 'customer_name' => optional($this->history->customer)->name,
-        ];
+            ]);
+        }
+    
+        return $data;
     }
 }

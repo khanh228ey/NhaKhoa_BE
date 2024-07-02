@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name',50);
             $table->unsignedBigInteger('category_id');
             $table->string('image');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->integer('min_price');
             $table->integer('max_price');
             $table->string('unit');

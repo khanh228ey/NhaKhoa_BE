@@ -57,7 +57,7 @@ class CustomerController extends Controller
         if ($customer == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Add, $customer, 201);
+        return JsonResponse::handle(200, ConstantsMessage::Add, $customer, 200);
     }
     Public function findById($id){
         try {
@@ -78,6 +78,6 @@ class CustomerController extends Controller
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(201, ConstantsMessage::Update, $category, 201);
+        return JsonResponse::handle(200, ConstantsMessage::Update, $category, 200);
     }
 }
