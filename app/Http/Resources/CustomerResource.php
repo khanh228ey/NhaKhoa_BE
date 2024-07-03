@@ -14,23 +14,6 @@ class CustomerResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return [
-        //     'id' => $this->id,
-        //     'name' => $this->name,
-        //     'phone_number' => $this->phone_number,
-        //     'birthday' => $this->birthday,
-        //     'email' => $this->email,
-        //     'gender' => $this->gender,
-        //     'address' => $this->address,
-            // 'histories' => $this->histories->map(function ($history) {
-            //     return [
-            //         'id' => $history->id,
-            //         'date' => $history->date,
-            //         'time' => $history->time,
-            //         'noted' => $history->noted,
-            //     ];
-            // }),
-        // ];
         $data = [
             'id' => $this->id,
             'name' => $this->name,
@@ -44,6 +27,12 @@ class CustomerResource extends JsonResource
                     'id' => $history->id,
                     'date' => $history->date,
                     'time' => $history->time,
+                    'total_price' => $history->invoice ? $history->invoice->total_price : null,
+                    'doctor' => [
+                        'id' =>   $history->doctor->id,
+                        'name' =>   $history->doctor->name,
+                    ],
+                   
                 ];
             })->all(),
         ];

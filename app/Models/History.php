@@ -22,4 +22,8 @@ class History extends Model
     public function Services(){
         return $this->belongsToMany(Service::class,'history_detail','history_id','service_id')->withPivot('quantity');
     }
+
+    Public function invoice(){
+        return $this->hasOne(Invoices::class,'history_id');
+    }
 }
