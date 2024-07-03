@@ -10,4 +10,6 @@ class History_detail extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'history_detail';
+
+    
 }

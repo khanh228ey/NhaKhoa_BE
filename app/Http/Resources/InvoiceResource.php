@@ -39,6 +39,7 @@ class InvoiceResource extends JsonResource
         // ];
         $data = [
             'id' => $this->id,
+            'history_id' =>$this->history_id,
             'total_price' => $this->total_price,
             'method_payment' => $this->method_payment,
             'status' => $this->status,
@@ -49,14 +50,14 @@ class InvoiceResource extends JsonResource
         ];
         if($request->route()->getName() === 'invoice.detail')  {
             $data = array_merge($data, [
-               'user' => [
-                'id' => $this->user->id,
-                'name' => $this->user->name,
-                'phone_number' => $this->user->phone_number
-            ],
+                'user' => $this->user ? [
+                    'id' => $this->user->id,
+                    'name' => $this->user->name,
+                    'phone_number' => $this->user->phone_number
+                ] : null,
             ]);
-        }
     
-        return $data;
+    }
+    return $data;
     }
 }

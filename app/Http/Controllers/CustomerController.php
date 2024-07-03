@@ -8,6 +8,7 @@ use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Repositories\CustomerRepository;
 use App\RequestValidations\CustomerValidation;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -44,15 +45,19 @@ class CustomerController extends Controller
 
 
     Public function createCustomer(Request $request){
-        $validator = $this->customerValidation->customerValidation();
-        if ($validator->fails()) {
-              return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+        try{
+            $validator = $this->customerValidation->customerValidation();
+            if ($validator->fails()) {
+                return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+            }
+            $customer = $this->customerRepository->AddCustomer($request->all());
+            if ($customer == false) {
+                    return JsonResponse::error(401,ConstantsMessage::ERROR,401);
+            }
+            return JsonResponse::handle(200, ConstantsMessage::Add, $customer, 200);
+        }catch(Exception $e){
+            return JsonResponse::handle(500, ConstantsMessage::ERROR, null, 500);
         }
-        $customer = $this->customerRepository->AddCustomer($request->all());
-        if ($customer == false) {
-                return JsonResponse::error(401,ConstantsMessage::ERROR,401);
-        }
-        return JsonResponse::handle(200, ConstantsMessage::Add, $customer, 200);
     }
     Public function findById($id){
         try {

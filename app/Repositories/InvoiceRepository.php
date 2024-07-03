@@ -13,16 +13,19 @@ class InvoiceRepository{
         $history = History::with('services')->find($data['history_id']);
         $invoice = new Invoices();
         $invoice->history_id = $data['history_id'];
-        $invoice->user_id = Auth::user()->id;
         $invoice->method_payment = 0;
         $invoice->status = 0;
         $invoice->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $total = 0;
-        foreach($history->services as $service){
-            $quantity = $service->pivot->quantity; 
-            $total += $quantity * $service->min_price;
+        if ($history->services->isNotEmpty()) {
+            foreach($history->services as $service){
+                $quantity = $service->pivot->quantity; 
+                $total += $quantity * $service->min_price;
+            }
+        } else {
+            $total = 200000;
         }
-        $invoice->total_price = $total;
+    $invoice->total_price = $total;
         if($invoice->save()){
             return $invoice;
         }
@@ -41,6 +44,10 @@ class InvoiceRepository{
     // }
     public function update(Request $request, $invoice){
         $data = $request->only(['method_payment', 'status']);
+        if (!$invoice->user_id) {
+            $invoice->user_id = auth()->id(); 
+            $invoice->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+        }
         $invoice->fill($data);
         $invoice->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
         if ($invoice->save()) {
