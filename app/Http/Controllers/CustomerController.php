@@ -47,7 +47,8 @@ class CustomerController extends Controller
     Public function createCustomer(Request $request){
             $validator = $this->customerValidation->customerValidation();
             if ($validator->fails()) {
-                return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+                $firstError = $validator->messages()->first();
+                return JsonResponse::handle(400,$firstError,$validator->messages(),400);
             }
             $customer = $this->customerRepository->AddCustomer($request);
             if ($customer == false) {
@@ -68,7 +69,8 @@ class CustomerController extends Controller
     Public function updateCustomer(Request $request,$id ){
         $validator = $this->customerValidation->customerValidation();
         if ($validator->fails()) {
-              return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+            $firstError = $validator->messages()->first();
+              return JsonResponse::handle(400,$firstError,$validator->messages(),400);
         }
         $customer = $this->customerRepository->Update($request->all(),$id);
         if ($customer == false) {

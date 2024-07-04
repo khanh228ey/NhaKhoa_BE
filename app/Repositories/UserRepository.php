@@ -13,8 +13,8 @@ use Spatie\Permission\Models\Role as ModelsRole;
 
 class UserRepository{
 
-    Public function AddUser($data){
-        $data = $_REQUEST;
+    Public function AddUser(Request $request){
+        $data = $request->all();
         $roleId = $data['role_id'];
         $role = Role::find($roleId);
         $user = new User();

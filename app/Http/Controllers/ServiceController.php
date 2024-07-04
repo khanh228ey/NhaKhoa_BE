@@ -53,7 +53,8 @@ class ServiceController extends Controller
     Public function createService(Request $request){
         $validator = $this->serviceValidation->Service();
         if ($validator->fails()) {
-            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+            $firstError = $validator->messages()->first();
+            return JsonResponse::handle(400, $firstError,$validator->messages(),400);
         }
         $service = $this->serviceRepository->addService($request->all());
         if ($service == false) {
@@ -79,7 +80,8 @@ class ServiceController extends Controller
             if( count($data) > 1){
                 $validator = $this->serviceValidation->Service();
                 if ($validator->fails()) {
-                    return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+                    $firstError = $validator->messages()->first();
+                    return JsonResponse::handle(400,$firstError,$validator->messages(),400);
                 }
             }
             $category = $this->serviceRepository->updateService($request,$service);

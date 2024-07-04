@@ -49,7 +49,8 @@ class CategoryController extends Controller
     Public function createCategory(Request $request){
         $validator = $this->categoryValidation->categoryValidate();
         if ($validator->fails()) {
-            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+            $firstError = $validator->messages()->first();
+            return JsonResponse::handle(400, $firstError,$validator->messages(),400);
         }
         $category = $this->categoryRepository->addCategory($request);
         if ($category == false) {
@@ -76,7 +77,8 @@ class CategoryController extends Controller
                 if(count($data)  >1){
                     $validator = $this->categoryValidation->categoryValidate();
                     if ($validator->fails()) {
-                        return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+                        $firstError = $validator->messages()->first();
+                        return JsonResponse::handle(400,$firstError,$validator->messages(),400);
                     }
                 }  
                 $category = $this->categoryRepository->updateCategory($request,$category);

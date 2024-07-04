@@ -99,7 +99,8 @@ class ClientController extends Controller
     Public function createAppointment(Request $request){
         $validator = $this->appointmentValidation->Appointment();
         if ($validator->fails()) {
-            return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
+            $firstError = $validator->messages()->first();
+            return JsonResponse::handle(400,$firstError,$validator->messages(),400);
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {

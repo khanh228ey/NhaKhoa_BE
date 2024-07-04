@@ -14,6 +14,7 @@ class CustomerRepository{
         $customer->phone_number = $data['phone_number'];
         $customer->email = $data['email'];
         $customer->gender = $data['gender'];
+        $customer->address = $data['address'];
         $customer->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $customer->birthday = $data['birthday'];
         if ($customer->save()) {
