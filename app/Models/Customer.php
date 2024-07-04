@@ -12,7 +12,7 @@ class Customer extends Model
     public $incrementing = false;
     protected $keyType = 'string'; 
     public $timestamps = false;
-
+    protected $table = 'customers';
     protected static function boot()
     {
         parent::boot();

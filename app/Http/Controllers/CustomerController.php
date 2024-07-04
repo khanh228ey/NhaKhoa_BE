@@ -45,19 +45,15 @@ class CustomerController extends Controller
 
 
     Public function createCustomer(Request $request){
-        try{
             $validator = $this->customerValidation->customerValidation();
             if ($validator->fails()) {
                 return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
             }
-            $customer = $this->customerRepository->AddCustomer($request->all());
+            $customer = $this->customerRepository->AddCustomer($request);
             if ($customer == false) {
                     return JsonResponse::error(401,ConstantsMessage::ERROR,401);
             }
             return JsonResponse::handle(200, ConstantsMessage::Add, $customer, 200);
-        }catch(Exception $e){
-            return JsonResponse::handle(500, ConstantsMessage::ERROR, null, 500);
-        }
     }
     Public function findById($id){
         try {
@@ -74,10 +70,10 @@ class CustomerController extends Controller
         if ($validator->fails()) {
               return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
         }
-        $category = $this->customerRepository->Update($request->all(),$id);
-        if ($category == false) {
+        $customer = $this->customerRepository->Update($request->all(),$id);
+        if ($customer == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(200, ConstantsMessage::Update, $category, 200);
+        return JsonResponse::handle(200, ConstantsMessage::Update, $customer, 200);
     }
 }
