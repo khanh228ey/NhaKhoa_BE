@@ -12,8 +12,11 @@ class HistoryRepository{
         $history->customer_id = $data['customer_id'];
         $history->doctor_id = $data['doctor_id'];
         if(count($data) > 2){
-            $history->date = $data['date'];
-            $history->time = $data['time'];
+            $nowInHCM = Carbon::now('Asia/Ho_Chi_Minh');
+            $date = $nowInHCM->toDateString(); // Định dạng ngày: 'YYYY-MM-DD'
+            $time = $nowInHCM->format('H:i'); // Định dạng giờ: 'HH:mm:ss'
+            $history->date = $date;
+            $history->time = $time;
             $history->noted = $data['noted'];
             $history->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         }
@@ -43,8 +46,11 @@ class HistoryRepository{
     public function updateHistory($data,$id){
         $history = History::find($id);
         if (count($data) > 2) {
-            $history->date = $data['date'];
-            $history->time = $data['time'];
+            $nowInHCM = Carbon::now('Asia/Ho_Chi_Minh');
+            $date = $nowInHCM->toDateString(); // Định dạng ngày: 'YYYY-MM-DD'
+            $time = $nowInHCM->format('H:i'); // Định dạng giờ: 'HH:mm:ss'
+            $history->date = $date;
+            $history->time = $time;
             $history->noted = $data['noted'];
             $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
         }
