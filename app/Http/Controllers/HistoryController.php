@@ -32,24 +32,27 @@ class HistoryController extends Controller
         return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
     }
 
-    public function listMeeting(Request $request){
-        $perPage = $request->get('limit', 10);
-        $page = $request->get('page'); 
-        $query = History::with(['Customer', 'Doctor'])->whereNull('date')->whereNull('noted')->where('doctor_id',Auth::user()->id);
-        if (!is_null($page)) {
-            $data = $query->paginate($perPage, ['*'], 'page', $page);
-            $meeting = $data->items();
-        } else {
-            $meeting = $query->get();
-        }
-        $result = $meeting->map(function ($item) {
-            return [
-            'customer_id' => $item->customer_id,
-            'customer_name' => $item->Customer->name,
-        ];
-    });
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
-    }
+    // public function listMeeting(Request $request){
+    //     $perPage = $request->get('limit', 10);
+    //     $page = $request->get('page'); 
+    //     $query = History::with(['Customer', 'Doctor'])->whereNull('date')->whereNull('noted')->where('doctor_id',Auth::user()->id);
+    //     if (!is_null($page)) {
+    //         $data = $query->paginate($perPage, ['*'], 'page', $page);
+    //         $meeting = $data->items();
+    //     } else {
+    //         $meeting = $query->get();
+    //     }
+    //     $result = $meeting->map(function ($item) {
+    //         return [
+    //             'customer'[
+    //                 'id' => $item->customer_id,
+    //                 'name' => $item->Customer->name,
+    //             ],
+            
+    //     ];
+    // });
+    //     return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+    // }
 
 
     Public function createHistory(Request $request){
@@ -73,7 +76,7 @@ class HistoryController extends Controller
         $doctor_id = $request->get('doctor_id');
         $query = History::with(['Customer', 'Doctor', 'services' => function ($query) {
             $query->select('services.id', 'services.name')
-                  ->withPivot('quantity'); 
+                  ->withPivot('quantity','price'); 
         }])->whereNotNull('date')->whereNotNull('noted');
         if ($customer_id) {
             $query->where('customer_id', $customer_id);

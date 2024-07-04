@@ -25,9 +25,10 @@ class HistoryRepository{
                 for ($i = 0; $i < $count; $i++) {
                     $serviceId = $data['service'][$i];
                     $quantity = $data['quantity'][$i];
+                    $price = $data['price'][$i];
     
                     // Thêm vào bảng pivot giữa History và Service
-                    $history->services()->attach($serviceId, ['quantity' => $quantity]);
+                    $history->services()->attach($serviceId, ['quantity' => $quantity,'price' => $price]);
                     $service = Service::find($data['service'][$i]);
                     $service->quantity_sold = $service->quantity_sold + 1;
                     $service->save();
@@ -55,7 +56,8 @@ class HistoryRepository{
                     for ($i = 0; $i < $count; $i++) {
                         $serviceId = $data['service'][$i];
                         $quantity = $data['quantity'][$i];
-                        $syncData[$serviceId] = ['quantity' => $quantity];
+                        $price = $data['price'][$i];
+                        $syncData[$serviceId] = ['quantity' => $quantity,'price' => $price];
                     }
                     
                     $history->services()->sync($syncData);

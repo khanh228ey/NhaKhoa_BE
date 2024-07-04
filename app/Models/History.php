@@ -21,7 +21,7 @@ class History extends Model
     }
 
     public function Services(){
-        return $this->belongsToMany(Service::class,'history_detail','history_id','service_id')->withPivot('quantity');
+        return $this->belongsToMany(Service::class,'history_detail','history_id','service_id')->withPivot('quantity','price');
     }
 
     Public function invoice(){
