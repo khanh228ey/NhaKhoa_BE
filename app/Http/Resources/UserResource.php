@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'avatar' => $this->avatar,
             'phone_number' => $this->phone_number,
+            'birthday' => $this->birthday,
             'email' => $this->email,
             'role' => [
                 'id' => $this->role_id,
@@ -32,7 +33,6 @@ class UserResource extends JsonResource
                 'address' => $this->address,
                 'education' => $this->education,
                 'certificate' => $this->certificate,
-                'role_id' => $this->role->id,
             ]);
         }
     

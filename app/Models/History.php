@@ -31,12 +31,11 @@ class History extends Model
     protected static function booted()
     {
         static::saved(function ($history) {
-            // Kiểm tra nếu thuộc tính 'noted' đã được thiết lập và nếu không có invoice nào đã tồn tại
+            // thiết lập hóa đơn nếu là bệnh án
             if ($history->noted && !$history->invoice) {
                 $invoiceRepository = new InvoiceRepository();
                 $invoiceRepository->addInvoice(['history_id' => $history->id]);
             }
         });
     }
-
 }

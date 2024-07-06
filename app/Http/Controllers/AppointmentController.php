@@ -8,7 +8,6 @@ use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use App\Repositories\AppointmentRepository;
 use App\RequestValidations\AppointmentValidation;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
