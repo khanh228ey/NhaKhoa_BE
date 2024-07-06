@@ -31,8 +31,7 @@ class UserResource extends JsonResource
             $data = array_merge($data, [
                 'gender' => $this->gender,
                 'address' => $this->address,
-                'education' => $this->education,
-                'certificate' => $this->certificate,
+                'description' => $this->description,
             ]);
         }
     

@@ -24,10 +24,7 @@ class UserRepository{
         $user->password = Hash::make($data['password']);
         $user->gender = $data['gender'];
         $user->address = $data['address'];
-        if($roleId == 1){
-            $user->education = $data['education'];
-            $user->certificate = $data['certificate'];
-        }
+        $user->description = $data['description'];
         $user->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $user->birthday = $data['birthday'];
         $user->role_id = $data['role_id'];
@@ -75,15 +72,8 @@ class UserRepository{
         if(count($data1) > 1){
             $roleId = $data1['role_id'];
             $role = ModelsRole::find($roleId);
-            if($roleId == 1){
-                $user->education = $data1['education'];
-                $user->certificate = $data1['certificate'];
-            }else{
-                $user->education = null;
-                $user->certificate = null;
-            }
         }
-        $data = $request->only(['id','name','email', 'phone_number','avatar','gender','birthday',
+        $data = $request->only(['id','name','email', 'phone_number','avatar','gender','birthday','description',
                 'address','role_id','status']);
         $user->fill($data);
         $user->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
