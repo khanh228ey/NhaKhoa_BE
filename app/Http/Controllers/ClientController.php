@@ -12,7 +12,9 @@ use App\Models\Schedule_time;
 use App\Models\Service;
 use App\Models\User;
 use App\RequestValidations\AppointmentValidation;
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -34,7 +36,6 @@ class ClientController extends Controller
             return [
                 'id' => $item->id,
                 'name' => $item->name,
-                'education' => $item->education,
                 'avatar' => $item->avatar,
             ];
         });
@@ -47,8 +48,7 @@ class ClientController extends Controller
              [
                 'id' => $doctor->id,
                 'name' => $doctor->name,
-                'education' => $doctor->education,
-                'certificate' => $doctor->certificate,
+                'description' => $doctor->description,
                 'avatar' => $doctor->avatar,
             ];
      
@@ -56,22 +56,50 @@ class ClientController extends Controller
     }
 
 
-    public function getDoctorSchedule($id){
-        $doctor = User::where('role_id',1)->find($id);
-        $Schedule = Schedule::where('doctor_id', $id)
-            ->select('date')->distinct()->orderBy('date', 'Asc')->get();
+    // public function getDoctorSchedule($id){
+    //     $doctor = User::where('role_id',1)->find($id);
+    //     $Schedule = Schedule::where('doctor_id', $id)
+    //         ->select('date')->distinct()->orderBy('date', 'Asc')->get();
     
-        // Tạo một mảng chứa các giá trị date
-        $dates = $Schedule->pluck('date')->toArray();
+    //     // Tạo một mảng chứa các giá trị date
+    //     $dates = $Schedule->pluck('date')->toArray();
     
-        $result =  [
-            'dates' => $dates,
-        ];
+    //     $result =  [
+    //         'date' => $dates,
+    //     ];
     
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
-    }
-    
+    //     return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+    // }
 
+    public function getDoctorSchedule($id) {
+        try {
+            $doctor = User::where('role_id', 1)->findOrFail($id);
+            $currentDate = Carbon::now();
+            $startDate = $currentDate->copy()->addDay();
+            $endDate = $currentDate->copy()->addDays(7);
+    
+            $Schedule = Schedule::where('doctor_id', $id)
+                ->whereBetween('date', [$startDate, $endDate])
+                ->select('date')
+                ->distinct()
+                ->orderBy('date', 'Asc')
+                ->get();
+    
+            // Create an array of the dates
+            $dates = $Schedule->pluck('date')->toArray();
+    
+            // Wrap the dates array inside another array with the key 'date'
+            $result = [
+                'date' => $dates,
+            ];
+    
+            // Return the JSON response
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+        } catch (ModelNotFoundException $e) {
+            return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+        }
+    
+    }
     public function getDoctorTimeslotsByDate($id, $date)
     {
         $schedule = Schedule::with('time')
@@ -82,14 +110,12 @@ class ClientController extends Controller
         if ($schedule->isEmpty()) {
             return JsonResponse::handle(404, 'No timeslots found for this doctor on the given date', null, 404);
         }
-    
-        // Sử dụng map để lấy các giá trị time và gom chúng vào một mảng duy nhất
         $timeslots = $schedule->map(function ($item) {
             return $item->time->time;
         })->toArray();
     
         $result = [
-            'times' => $timeslots,
+            'time' => $timeslots,
         ];
     
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
