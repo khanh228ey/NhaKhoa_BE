@@ -25,7 +25,7 @@ class ScheduleRepository{
                 $schedule = new Schedule();
                 $schedule->doctor_id = $data['doctor_id']; 
                 $schedule->time_id = $time;
-                $schedule->status = 0; 
+                $schedule->status = 1; 
                 $schedule->date = $scheduleData['date'];
                 $schedule->created_at = Carbon::now('Asia/Ho_Chi_Minh');
                 $schedule->save(); 

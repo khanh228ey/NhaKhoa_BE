@@ -74,53 +74,40 @@ class ClientController extends Controller
     public function getDoctorSchedule($id) {
         try {
             $doctor = User::where('role_id', 1)->findOrFail($id);
-            $currentDate = Carbon::now();
-            $startDate = $currentDate->copy()->addDay();
-            $endDate = $currentDate->copy()->addDays(7);
-    
             $Schedule = Schedule::where('doctor_id', $id)
-                ->whereBetween('date', [$startDate, $endDate])
+                ->where('status', 1)
                 ->select('date')
                 ->distinct()
                 ->orderBy('date', 'Asc')
                 ->get();
-    
-            // Create an array of the dates
             $dates = $Schedule->pluck('date')->toArray();
-    
-            // Wrap the dates array inside another array with the key 'date'
-            $result = [
-                'date' => $dates,
-            ];
-    
-            // Return the JSON response
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+            $limitedDates = array_slice($dates, 0, 7);
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $limitedDates, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
         }
-    
     }
+    
+    
     public function getDoctorTimeslotsByDate($id, $date)
     {
         $schedule = Schedule::with('time')
             ->where('doctor_id', $id)
             ->where('date', $date)
+            ->where('status',1)
             ->get();
-    
+
         if ($schedule->isEmpty()) {
             return JsonResponse::handle(404, 'No timeslots found for this doctor on the given date', null, 404);
         }
+
         $timeslots = $schedule->map(function ($item) {
             return $item->time->time;
         })->toArray();
-    
-        $result = [
-            'time' => $timeslots,
-        ];
-    
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
     }
-    
+
 // đặt lịch
     Public function createAppointment(Request $request){
         $validator = $this->appointmentValidation->Appointment();
@@ -135,16 +122,15 @@ class ClientController extends Controller
         return JsonResponse::error(401,$appointment['message'],401);
     }
 /// Thời gian
-        Public function getTime(){
-                $time = Schedule_time::all();
-                $timeslots = $time->map(function ($item) {
-                    return [
-                         $item->time,
-                    ];
-                });
-            
-                return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $timeslots, 200);
+        public function getTime(){
+            $time = Schedule_time::all();
+            $timeslots = $time->map(function ($item) {
+                return $item->time;
+            })->toArray();
+
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
         }
+
 // Danh sách danh mục
         public function getCategories(Request $request)
         {
@@ -166,7 +152,6 @@ class ClientController extends Controller
             });
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
         }
-
 
         Public function categoryfindById($id){
             try {
