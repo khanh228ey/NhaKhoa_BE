@@ -33,9 +33,11 @@ class ServiceRepository{
     }
 
     Public function updateService(Request $request,$service){
-        $data = $request->only(['name', 'status', 'min_price', 'max_price', 'image','unit', 'category_id','description','quantity_sold']);
+        $data = $request->only(['name', 'status', 'min_price', 'max_price', 'image','unit', 'category_id','quantity_sold']);
             $data['updated_at'] = Carbon::now('Asia/Ho_Chi_Minh');
-            // $service->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+            if (isset($request->description) && $request->description !== '') {
+                $data['description'] = $request->description;
+            }
             $service->fill($data);
         if($service->save()){
             return $service;

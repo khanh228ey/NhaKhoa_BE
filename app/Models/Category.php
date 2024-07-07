@@ -9,7 +9,7 @@ class Category extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $fillable = ['name', 'status', 'description', 'image'];
+    protected $fillable = ['name', 'status', 'description', 'image','updated_at'];
     public function Services(){
         return $this->hasMany(Service::class,'category_id');
     }

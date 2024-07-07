@@ -26,10 +26,11 @@ class CategoryRepository{
     }
 
     public function updateCategory(Request $request,$category){
-        $data = $request->only(['name', 'status', 'description', 'image']);
-        if (count($data) > 0) {
-            $data['updated_at'] = Carbon::now('Asia/Ho_Chi_Minh');
-        }
+        $data = $request->only(['name', 'status', 'image']);
+        if (isset($request->description) && $request->description !== '') {
+            $data['description'] = $request->description;
+        }    
+        $data['updated_at'] = Carbon::now('Asia/Ho_Chi_Minh');
         $category->fill($data);
         if ($category->save()) {
             return $category;
