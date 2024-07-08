@@ -24,11 +24,10 @@ class AppointmentRepository{
             $appointment->phone = $data['phone'];
             $appointment->date = $data['date'];
             $appointment->time = $data['time'];
-            $appointment->email = $data['email'];
             if(isset($data['status'])){
                 $appointment->status = $data['status'];
             }else{
-                $appointment->status =0;
+                $appointment->status = 0;
             }
             $appointment->note = $data['note'];
             $appointment->created_at = Carbon::now('Asia/Ho_Chi_Minh');
@@ -39,11 +38,10 @@ class AppointmentRepository{
             $appointment->phone = $data['phone'];
             $appointment->date =  $data['date'];
             $appointment->time = $data['time'];
-            $appointment->email = $data['email'];
             if(isset($data['status'])){
                 $appointment->status = $data['status'];
             }else{
-                $appointment->status =0;
+                $appointment->status = 0;
             }
             $appointment->note = $data['note'];
             $appointment->created_at = Carbon::now('Asia/Ho_Chi_Minh');
@@ -56,8 +54,10 @@ class AppointmentRepository{
                 ->whereHas('time', function ($query) use ($data) {
                     $query->where('time', $data['time']); 
                 })->where('doctor_id',$data['doctor_id'])->first();
-                $schedule->status = 1;
-                $schedule->save();
+                if($schedule){
+                    $schedule->status = 0;
+                    $schedule->save();
+                }
                 $appointment->doctor_id = $data['doctor_id'];
             }
                
@@ -101,7 +101,6 @@ class AppointmentRepository{
         }
             $appointment->save();
             if (isset($data['services'])) {
-                // Đồng bộ các dịch vụ liên quan,
                 $appointment->services()->sync($data['services']);
             } else {
                 // Nếu không có dịch vụ nào được cung cấp, xóa tất cả các dịch vụ liên quan

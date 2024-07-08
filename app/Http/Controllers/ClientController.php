@@ -128,18 +128,18 @@ class ClientController extends Controller
     
 
 // đặt lịch
-    Public function createAppointment(Request $request){
-        $validator = $this->appointmentValidation->Appointment();
-        if ($validator->fails()) {
-            $firstError = $validator->messages()->first();
-            return JsonResponse::handle(400,$firstError,$validator->messages(),400);
-        }
-        $appointment = $this->appointmentRepository->addAppointment($request->all());
-        if ($appointment['success'] == true) {
-            return JsonResponse::handle(200, "Đặt lịch hẹn thành công", $appointment['appointment'], 200);     
-        }
-        return JsonResponse::error(401,$appointment['message'],401);
-    }
+    // Public function createAppointment(Request $request){
+    //     $validator = $this->appointmentValidation->Appointment();
+    //     if ($validator->fails()) {
+    //         $firstError = $validator->messages()->first();
+    //         return JsonResponse::handle(400,$firstError,$validator->messages(),400);
+    //     }
+    //     $appointment = $this->appointmentRepository->addAppointment($request->all());
+    //     if ($appointment['success'] == true) {
+    //         return JsonResponse::handle(200, "Đặt lịch hẹn thành công", $appointment['appointment'], 200);     
+    //     }
+    //     return JsonResponse::error(401,$appointment['message'],401);
+    // }
 /// Thời gian
         public function getTime(){
             $time = Schedule_time::all();
