@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ServiceClientResource;
 use App\Http\Resources\ServiceResource;
 use App\Models\Category;
 use App\Models\Schedule;
@@ -197,7 +198,7 @@ class ClientController extends Controller
             } else {
                 $service = $query->get();
             }
-            $result = ServiceResource::collection($service);
+            $result = ServiceClientResource::collection($service);
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
             
         }
@@ -205,7 +206,7 @@ class ClientController extends Controller
         Public function serviceFindById($id){
             try {
                 $service = Service::where('status',1)->findOrFail($id); 
-                $result = new ServiceResource($service);
+                $result = new ServiceClientResource($service);
                 return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
             } catch (Exception $e) {
                 return JsonResponse::error(404, ConstantsMessage::Not_Found, 404);

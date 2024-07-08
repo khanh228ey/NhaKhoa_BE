@@ -144,7 +144,7 @@ Route::prefix('v2')->controller(ClientController::class)->group(function(){
     });
     Route::prefix('service')->group(function(){
         Route::get('/','getServices');
-        Route::Get('/{id}','serviceFindById');
+        Route::Get('/{id}','serviceFindById')->name('service.detail');
        
     });
 });
