@@ -75,24 +75,25 @@ class ClientController extends Controller
     // }
     
     
-    // public function getDoctorTimeslotsByDate($id, $date)
-    // {
-    //     $schedule = Schedule::with('time')
-    //         ->where('doctor_id', $id)
-    //         ->where('date', $date)
-    //         ->where('status',1)
-    //         ->get();
-
-    //     if ($schedule->isEmpty()) {
-    //         return JsonResponse::handle(404, 'No timeslots found for this doctor on the given date', null, 404);
-    //     }
-
-    //     $timeslots = $schedule->map(function ($item) {
-    //         return $item->time->time;
-    //     })->toArray();
-
-    //     return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
-    // }
+    public function getDoctorTimeslotsByDate($id, $date)
+    {
+        $schedule = Schedule::with('time')
+            ->where('doctor_id', $id)
+            ->where('date', $date)
+            ->where('status', 1)
+            ->get();
+    
+        if ($schedule->isEmpty()) {
+            return JsonResponse::handle(404, 'Không có thời gian trong ngày', null, 404);
+        }
+    
+        $timeslots = $schedule->map(function ($item) {
+            return ['time' => $item->time->time];
+        })->toArray();
+    
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
+    }
+    
     public function getDoctorScheduleWithTimeslots($id) {
         try {
             $doctor = User::where('role_id', 1)->findOrFail($id);
@@ -116,12 +117,9 @@ class ClientController extends Controller
                 if (!isset($datesProcessed[$date])) {
                     $datesProcessed[$date] = [
                         'date' => $date,
-                        'times' => []
                     ];
                 }
     
-                $timeSlot = $schedule->time->time;
-                $datesProcessed[$date]['times'][] = ['time' => $timeSlot];
             }
     
             $limitedScheduleData = array_slice(array_values($datesProcessed), 0, 7);
@@ -142,7 +140,7 @@ class ClientController extends Controller
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $appointment['appointment'], 200);     
+            return JsonResponse::handle(200, "Đặt lịch hẹn thành công", $appointment['appointment'], 200);     
         }
         return JsonResponse::error(401,$appointment['message'],401);
     }
