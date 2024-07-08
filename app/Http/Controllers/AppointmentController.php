@@ -80,14 +80,18 @@ class AppointmentController extends Controller
                     $firstError = $validator->messages()->first();
                     return JsonResponse::handle(400, $firstError,$validator->messages(),400);
                 }
-                $history = $this->appointmentRepository->update($request->all(),$appointment);
-                return JsonResponse::handle(200, ConstantsMessage::Update, $history, 200);
+                $appointment = $this->appointmentRepository->update($request->all(),$appointment);
+                if ($appointment['success'] == true) {
+                    return JsonResponse::handle(200, ConstantsMessage::Add, $appointment['appointment'], 200);     
+                }
+                return JsonResponse::error(401,$appointment['message'],401);
             }
             catch (ModelNotFoundException $e) {
                 return JsonResponse::handle(404,"Lịch đặt hẹn không tồn tại", null, 404);
-            }catch (\Exception $e) {
-                return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
             }
+            // catch (\Exception $e) {
+            //     return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
+            // }
           
     }
 

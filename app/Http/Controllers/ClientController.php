@@ -56,25 +56,6 @@ class ClientController extends Controller
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
 
-
-
-    // public function getDoctorSchedule($id) {
-    //     try {
-    //         $doctor = User::where('role_id', 1)->findOrFail($id);
-    //         $Schedule = Schedule::where('doctor_id', $id)
-    //             ->where('status', 1)
-    //             ->select('date')
-    //             ->distinct()
-    //             ->orderBy('date', 'Asc')
-    //             ->get();
-    //         $dates = $Schedule->pluck('date')->toArray();
-    //         $limitedDates = array_slice($dates, 0, 7);
-    //         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $limitedDates, 200);
-    //     } catch (ModelNotFoundException $e) {
-    //         return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
-    //     }
-    // }
-    
     
     public function getDoctorTimeslotsByDate($id, $date)
     {
@@ -127,19 +108,6 @@ class ClientController extends Controller
     }
     
 
-// đặt lịch
-    // Public function createAppointment(Request $request){
-    //     $validator = $this->appointmentValidation->Appointment();
-    //     if ($validator->fails()) {
-    //         $firstError = $validator->messages()->first();
-    //         return JsonResponse::handle(400,$firstError,$validator->messages(),400);
-    //     }
-    //     $appointment = $this->appointmentRepository->addAppointment($request->all());
-    //     if ($appointment['success'] == true) {
-    //         return JsonResponse::handle(200, "Đặt lịch hẹn thành công", $appointment['appointment'], 200);     
-    //     }
-    //     return JsonResponse::error(401,$appointment['message'],401);
-    // }
 /// Thời gian
         public function getTime(){
             $time = Schedule_time::all();

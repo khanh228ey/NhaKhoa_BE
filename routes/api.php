@@ -113,18 +113,6 @@ Route::prefix('v1/role')->controller(RoleController::class)->group(function(){
 Route::post('v1/upload', [UploadController::class, 'uploadImage']);
 
 
-
-// Route::prefix('v2')->group(function(){
-//     Route::get('/category',[CategoryController::class,'getCategories']);
-//     Route::get('category/{id}',[CategoryController::class,'findById']);
-//     Route::get('/service',[ServiceController::class,'getServices']);
-//     Route::get('/service/{id}',[ServiceController::class,'findById']);
-//     Route::Get('doctor',[UserController::class,'getDoctor']);
-//     Route::get('doctor/{id}',[UserController::class,'getDoctorId']);
-//     Route::Get('doctor/{id}/date/{date}',[UserController::class,'getDoctorTimeslotsByDate']);
-//     Route::get('appointment/create',[AppointmentController::class,'createAppointment']);
-// });
-
 Route::prefix('v2')->controller(ClientController::class)->group(function(){
     Route::prefix('doctor')->group(function(){
         Route::get('/','getDoctor');
