@@ -111,9 +111,19 @@ Route::prefix('v1/role')->controller(RoleController::class)->group(function(){
     Route::put('/update/{id}','updatePermissions');
 });
 Route::post('v1/upload', [UploadController::class, 'uploadImage']);
-Route::get('v1/time',[ClientController::class,'getTime']);
 
-
+Route::prefix('v1')->controller(ClientController::class)->group(function(){
+    Route::prefix('doctor')->group(function(){
+        Route::get('/','getDoctor');
+        Route::Get('/{id}','getDoctorDetail');
+        
+    });
+    Route::prefix('schedule')->group(function(){
+        Route::get('/{id}','getDoctorScheduleWithTimeslots');
+        Route::get('/{id}/{date}','getDoctorTimeslotsByDate');
+    });
+    Route::get('/time','getTime');
+});
 
 Route::prefix('v2')->controller(ClientController::class)->group(function(){
     Route::prefix('doctor')->group(function(){
