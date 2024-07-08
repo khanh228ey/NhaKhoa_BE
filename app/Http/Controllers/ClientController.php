@@ -56,57 +56,82 @@ class ClientController extends Controller
     }
 
 
-    // public function getDoctorSchedule($id){
-    //     $doctor = User::where('role_id',1)->find($id);
-    //     $Schedule = Schedule::where('doctor_id', $id)
-    //         ->select('date')->distinct()->orderBy('date', 'Asc')->get();
-    
-    //     // Tạo một mảng chứa các giá trị date
-    //     $dates = $Schedule->pluck('date')->toArray();
-    
-    //     $result =  [
-    //         'date' => $dates,
-    //     ];
-    
-    //     return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
-    // }
 
-    public function getDoctorSchedule($id) {
+    // public function getDoctorSchedule($id) {
+    //     try {
+    //         $doctor = User::where('role_id', 1)->findOrFail($id);
+    //         $Schedule = Schedule::where('doctor_id', $id)
+    //             ->where('status', 1)
+    //             ->select('date')
+    //             ->distinct()
+    //             ->orderBy('date', 'Asc')
+    //             ->get();
+    //         $dates = $Schedule->pluck('date')->toArray();
+    //         $limitedDates = array_slice($dates, 0, 7);
+    //         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $limitedDates, 200);
+    //     } catch (ModelNotFoundException $e) {
+    //         return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+    //     }
+    // }
+    
+    
+    // public function getDoctorTimeslotsByDate($id, $date)
+    // {
+    //     $schedule = Schedule::with('time')
+    //         ->where('doctor_id', $id)
+    //         ->where('date', $date)
+    //         ->where('status',1)
+    //         ->get();
+
+    //     if ($schedule->isEmpty()) {
+    //         return JsonResponse::handle(404, 'No timeslots found for this doctor on the given date', null, 404);
+    //     }
+
+    //     $timeslots = $schedule->map(function ($item) {
+    //         return $item->time->time;
+    //     })->toArray();
+
+    //     return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
+    // }
+    public function getDoctorScheduleWithTimeslots($id) {
         try {
             $doctor = User::where('role_id', 1)->findOrFail($id);
-            $Schedule = Schedule::where('doctor_id', $id)
+    
+            $schedules = Schedule::with('time')
+                ->where('doctor_id', $id)
                 ->where('status', 1)
-                ->select('date')
-                ->distinct()
                 ->orderBy('date', 'Asc')
                 ->get();
-            $dates = $Schedule->pluck('date')->toArray();
-            $limitedDates = array_slice($dates, 0, 7);
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $limitedDates, 200);
+    
+            if ($schedules->isEmpty()) {
+                return JsonResponse::handle(404, 'No schedules found for this doctor', null, 404);
+            }
+    
+            $scheduleData = [];
+            $datesProcessed = [];
+    
+            foreach ($schedules as $schedule) {
+                $date = $schedule->date;
+    
+                if (!isset($datesProcessed[$date])) {
+                    $datesProcessed[$date] = [
+                        'date' => $date,
+                        'times' => []
+                    ];
+                }
+    
+                $timeSlot = $schedule->time->time;
+                $datesProcessed[$date]['times'][] = ['time' => $timeSlot];
+            }
+    
+            $limitedScheduleData = array_slice(array_values($datesProcessed), 0, 7);
+    
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $limitedScheduleData, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
         }
     }
     
-    
-    public function getDoctorTimeslotsByDate($id, $date)
-    {
-        $schedule = Schedule::with('time')
-            ->where('doctor_id', $id)
-            ->where('date', $date)
-            ->where('status',1)
-            ->get();
-
-        if ($schedule->isEmpty()) {
-            return JsonResponse::handle(404, 'No timeslots found for this doctor on the given date', null, 404);
-        }
-
-        $timeslots = $schedule->map(function ($item) {
-            return $item->time->time;
-        })->toArray();
-
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
-    }
 
 // đặt lịch
     Public function createAppointment(Request $request){
