@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Events\AppointmentCreatedEvent;
 use App\Models\Appointment; 
 use App\Models\Category;
 use App\Models\Schedule;
@@ -24,7 +25,7 @@ class AppointmentRepository{
             $appointment->date = $data['date'];
             $appointment->time = $data['time'];
             $appointment->email = $data['email'];
-            if($data['status']){
+            if(isset($data['status'])){
                 $appointment->status = $data['status'];
             }else{
                 $appointment->status =0;
@@ -39,7 +40,7 @@ class AppointmentRepository{
             $appointment->date =  $data['date'];
             $appointment->time = $data['time'];
             $appointment->email = $data['email'];
-            if($data['status']){
+            if(isset($data['status'])){
                 $appointment->status = $data['status'];
             }else{
                 $appointment->status =0;
@@ -62,8 +63,13 @@ class AppointmentRepository{
                
             if ($appointment->save()) {
                 // Gán dịch vụ nếu có
-                if (isset($data['service'])) {
-                    $appointment->Services()->attach($data['service']);
+                // broadcast(new AppointmentCreatedEvent($appointment));
+                // if (isset($data['services'])) {
+                //     $appointment->Services()->attach($data['services']);
+                // }
+                if (isset($data['services']) && is_array($data['services'])) {
+                    $serviceIds = collect($data['services'])->pluck('id')->toArray();
+                    $appointment->Services()->attach($serviceIds);
                 }
                 return ['success' => true, 'appointment' => $appointment];
             }
@@ -94,9 +100,9 @@ class AppointmentRepository{
             $appointment->doctor_id = $data['doctor_id'];
         }
             $appointment->save();
-            if (isset($data['service'])) {
+            if (isset($data['services'])) {
                 // Đồng bộ các dịch vụ liên quan,
-                $appointment->services()->sync($data['service']);
+                $appointment->services()->sync($data['services']);
             } else {
                 // Nếu không có dịch vụ nào được cung cấp, xóa tất cả các dịch vụ liên quan
                 $appointment->services()->detach();

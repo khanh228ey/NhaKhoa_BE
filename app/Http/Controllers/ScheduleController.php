@@ -33,11 +33,10 @@ class ScheduleController extends Controller
     }
 
 
-
     public function getSchedule(Request $request)
     {
         $doctor_id = $request->get('doctor_id');
-        $date = $request->get('date', Carbon::today()->toDateString()); // Use today's date if no date is provided
+        // $date = $request->get('date', Carbon::today()->toDateString()); // Use today's date if no date is provided
         $perPage = $request->get('limit', 5); // Số lượng ngày trên mỗi trang, mặc định là 5
         $page = $request->get('page'); // Trang hiện tại
     
@@ -48,8 +47,8 @@ class ScheduleController extends Controller
             $query->where('doctor_id', $doctor_id);
         }
     
-        $query->whereDate('date', $date);
-    
+        // $query->whereDate('date', $date);
+        $query->get();
         // Nếu không có trang được chỉ định, lấy toàn bộ dữ liệu
         if (is_null($page)) {
             $distinctDates = $query->pluck('date')->toArray();
