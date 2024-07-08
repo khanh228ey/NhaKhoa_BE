@@ -15,6 +15,8 @@ class ServiceResource extends JsonResource
             'name' => $this->name,
             'image' => $this->image,
             'quantity_sold' => $this->quantity_sold,
+            'min_price' => $this->min_price,
+            'unit' => $this->unit, 
             'status' => $this->status,
             'category' =>[
                 'id' => $this->category_id,
@@ -24,9 +26,7 @@ class ServiceResource extends JsonResource
         if ($request->route()->getName() === 'service.detail') {
             $data = array_merge($data, [
                 'description' => $this->description,
-                'min_price' => $this->min_price,
                 'max_price' => $this->max_price,
-                'unit' => $this->unit,   
             ]);
         }
 

@@ -116,7 +116,6 @@ Route::prefix('v1')->controller(ClientController::class)->group(function(){
     Route::prefix('doctor')->group(function(){
         Route::get('/','getDoctor');
         Route::Get('/{id}','getDoctorDetail');
-        
     });
     Route::prefix('schedule')->group(function(){
         Route::get('/{id}','getDoctorScheduleWithTimeslots');
