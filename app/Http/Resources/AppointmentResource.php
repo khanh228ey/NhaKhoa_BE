@@ -45,7 +45,7 @@ class AppointmentResource extends JsonResource
         ];
         if($request->route()->getName() === 'appointment.detail')  {
             $data = array_merge($data, [
-                'noted' => $this->note,
+                'note' => $this->note,
                'doctor' => $this->doctor ? [
                         'id' => $this->doctor->id,
                         'name' => $this->doctor->name,
