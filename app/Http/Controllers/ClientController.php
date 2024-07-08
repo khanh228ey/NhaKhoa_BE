@@ -105,12 +105,9 @@ class ClientController extends Controller
                 ->get();
     
             if ($schedules->isEmpty()) {
-                return JsonResponse::handle(404, 'No schedules found for this doctor', null, 404);
+                return JsonResponse::handle(404, 'Không tìm thấy lịch làm việc của bác sĩ', null, 404);
             }
-    
-            $scheduleData = [];
             $datesProcessed = [];
-    
             foreach ($schedules as $schedule) {
                 $date = $schedule->date;
     
@@ -121,9 +118,7 @@ class ClientController extends Controller
                 }
     
             }
-    
             $limitedScheduleData = array_slice(array_values($datesProcessed), 0, 7);
-    
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $limitedScheduleData, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
