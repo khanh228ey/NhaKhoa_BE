@@ -94,15 +94,15 @@ class UserRepository{
             $roleId = $data1['role_id'];
             $role = ModelsRole::find($roleId);
         }
-
-    // Lấy các trường cần thiết trừ 'description'
     $data = $request->only([
-        'id', 'name', 'email', 'phone_number', 'avatar', 'gender', 'birthday', 'address', 'role_id', 'status', 'password'
+        'id', 'name', 'email', 'phone_number', 'avatar', 'gender', 'birthday', 'address', 'role_id', 'status'
     ]);
     if (isset($request->description) && $request->description !== '') {
         $data['description'] = $request->description;
     }
-
+    if (isset($request->password) && $request->password !== '') {
+        $data['password'] = Hash::make($request->password);
+    }
     $user->fill($data);
     $user->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
     
