@@ -94,27 +94,27 @@ class UserRepository{
             $roleId = $data1['role_id'];
             $role = ModelsRole::find($roleId);
         }
-    $data = $request->only([
-        'id', 'name', 'email', 'phone_number', 'avatar', 'gender', 'birthday', 'address', 'role_id', 'status'
-    ]);
-    if (isset($request->description) && $request->description !== '') {
-        $data['description'] = $request->description;
-    }
-    if (isset($request->password) && $request->password !== '') {
-        $data['password'] = Hash::make($request->password);
-    }
-    $user->fill($data);
-    $user->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-    
-    if ($user->save()) {
-        if (count($data1) > 1) {
-            $user->roles()->detach();
-            $user->assignRole($role->name);
-            $user->role_id = $roleId;
+        $data = $request->only([
+            'id', 'name', 'email', 'phone_number', 'avatar', 'gender', 'birthday', 'address', 'role_id', 'status'
+        ]);
+        if (isset($request->description) && $request->description !== '') {
+            $data['description'] = $request->description;
         }
-        return $user;
-    }
-    return false;
+        if (isset($request->password) && $request->password !== '') {
+            $data['password'] = Hash::make($request->password);
+        }
+        $user->fill($data);
+        $user->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+        
+        if ($user->save()) {
+            if (count($data1) > 1) {
+                $user->roles()->detach();
+                $user->assignRole($role->name);
+                $user->role_id = $roleId;
+            }
+            return $user;
+        }
+        return false;
     }
 
 }

@@ -111,6 +111,8 @@ Route::prefix('v1/role')->controller(RoleController::class)->group(function(){
     Route::put('/update/{id}','updatePermissions');
 });
 Route::post('v1/upload', [UploadController::class, 'uploadImage']);
+Route::get('v1/time',[ClientController::class,'getTime']);
+
 
 
 Route::prefix('v2')->controller(ClientController::class)->group(function(){

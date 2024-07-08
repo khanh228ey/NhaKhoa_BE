@@ -109,15 +109,15 @@ class ClientController extends Controller
     
 
 /// Thời gian
-        public function getTime(){
-            $time = Schedule_time::all();
-            $timeslots = $time->map(function ($item) {
-                return $item->time;
-            })->toArray();
-
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
-        }
-
+    public function getTime()
+    {
+        $time = Schedule_time::all();
+        $timeslots = $time->map(function ($item) {
+            return ['time' => $item->time];
+        })->toArray();
+        
+        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
+    }
 // Danh sách danh mục
         public function getCategories(Request $request)
         {
