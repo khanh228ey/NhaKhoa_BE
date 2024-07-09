@@ -13,6 +13,7 @@ class HistoryRepository{
         $history->doctor_id = $data['doctor_id'];
         $history->noted = $data['note'];
         if ($data['status'] == 1) {
+            $history->status = $data['status'];
             $nowInHCM = Carbon::now('Asia/Ho_Chi_Minh');
             $date = $nowInHCM->toDateString(); // Định dạng ngày: 'YYYY-MM-DD'
             $time = $nowInHCM->format('H:i');
@@ -49,6 +50,7 @@ class HistoryRepository{
             $time = $nowInHCM->format('H:i'); // Định dạng giờ: 'HH:mm:ss'
             $history->date = $date;
             $history->time = $time;
+            $history->status = $data['status'];
         }
         $history->noted = $data['note'];
         $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
