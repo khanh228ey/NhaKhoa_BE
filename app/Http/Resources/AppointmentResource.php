@@ -56,7 +56,7 @@ class AppointmentResource extends JsonResource
                             'name' => $service->name,
                             'image' => $service->image,
                             'unit' => $service->unit,
-                            'min_pirce' => $service->min_price
+                            'min_price' => $service->min_price
                         ];
                     }) : null,
             ]);

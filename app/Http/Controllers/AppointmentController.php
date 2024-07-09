@@ -107,6 +107,10 @@ class AppointmentController extends Controller
             return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
         }
     }
+
+    public function getdate(){
+        
+    }
     
 }
 

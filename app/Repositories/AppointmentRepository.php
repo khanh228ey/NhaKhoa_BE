@@ -10,6 +10,7 @@ use Carbon\Carbon;
 class AppointmentRepository{
 
     public function addAppointment($data) {
+        
         $quantityDoctor = Schedule::with('time')
             ->where('date',  $data['date'])
             ->whereHas('time', function ($query) use ($data) {
