@@ -54,6 +54,9 @@ class AppointmentResource extends JsonResource
                         return [
                             'id' => $service->id,
                             'name' => $service->name,
+                            'image' => $service->image,
+                            'unit' => $service->unit,
+                            'min_pirce' => $service->min_price
                         ];
                     }) : null,
             ]);
