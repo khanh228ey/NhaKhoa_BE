@@ -71,10 +71,11 @@ class ClientController extends Controller
     
         $timeslots = $schedule->map(function ($item) {
             return ['time' => $item->time->time];
-        })->toArray();
+        })->unique('time')->values()->toArray();
     
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
     }
+    
     
     public function getDoctorScheduleWithTimeslots($id) {
         try {
@@ -83,6 +84,7 @@ class ClientController extends Controller
             $schedules = Schedule::with('time')
                 ->where('doctor_id', $id)
                 ->where('status', 1)
+                ->where('date', '>=', now()->toDateString()) 
                 ->orderBy('date', 'Asc')
                 ->get();
     

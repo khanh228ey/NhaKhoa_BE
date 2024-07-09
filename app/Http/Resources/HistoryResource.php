@@ -38,6 +38,7 @@ class HistoryResource extends JsonResource
             'id' => $this->id,
             'date' => $this->date,
             'time' => $this->time,
+            'status' => $this->status,
             'customer' => [
                     'id' => $this->Customer->id,
                     'name' => $this->Customer->name,
@@ -49,12 +50,14 @@ class HistoryResource extends JsonResource
         ];
         if($request->route()->getName() === 'history.detail')  {
             $data = array_merge($data, [
-                'noted' => $this->noted,
+                'note' => $this->noted,
                 'total_price' => $this->invoice->total_price,
                 'services' =>$this->services ?  $this->services->map(function ($service) {
                     return [
                         'id' => $service->id,
                         'name' => $service->name,
+                        'image' =>$service->image,
+                        'unit' => $service->unit,
                         'quantity' => $service->pivot->quantity,
                         'price' => $service->pivot->price,
                     ];

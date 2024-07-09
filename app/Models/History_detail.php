@@ -11,5 +11,4 @@ class History_detail extends Model
     public $timestamps = false;
     protected $table = 'history_detail';
 
-    
 }

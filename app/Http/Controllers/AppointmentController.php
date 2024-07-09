@@ -82,16 +82,16 @@ class AppointmentController extends Controller
                 }
                 $appointment = $this->appointmentRepository->update($request->all(),$appointment);
                 if ($appointment['success'] == true) {
-                    return JsonResponse::handle(200, ConstantsMessage::Add, $appointment['appointment'], 200);     
+                    return JsonResponse::handle(200, ConstantsMessage::Update, $appointment['appointment'], 200);     
                 }
                 return JsonResponse::error(401,$appointment['message'],401);
             }
             catch (ModelNotFoundException $e) {
                 return JsonResponse::handle(404,"Lịch đặt hẹn không tồn tại", null, 404);
             }
-            // catch (\Exception $e) {
-            //     return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
-            // }
+            catch (\Exception $e) {
+                return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
+            }
           
     }
 
@@ -106,10 +106,6 @@ class AppointmentController extends Controller
         } catch (\Exception $e) {
             return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
         }
-    }
-
-    public function getdate(){
-        
     }
     
 }

@@ -24,13 +24,13 @@ class HistoryController extends Controller
         $this->historyRepository = $historyRepository; 
       
     }
-    public function transferInformation(Request $request){
-        $history = $this->historyRepository->addHistory($request->all());
-        if ($history == false) {
-                return JsonResponse::error(401,ConstantsMessage::ERROR,401);
-        }
-        return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
-    }
+    // public function transferInformation(Request $request){
+    //     $history = $this->historyRepository->addHistory($request->all());
+    //     if ($history == false) {
+    //             return JsonResponse::error(401,ConstantsMessage::ERROR,401);
+    //     }
+    //     return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
+    // }
 
     // public function listMeeting(Request $request){
     //     $perPage = $request->get('limit', 10);
@@ -56,11 +56,11 @@ class HistoryController extends Controller
 
 
     Public function createHistory(Request $request){
-        $validator = $this->historyValidation->history();
-        if ($validator->fails()) {
-            $firstError = $validator->messages()->first();
-              return JsonResponse::handle(400,$firstError,$validator->messages(),400);
-        }
+        // $validator = $this->historyValidation->history();
+        // if ($validator->fails()) {
+        //     $firstError = $validator->messages()->first();
+        //       return JsonResponse::handle(400,$firstError,$validator->messages(),400);
+        // }
         $history = $this->historyRepository->addhistory($request->all());
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
@@ -108,16 +108,16 @@ class HistoryController extends Controller
 }
     
     Public function updateHistory(Request $request,$id){
-        $validator = $this->historyValidation->history();
-        if ($validator->fails()) {
-            $firstError = $validator->messages()->first();
-              return JsonResponse::handle(400,$firstError,$validator->messages(),400);
+        $history = History::findOrFail($id);
+        try{
+            $history = $this->historyRepository->updateHistory($request->all(),$history);
+            if ($history == false) {
+                    return JsonResponse::error(500,ConstantsMessage::ERROR,500);
+            }
+            return JsonResponse::handle(200, ConstantsMessage::Update, $history, 200);
+        }catch(ModelNotFoundException $e){
+            return JsonResponse::handle(404, "Không tìm thấy lịch sử khám", null, 404);
         }
-        $history = $this->historyRepository->updateHistory($request->all(),$id);
-        if ($history == false) {
-                return JsonResponse::error(500,ConstantsMessage::ERROR,500);
-        }
-        return JsonResponse::handle(200, ConstantsMessage::Update, $history, 200);
-    }
 
+    }   
 }

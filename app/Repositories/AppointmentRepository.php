@@ -74,43 +74,7 @@ class AppointmentRepository{
         return ['success' => false, 'message' => "Đã xảy ra lỗi khi thêm cuộc hẹn"];
         
     }
-    // public function update($data,$appointment){
-    //     if( isset($data['doctor_id'])){
-    //         $schedule = Schedule::with('time')->where('date',  $appointment->date)
-    //             ->whereHas('time', function ($query) use ($appointment) {
-    //                 $query->where('time', $appointment->time); 
-    //             })->where('doctor_id',$data['doctor_id'])->first();
-    //             if($schedule){
-    //                 $schedule->status=1;
-    //                 $schedule->save();
-    //             }
-    //         $schedule = Schedule::where('date',$data['date'])->where('time',$data['time'])->where('doctor_id',$data['doctor_id'])->get();
-    //         $schedule->status = 0;
-    //         $schedule->save();
-    //         $appointment->doctor_id = $data['doctor_id'];
-    //     }
-    //         $appointment->name = $data['name'];
-    //         $appointment->phone = $data['phone'];
-    //         $appointment->date = $data['date'];
-    //         $appointment->time = $data['time'];
-    //         $appointment->email = $data['email'];
-                
-    //         $appointment->status = $data['status'];
-    //         $appointment->note = $data['note'];
-    //         $appointment->updated_at =  Carbon::now('Asia/Ho_Chi_Minh');
-       
-    //         $appointment->save();
-    //         if (isset($data['services'])) {
-    //                 $serviceIds = collect($data['services'])->pluck('id')->toArray();
-    //                 $appointment->Services()->attach($serviceIds);
-    //             $appointment->services()->sync($serviceIds);
-    //         } else {
-    //             // Nếu không có dịch vụ nào được cung cấp, xóa tất cả các dịch vụ liên quan
-    //             $appointment->services()->detach();
-    //         }
-    //     return $appointment;
-    // }
-
+    
     public function update($data, $appointment) {
         $quantityDoctor = Schedule::with('time')->where('date', $data['date'])
         ->whereHas('time', function ($query) use ($data) {

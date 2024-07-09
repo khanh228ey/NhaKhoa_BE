@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('date')->nullable();
             $table->string('time',50)->nullable();
             $table->string('noted')->nullable();
+            $table->integer('status')->default(0)->comment('0 là đang chờ , 1 là đã hoàn thành');
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
