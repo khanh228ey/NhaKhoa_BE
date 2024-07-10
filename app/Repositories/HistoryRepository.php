@@ -12,9 +12,6 @@ class HistoryRepository{
         $history->customer_id = $data['customer_id'];
         $history->doctor_id = $data['doctor_id'];
         $history->noted = $data['note'];
-        if($data['status']){
-            $history->status = $data['status'];
-        }
         if ($data['status'] == 1) {
             $history->status = $data['status'];
             $nowInHCM = Carbon::now('Asia/Ho_Chi_Minh');
