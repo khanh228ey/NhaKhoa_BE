@@ -14,26 +14,6 @@ class AppointmentResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return [
-        //     'id' => $this->id,
-        //     'name' => $this->name,
-        //     'phone' => $this->phone,
-        //     'email' => $this->email,
-        //     'date' => $this->date,
-        //     'time' => $this->time,
-        //     'noted' => $this->note,
-        //     'status'=> $this->status,
-        //     'doctor' => $this->doctor ? [
-        //         'id' => $this->doctor->id,
-        //         'name' => $this->doctor->name,
-        //     ] : null,
-        //     'services' => $this->services ? $this->services->map(function ($service) {
-        //         return [
-        //             'id' => $service->id,
-        //             'name' => $service->name,
-        //         ];
-        //     }) : null,
-        // ];
 
         $data = [
                 'id' => $this->id,
@@ -61,7 +41,6 @@ class AppointmentResource extends JsonResource
                     }) : null,
             ]);
         }
-    
         return $data;
     }
 }

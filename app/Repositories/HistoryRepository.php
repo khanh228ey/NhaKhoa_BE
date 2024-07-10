@@ -12,6 +12,9 @@ class HistoryRepository{
         $history->customer_id = $data['customer_id'];
         $history->doctor_id = $data['doctor_id'];
         $history->noted = $data['note'];
+        if($data['status']){
+            $history->status = $data['status'];
+        }
         if ($data['status'] == 1) {
             $history->status = $data['status'];
             $nowInHCM = Carbon::now('Asia/Ho_Chi_Minh');
@@ -50,9 +53,9 @@ class HistoryRepository{
             $time = $nowInHCM->format('H:i'); // Định dạng giờ: 'HH:mm:ss'
             $history->date = $date;
             $history->time = $time;
-            $history->status = $data['status'];
         }
         $history->noted = $data['note'];
+        $history->status = $data['status'];
         $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
         if ($history->save()) {
             if (isset($data['services']) && is_array($data['services'])) {
@@ -67,7 +70,6 @@ class HistoryRepository{
                 foreach ($data['services'] as $serviceData) {
                     $serviceId = $serviceData['id'];
                     $quantity = $serviceData['quantity'];
-    
                     $service = Service::find($serviceId);
                     if ($service) {
                         $service->quantity_sold += $quantity;

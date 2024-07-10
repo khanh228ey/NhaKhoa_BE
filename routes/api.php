@@ -74,8 +74,6 @@ Route::prefix('v1/service')->controller(ServiceController::class)->group(functio
 
 Route::prefix('v1/history')->controller(HistoryController::class)->group(function () {
     Route::get('/','getHistory');
-    Route::get('/list-meeting','listMeeting');
-    Route::post('/transfer-information','transferInformation');
     Route::post('/','createHistory');
     Route::get('/{id}','findById')->name('history.detail');
     Route::put('/{id}','updateHistory');

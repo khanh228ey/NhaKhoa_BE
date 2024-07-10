@@ -56,11 +56,7 @@ class HistoryController extends Controller
 
 
     Public function createHistory(Request $request){
-        // $validator = $this->historyValidation->history();
-        // if ($validator->fails()) {
-        //     $firstError = $validator->messages()->first();
-        //       return JsonResponse::handle(400,$firstError,$validator->messages(),400);
-        // }
+  
         $history = $this->historyRepository->addhistory($request->all());
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
@@ -72,17 +68,13 @@ class HistoryController extends Controller
     {
         $perPage = $request->get('limit', 10);
         $page = $request->get('page'); 
-        $customer_id = $request->get('customer_id');
-        $doctor_id = $request->get('doctor_id');
+        $status = $request->get('status');
         $query = History::with(['Customer', 'Doctor', 'services' => function ($query) {
             $query->select('services.id', 'services.name')
                   ->withPivot('quantity','price'); 
         }])->whereNotNull('date')->whereNotNull('noted');
-        if ($customer_id) {
-            $query->where('customer_id', $customer_id);
-        }
-        if ($doctor_id) {
-            $query->where('doctor_id', $doctor_id);
+        if ($status) {
+            $query->where('status', $status);
         }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);

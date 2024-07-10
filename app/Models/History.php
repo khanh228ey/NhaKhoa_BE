@@ -32,7 +32,7 @@ class History extends Model
     {
         static::saved(function ($history) {
             // thiết lập hóa đơn nếu là bệnh án
-            if ($history->status == 1 && !$history->invoice) {
+            if ($history->status == 2 && !$history->invoice) {
                 $invoiceRepository = new InvoiceRepository();
                 $invoiceRepository->addInvoice(['history_id' => $history->id]);
             }
