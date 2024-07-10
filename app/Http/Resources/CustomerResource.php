@@ -36,12 +36,6 @@ class CustomerResource extends JsonResource
                 ];
             })->all(),
         ];
-        // if($request->route()->getName() === 'customer.detail')  {
-        //     $data = array_merge($data, [
-               
-        //     ]);
-        // }
-    
         return $data;
     }
 }

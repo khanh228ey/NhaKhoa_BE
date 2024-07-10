@@ -32,16 +32,6 @@ class InvoiceRepository{
         return false;
     }
 
-    // Public function update(Request $request,$invoice){
-    //     $data = $request->all();
-    //     $invoice->method_payment = $data['method_payment'];
-    //     $invoice->status = $data['status'];
-    //     $invoice->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-    //     if($invoice->save()){
-    //         return $invoice;
-    //     }
-    //     return false;
-    // }
     public function update(Request $request, $invoice){
         $data = $request->only(['method_payment', 'status']);
         if (!$invoice->user_id) {

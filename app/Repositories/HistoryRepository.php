@@ -12,16 +12,15 @@ class HistoryRepository{
         $history->customer_id = $data['customer_id'];
         $history->doctor_id = $data['doctor_id'];
         $history->noted = $data['note'];
-        if ($data['status'] == 1) {
-            $history->status = $data['status'];
-            $nowInHCM = Carbon::now('Asia/Ho_Chi_Minh');
-            $date = $nowInHCM->toDateString(); // Định dạng ngày: 'YYYY-MM-DD'
-            $time = $nowInHCM->format('H:i');
-            $history->date = $date;
-            $history->time = $time;
-            $history->created_at = Carbon::now('Asia/Ho_Chi_Minh');
-        }
-    
+        $nowInHCM = Carbon::now('Asia/Ho_Chi_Minh');
+        $date = $nowInHCM->toDateString(); // Định dạng ngày: 'YYYY-MM-DD'
+        $time = $nowInHCM->format('H');
+        $startHour = $time . ':00';
+        $endHour = str_pad($time + 1, 2, '0', STR_PAD_LEFT) . ':00';
+        $timeFrame = $startHour . ' - ' . $endHour;
+        $history->date = $date;
+        $history->time = $timeFrame;
+        $history->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         if ($history->save()) {
             if (isset($data['services']) && is_array($data['services'])) {
                 foreach ($data['services'] as $serviceData) {
