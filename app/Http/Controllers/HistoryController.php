@@ -68,14 +68,10 @@ class HistoryController extends Controller
     {
         $perPage = $request->get('limit', 10);
         $page = $request->get('page'); 
-        $status = $request->get('status');
         $query = History::with(['Customer', 'Doctor', 'services' => function ($query) {
             $query->select('services.id', 'services.name')
                   ->withPivot('quantity','price'); 
         }])->OrderBy('date','DESC');
-        if ($status) {
-            $query->where('status', $status);
-        }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
             $history = collect($data->items());
@@ -89,15 +85,16 @@ class HistoryController extends Controller
 
     public function findById($id){
         try {
-        $history = History::with(['Customer', 'Doctor', 'services'])->whereNotNull('date')->whereNotNull('noted')->findOrFail($id);
-
-        $result = new HistoryResource($history);
-
-        return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
-    } catch (ModelNotFoundException $e) {
-        return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+            $history = History::with(['Customer','Customer.histories' => function($query){
+                $query->where('status' ,2 );
+            }, 
+            'Doctor', 'services' ])->findOrFail($id);
+            $result = new HistoryResource($history);
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+        } catch (ModelNotFoundException $e) {
+            return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+        }
     }
-}
     
     Public function updateHistory(Request $request,$id){
         $history = History::findOrFail($id);
