@@ -22,10 +22,18 @@ class HistoryResource extends JsonResource
             'customer' => [
                 'id' => $this->Customer->id,
                 'name' => $this->Customer->name,
+                'phone_number' => $this->Customer->phone_number,
+                'birthday' => $this->Customer->birthday,
+                'gender' => $this->Customer->gender,
+                'address' => $this->Customer->address,
             ],
             'doctor' => [
                 'id' => $this->doctor->id,
                 'name' => $this->doctor->name,
+                'phone_number' => $this->doctor->phone_number,
+                'gender' => $this->doctor->gender,
+                'birthday' => $this->doctor->birthday,
+
             ],
         ];
         

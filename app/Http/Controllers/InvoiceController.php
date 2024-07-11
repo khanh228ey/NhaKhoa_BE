@@ -44,11 +44,7 @@ class InvoiceController extends Controller
     Public function getInvoice(Request $request){
         $perPage = $request->get('limit', 10);
         $page = $request->get('page'); 
-        // $name = $request->get('name');
         $query = Invoices::with(['History','user'])->orderBy('created_at','DESC');
-        // if ($name) {
-        //     $query->where('name', 'LIKE', "%{$name}%");
-        // }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
             $invoices = collect($data->items());
@@ -66,5 +62,9 @@ class InvoiceController extends Controller
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
         }
+    }
+
+    Public function printInvoice(){
+        
     }
 }
