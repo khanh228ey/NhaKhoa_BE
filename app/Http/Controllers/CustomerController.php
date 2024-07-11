@@ -30,7 +30,8 @@ class CustomerController extends Controller
         $page = $request->get('page'); 
         $query = Customer::with(['Histories' => function ($query) {
             $query->whereNotNull('date')
-                  ->whereNotNull('time');
+                  ->whereNotNull('time')
+                  ->where('status',2);
         }]);
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);

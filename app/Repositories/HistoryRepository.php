@@ -45,10 +45,6 @@ class HistoryRepository{
     public function updateHistory($data, $history) {
         if ($data['status'] == 1) {
             $nowInHCM = Carbon::now('Asia/Ho_Chi_Minh');
-            $date = $nowInHCM->toDateString(); // Định dạng ngày: 'YYYY-MM-DD'
-            $time = $nowInHCM->format('H:i'); // Định dạng giờ: 'HH:mm:ss'
-            $history->date = $date;
-            $history->time = $time;
         }
         $history->noted = $data['note'];
         $history->status = $data['status'];

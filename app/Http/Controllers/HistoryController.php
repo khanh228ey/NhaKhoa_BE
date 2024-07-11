@@ -72,7 +72,7 @@ class HistoryController extends Controller
         $query = History::with(['Customer', 'Doctor', 'services' => function ($query) {
             $query->select('services.id', 'services.name')
                   ->withPivot('quantity','price'); 
-        }])->whereNotNull('date')->whereNotNull('noted');
+        }])->OrderBy('date','DESC');
         if ($status) {
             $query->where('status', $status);
         }
