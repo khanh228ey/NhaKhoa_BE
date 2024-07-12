@@ -104,6 +104,10 @@ class HistoryController extends Controller
             if ($history == false) {
                     return JsonResponse::error(500,ConstantsMessage::ERROR,500);
             }
+            if ($history->status = 1) {
+                $invoiceRepository = new InvoiceRepository();
+                $invoiceRepository->addInvoice($id);
+            }
             return JsonResponse::handle(200, ConstantsMessage::Update, $history, 200);
         }catch(ModelNotFoundException $e){
             return JsonResponse::handle(404, "Không tìm thấy lịch sử khám", null, 404);

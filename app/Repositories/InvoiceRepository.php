@@ -9,20 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class InvoiceRepository{
 
-    public function addInvoice($data){
-        $history = History::with('services')->find($data['history_id']);
+    public function addInvoice($id){
+        $history = History::with('services')->find($id);
         $invoice = new Invoices();
-        $invoice->history_id = $data['history_id'];
+        $invoice->history_id = $id;
         $invoice->method_payment = 0;
         $invoice->status = 0;
         $invoice->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $total = 0;
-        if ($history->services->isEmpty()) {
+        if (!$history->services->isEmpty()) {
             foreach($history->services as $service){
                 $quantity = $service->pivot->quantity; 
                 $price = $service->pivot->price;
                 $total += $quantity * $price ;
             }
+            
         } else {
             $total = 200000;
         }
