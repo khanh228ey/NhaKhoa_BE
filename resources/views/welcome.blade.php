@@ -128,13 +128,45 @@
                 </div>
             </div>
         </div>
-    </body>
-    <img src="http://127.0.0.1:9000/luanvantotnghiep/a.png
-" alt="ảnh nằm day">
 
-<form action="/upload" method="POST" enctype="multipart/form-data">
-    @csrf
-    <input type="file" name="file">
-    <button type="submit">Upload</button>
-</form>
+
+
+
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print Invoice</title>
+</head>
+<body>
+    <form id="printForm" action="http://127.0.0.1:8000/api/v1/print" method="POST">
+        @csrf
+        <button type="submit" onclick="printCurrentPageAsPdf()">Print as PDF</button>
+    </form>
+    <script>
+        function printCurrentPageAsPdf() {
+            var currentPageHtml = document.documentElement.outerHTML;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://127.0.0.1:8000/api/v1/print', true); 
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        
+                    var blob = new Blob([xhr.response], { type: 'application/pdf' });
+                    var url = window.URL.createObjectURL(blob);
+                    window.open(url);
+                }
+            };
+            xhr.send(JSON.stringify({ html: currentPageHtml }));
+        }
+    </script>
+</body>
 </html>
+
+    </body>
+
+
+</html>
+

@@ -72,6 +72,9 @@ class AppointmentController extends Controller
             return JsonResponse::handle(404, "Lịch đặt hẹn không tồn tại", null, 404);
         }
     }
+
+
+    
     Public function updateAppointment(Request $request,$id){
         try{
                 $appointment = Appointment::findOrFail($id);

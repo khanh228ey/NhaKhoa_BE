@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\InvoiceResource;
@@ -10,6 +9,9 @@ use App\Repositories\InvoiceRepository;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\App;
 
 class InvoiceController extends Controller
 {
@@ -64,7 +66,12 @@ class InvoiceController extends Controller
         }
     }
 
-    Public function printInvoice(){
-        
+    public function printInvoice(Request $request)
+    {
+        $pdf = new Dompdf();
+        $html = $request->input('html');
+        $pdf->loadHtml($html);
+        $pdf->render();
+        return $pdf->stream('invoice.pdf');
     }
 }

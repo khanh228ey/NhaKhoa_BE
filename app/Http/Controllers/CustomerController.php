@@ -31,7 +31,7 @@ class CustomerController extends Controller
         $query = Customer::with(['Histories' => function ($query) {
             $query->whereNotNull('date')
                   ->whereNotNull('time')
-                  ->where('status',2);
+                  ->where('status', '!=', 0);
         }]);
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
@@ -57,6 +57,8 @@ class CustomerController extends Controller
             }
             return JsonResponse::handle(200, ConstantsMessage::Add, $customer, 200);
     }
+
+    
     Public function findById($id){
         try {
             $customer = Customer::findOrFail($id); 

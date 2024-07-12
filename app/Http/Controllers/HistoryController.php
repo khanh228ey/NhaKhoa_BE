@@ -86,7 +86,7 @@ class HistoryController extends Controller
     public function findById($id){
         try {
             $history = History::with(['Customer','Customer.histories' => function($query){
-                $query->where('status' ,2 );
+                $query->where('status', '!=', 0);
             }, 
             'Doctor', 'services' ])->findOrFail($id);
             $result = new HistoryResource($history);

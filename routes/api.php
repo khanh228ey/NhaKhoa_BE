@@ -33,7 +33,7 @@ use Illuminate\Support\Facades\Route;
 Route::group([
 
     'middleware' => 'api',
-    'prefix' => 'auth'
+    'prefix' => 'v1/auth'
 
 ], function ($router) {
     Route::post('login', [AuthController::class,'login']);
@@ -100,7 +100,7 @@ Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(functio
     Route::post('/','createInvoice');
     Route::get('/{id}','findById')->name('invoice.detail');
     Route::put('/{id}','updateInvoice');
-    // Route::delete('/delete/{id}',[InvoiceController::class,'deleteInvoice']);
+  
 });
 
 Route::prefix('v1/role')->controller(RoleController::class)->group(function(){
@@ -131,7 +131,6 @@ Route::prefix('v2')->controller(ClientController::class)->group(function(){
         Route::get('/{id}','getDoctorScheduleWithTimeslots');
         Route::get('/{id}/{date}','getDoctorTimeslotsByDate');
     });
-    // Route::post('/appointment','createAppointment');
     Route::get('/time','getTime');
     
     Route::prefix('category')->group(function(){
@@ -148,3 +147,4 @@ Route::prefix('v2')->controller(ClientController::class)->group(function(){
 Route::post('/v2/appointment',[AppointmentController::class,'createAppointment']);
 
 
+Route::post('/v1/print',[InvoiceController::class,'printInvoice']);

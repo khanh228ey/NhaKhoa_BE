@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -36,11 +37,7 @@ class AuthController extends Controller
     }
 
 
-    public function profile()
-    {
-        return response()->json(auth()->user());
-    }
-
+ 
 
     public function logout()
     {
@@ -77,6 +74,23 @@ class AuthController extends Controller
             'expires_in' => Auth::factory()->getTTL() * 60,
         ];
         return JsonResponse::handle(200,"Đăng nhập thành công",$data,200);
+    }
+
+
+    public function profile()
+    {
+        $profile = auth()->user();
+        $result = 
+             [
+                'id' => $profile->id,
+                'name' => $profile->name,
+                'email' => $profile->email,
+                'avatar' => $profile->avatar,
+                'phone_number' => $profile->phone_number,
+                'birthday' => $profile->birthday,
+                'gender' => $profile->gender,
+            ];
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
     
 }

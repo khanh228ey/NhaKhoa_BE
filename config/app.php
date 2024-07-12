@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Facade;
 
+
 return [
 
     /*
@@ -197,7 +198,8 @@ return [
         // ...
         'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
         // 'PDF' => Barryvdh\DomPDF\Facade::class,
-        // 'PDF' => \Barryvdh\DomPDF\Facade::class,
+        // 'PDF' => Barryvdh\DomPDF\Facade::class,
     ])->toArray(),
+    
 
 ];
