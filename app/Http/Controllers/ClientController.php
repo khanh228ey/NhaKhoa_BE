@@ -38,6 +38,7 @@ class ClientController extends Controller
                 'id' => $item->id,
                 'name' => $item->name,
                 'avatar' => $item->avatar,
+                'description' => $item->description,
             ];
         });
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);

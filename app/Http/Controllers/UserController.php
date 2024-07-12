@@ -32,6 +32,7 @@ class UserController extends Controller
         $role = $request->get('role_id');
         $name = $request->get('name');
         $phone = $request->get('phone');
+        $status = $request->get('status');
         $query = User::with('role');
         if ($role) {
             $query->where('role_id', $role);
@@ -39,6 +40,7 @@ class UserController extends Controller
         if ($name) {
             $query->where('name', 'LIKE', "%{$name}%");
         }
+        if($status) {$query->where('status',$status);}
         if($phone){
             $query->where('phone_number', 'LIKE', "%{$phone}%");
         }

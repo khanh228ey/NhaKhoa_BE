@@ -44,15 +44,9 @@ class AppointmentController extends Controller
         $name = $request->get('name');
         $phone = $request->get('phone');
         $query = Appointment::with(['doctor','Services'])->orderBy('created_at','DESC');
-        if ($doctor_id) {
-            $query->where('doctor_id', $doctor_id);
-        }
-        if ($name) {
-            $query->where('name', 'LIKE', "%{$name}%");
-        }
-        if ($phone) {
-            $query->where('phone', 'LIKE', "%{$phone}%");
-        }
+        if ($doctor_id) {$query->where('doctor_id', $doctor_id);}
+        if ($name) {$query->where('name', 'LIKE', "%{$name}%");}
+        if ($phone) {$query->where('phone', 'LIKE', "%{$phone}%");}
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
             $appointment = $data->items();
@@ -73,8 +67,6 @@ class AppointmentController extends Controller
         }
     }
 
-
-    
     Public function updateAppointment(Request $request,$id){
         try{
                 $appointment = Appointment::findOrFail($id);
@@ -95,7 +87,6 @@ class AppointmentController extends Controller
             catch (\Exception $e) {
                 return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
             }
-          
     }
 
     Public function deleteAppointment($id){

@@ -38,55 +38,6 @@ class UserRepository{
         }
     }
 
-    // Public function Update($data,$user){
-    //     $roleId = $data['role_id'];
-    //     $role = ModelsRole::find($roleId);
-    //     $user->name = $data['name'];
-    //     $user->phone_number = $data['phone_number'];
-    //     $user->email = $data['email'];
-    //     $user->gender = $data['gender'];
-    //     $user->address = $data['address'];
-    //     $user->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-    //     $user->birthday = $data['birthday'];
-    //     $user->status = $data['status'];
-    //     if($roleId == 1){
-    //         $user->education = $data['education'];
-    //         $user->certificate = $data['certificate'];
-    //     }
-    //     $user->education = null;
-    //     $user->certificate = null;
-    //     $user->role_id = $data['role_id'];
-    //     $user->avatar = $data['avatar'];
-    //     if ($user->save()) {
-    //         $user->roles()->detach();
-    //         $user->assignRole($role->name);
-    //         $user->role_id = $roleId;
-    //         return $user; 
-    //     } else {
-            
-    //         return false;
-    //     }
-    // }
-    // Public function update(Request $request,$user){
-    //     $data1 = $request->all();
-    //     if(count($data1) > 1){
-    //         $roleId = $data1['role_id'];
-    //         $role = ModelsRole::find($roleId);
-    //     }
-    //     $data = $request->only(['id','name','email', 'phone_number','avatar','gender','birthday','description',
-    //             'address','role_id','status','password']);
-    //     $user->fill($data);
-    //     $user->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-    //     if ($user->save()) {
-    //         if(count($data1) > 1){
-    //             $user->roles()->detach();
-    //             $user->assignRole($role->name);
-    //             $user->role_id = $roleId;
-    //         }
-    //         return $user;
-    //     }
-    //     return false;
-    // }
     public function update(Request $request, $user)
     {
         $data1 = $request->all();
