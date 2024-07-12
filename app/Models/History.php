@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Repositories\InvoiceRepository;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Claims\Custom;
@@ -28,14 +28,11 @@ class History extends Model
         return $this->hasOne(Invoices::class,'history_id');
     }
 
-    protected static function booted()
-    {
-        static::saved(function ($history) {
-            // thiết lập hóa đơn nếu là bệnh án
-            if ($history->status == 1 && !$history->invoice) {
-                $invoiceRepository = new InvoiceRepository();
-                $invoiceRepository->addInvoice(['history_id' => $history->id]);
-            }
-        });
-    }
+    // protected static function booted()
+    // {
+    //     static::saved(function ($history) {
+    //         // thiết lập hóa đơn nếu là bệnh án
+            
+    //     });
+    // }
 }

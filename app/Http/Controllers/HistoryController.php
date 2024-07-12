@@ -12,6 +12,7 @@ use App\RequestValidations\HistoryValidation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HistoryController extends Controller
 {
@@ -71,7 +72,7 @@ class HistoryController extends Controller
         $query = History::with(['Customer', 'Doctor', 'services' => function ($query) {
             $query->select('services.id', 'services.name')
                   ->withPivot('quantity','price'); 
-        }])->OrderBy('date','DESC');
+        }])->OrderBy('created_at','DESC');
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
             $history = collect($data->items());
@@ -107,6 +108,5 @@ class HistoryController extends Controller
         }catch(ModelNotFoundException $e){
             return JsonResponse::handle(404, "Không tìm thấy lịch sử khám", null, 404);
         }
-
     }   
 }

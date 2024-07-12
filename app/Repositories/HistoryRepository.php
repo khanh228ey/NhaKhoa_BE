@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\History;
 use App\Models\Service;
 use Carbon\Carbon;
+use App\Repositories\InvoiceRepository;
 use Illuminate\Support\Facades\DB;
 
 class HistoryRepository{
@@ -30,29 +31,32 @@ class HistoryRepository{
     }
     
     public function updateHistory($data, $history) {
-        $history->noted = $data['note'];
-        $history->status = $data['status'];
-        $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-        if ($history->save()) {
-            if (isset($data['services']) && is_array($data['services'])) {
-                $historyDetail = [];
-                foreach ($data['services'] as $serviceData) {
-                    $serviceId = $serviceData['id'];
-                    $service = Service::find($serviceId);
-                    $price = $serviceData['price'] ?? $service->min_price;
-                    $quantity = $serviceData['quantity'] ?? 1;
-                    $service->quantity_sold += $quantity;
-                    $service->save();
-                    $historyDetail[$serviceId] = ['quantity' => $quantity, 'price' => $price];
-                }
-                $history->services()->sync($historyDetail);
-            } else {
-                $history->services()->detach();
-            }
-            return $history;
-        }
-    
-        return false;
+                    $history->noted = $data['note'];
+                    $history->status = $data['status'];
+                    $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+                    if ($history->save()) {
+                        if (isset($data['services']) && is_array($data['services'])) {
+                            $historyDetail = [];
+                            foreach ($data['services'] as $serviceData) {
+                                $serviceId = $serviceData['id'];
+                                $service = Service::find($serviceId);
+                                $price = $serviceData['price'] ?? $service->min_price;
+                                $quantity = $serviceData['quantity'] ?? 1;
+                                $service->quantity_sold += $quantity;
+                                $service->save();
+                                $historyDetail[$serviceId] = ['quantity' => $quantity, 'price' => $price];
+                            }
+                            $history->services()->sync($historyDetail);
+                        } else {
+                            $history->services()->detach();
+                        }
+                        if ($history->status == 1 && !$history->invoice) {
+                            $invoiceRepository = new InvoiceRepository();
+                            $invoiceRepository->addInvoice(['history_id' => $history->id]);
+                        }
+                        return $history;
+                    }
+                    return false;
     }
     
     

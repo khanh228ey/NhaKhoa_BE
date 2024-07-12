@@ -158,7 +158,7 @@ class ClientController extends Controller
             $perPage = $request->get('limit', 10);
             $page = $request->get('page'); 
             $category = $request->get('category_id');   
-            $query = Service::with('category')->where('status',1);
+            $query = Service::with('category')->where('status',1)->orderBy('quantity_sold','DESC');
             if($category){
                 $query->where('category_id',  $category);
             }

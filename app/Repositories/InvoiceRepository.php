@@ -17,15 +17,16 @@ class InvoiceRepository{
         $invoice->status = 0;
         $invoice->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $total = 0;
-        if ($history->services->isNotEmpty()) {
+        if ($history->services->isEmpty()) {
             foreach($history->services as $service){
                 $quantity = $service->pivot->quantity; 
-                $total += $quantity * $service->min_price;
+                $price = $service->pivot->price;
+                $total += $quantity * $price ;
             }
         } else {
             $total = 200000;
         }
-    $invoice->total_price = $total;
+        $invoice->total_price = $total;
         if($invoice->save()){
             return $invoice;
         }
