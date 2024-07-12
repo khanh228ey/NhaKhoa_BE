@@ -50,7 +50,7 @@ class HistoryRepository{
                         } else {
                             $history->services()->detach();
                         }
-                        if ($history->status == 1 && !$history->invoice) {
+                        if ($data['status'] == 1) {
                             $invoiceRepository = new InvoiceRepository();
                             $invoiceRepository->addInvoice(['history_id' => $history->id]);
                         }
