@@ -21,74 +21,103 @@ class ScheduleController extends Controller
       
     }
     Public function createSchedule(Request $request){
-        // $validator = $this->ScheduleValidation->Schedule();
-        // if ($validator->fails()) {
-        //       return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
-        // }
         $history = $this->ScheduleRepository->addSchedule($request->all());
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
         return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
     }
-
-
     public function getSchedule(Request $request)
     {
-        $doctor_id = $request->get('doctor_id');
-        // $date = $request->get('date', Carbon::today()->toDateString()); // Use today's date if no date is provided
-        $perPage = $request->get('limit', 5); 
-        $page = $request->get('page'); 
+        // Nhận ngày từ URL hoặc sử dụng ngày hiện tại
+        $dateInput = $request->get('date');
+        $date = $dateInput ? Carbon::parse($dateInput)->setTimezone('Asia/Ho_Chi_Minh') : Carbon::now('Asia/Ho_Chi_Minh');
     
-        $query = Schedule::query()->select('date')->distinct()
-                    ->orderBy('date', 'ASC');
+        // Xác định ngày bắt đầu (Thứ Hai) của tuần cho ngày đã cho
+        $startDate = $date->startOfWeek(Carbon::MONDAY);
     
-        if ($doctor_id) {
-            $query->where('doctor_id', $doctor_id);
-        }
-        $query->get();
-        if (is_null($page)) {
-            $distinctDates = $query->pluck('date')->toArray();
-            $schedules = Schedule::with(['doctor', 'time'])
-                        ->whereIn('date', $distinctDates)
-                        ->orderBy('date', 'ASC')
-                        ->orderBy('doctor_id', 'ASC')
-                        ->orderBy('created_at', 'DESC')
-                        ->get();
-        } else {
-            $distinctDates = $query->pluck('date')->toArray();
-            $startIndex = ($page - 1) * $perPage;
-            $paginatedDates = array_slice($distinctDates, $startIndex, $perPage);
-            $schedules = Schedule::with(['doctor', 'time'])
-                        ->whereIn('date', $paginatedDates)
-                        ->orderBy('date', 'ASC')
-                        ->orderBy('doctor_id', 'ASC')
-                        ->orderBy('created_at', 'DESC')
-                        ->get();
-        }
+        // Lấy 6 ngày tiếp theo (Thứ Hai đến Thứ Bảy)
+        $endDate = $startDate->copy()->addDays(5); // Thứ Bảy
+    
+        // Lấy tất cả lịch trình trong khoảng thời gian này
+        $query = Schedule::query()->with(['doctor', 'time'])
+                    ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+                    ->orderBy('date', 'ASC')
+                    ->orderBy('doctor_id', 'ASC');
+    
+        $schedules = $query->get();
+    
         $result = [];
         foreach ($schedules as $schedule) {
-            $key = $schedule->date . '_' . $schedule->doctor_id;
+            $dateKey = $schedule->date;
+            $doctorKey = $schedule->doctor_id;
     
-            if (!isset($result[$key])) {
-                $result[$key] = [
-                    'doctor' => [
-                        'id' => $schedule->doctor_id,
-                        'name' => $schedule->doctor->name,
-                    ],
+            if (!isset($result[$dateKey])) {
+                $result[$dateKey] = [
                     'date' => $schedule->date,
-                    'times' => [],
+                    'doctors' => []
                 ];
             }
-            $result[$key]['times'][] = $schedule->time->time;
+    
+            if (!isset($result[$dateKey]['doctors'][$doctorKey])) {
+                $result[$dateKey]['doctors'][$doctorKey] = [
+                    'id' => $schedule->doctor_id,
+                    'name' => $schedule->doctor->name,
+                    'times' => []
+                ];
+            }
+    
+            // Thêm khung giờ, bỏ qua trùng lặp
+            if (!in_array($schedule->time->time, $result[$dateKey]['doctors'][$doctorKey]['times'])) {
+                $result[$dateKey]['doctors'][$doctorKey]['times'][] = $schedule->time->time;
+            }
         }
+    
+        // Gộp các khung giờ liền nhau cho mỗi bác sĩ trong cùng ngày
+        foreach ($result as &$daySchedule) {
+            foreach ($daySchedule['doctors'] as &$doctorSchedule) {
+                sort($doctorSchedule['times']);
+                $doctorSchedule['times'] = $this->mergeSameDayTimes($doctorSchedule['times']);
+            }
+            $daySchedule['doctors'] = array_values($daySchedule['doctors']);
+        }
+    
         $result = array_values($result);
     
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
     }
     
+    private function mergeSameDayTimes($times)
+    {
+        if (empty($times)) {
+            return [];
+        }
+    
+        $mergedTimes = [];
+        $currentRange = $times[0];
+    
+        foreach ($times as $time) {
+            if ($currentRange != $time) {
+                list($currentStart, $currentEnd) = explode(' - ', $currentRange);
+                list($nextStart, $nextEnd) = explode(' - ', $time);
+    
+                // Chỉ nối khi khung giờ liền nhau
+                if ($currentEnd == $nextStart) {
+                    $currentRange = $currentStart . ' - ' . $nextEnd;
+                } else {
+                    // Nếu không nối, lưu khung giờ hiện tại và chuyển sang khung giờ tiếp theo
+                    $mergedTimes[] = $currentRange;
+                    $currentRange = $time;
+                }
+            }
+        }
+    
+        // Thêm khung giờ cuối cùng vào kết quả
+        $mergedTimes[] = $currentRange;
+    
+        return $mergedTimes;
+    }
     
     
-
     
 }

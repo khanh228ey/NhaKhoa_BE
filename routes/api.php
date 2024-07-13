@@ -7,6 +7,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\OverviewController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ServiceController;
@@ -121,6 +122,26 @@ Route::prefix('v1')->controller(ClientController::class)->group(function(){
     });
     Route::get('/time','getTime');
 });
+Route::prefix('v1/overview')->controller(OverviewController::class)->group(function(){
+    Route::get('/','getRoles');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Route::prefix('v2')->controller(ClientController::class)->group(function(){
     Route::prefix('doctor')->group(function(){
