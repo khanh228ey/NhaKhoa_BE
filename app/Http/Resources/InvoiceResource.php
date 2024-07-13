@@ -16,7 +16,6 @@ class InvoiceResource extends JsonResource
     {
         $data = [
             'id' => $this->id,
-            'history_id' => $this->history_id,
             'customer' => [
                     'id' => $this->history->customer->id,
                     'name' => $this->history->customer->name,
@@ -35,6 +34,21 @@ class InvoiceResource extends JsonResource
                     'name' => $this->user->name,
                     'phone_number' => $this->user->phone_number
                 ] : null,
+                'history' => $this->history ? [
+                        'id' => $this->history->id,
+                        'date' => $this->history->date,
+                        'time' => $this->history->time,
+                    'services' => $this->history->services ? $this->history->services->map(function ($service) {
+                        return [
+                            'id' => $service->id,
+                            'name' => $service->name,
+                            'unit' => $service->unit,
+                            'quantity' => $service->pivot->quantity,
+                            'price' => $service->pivot->price,
+                        ];
+                    })->toArray() : null,
+                ] : null,
+
             ]);
     
     }

@@ -37,7 +37,7 @@ class InvoiceRepository{
     public function update(Request $request, $invoice){
         $data = $request->only(['method_payment', 'status']);
         if (!$invoice->user_id) {
-            $invoice->user_id = auth()->id(); 
+            $invoice->user_id = 'DH00002'; 
             $invoice->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
         }
         $invoice->fill($data);
