@@ -105,7 +105,39 @@ class OverviewRepository{
 
 
 
-    // Public function 
+    Public function monthlyStatistics(){
+        $date = Carbon::now('Asia/Ho_Chi_Minh');
+        for ($month = 1; $month <= 12; $month++) {
+            $startMonth = $date->copy()->month($month)->startOfMonth()->format('Y-m-d H:i:s');
+            $endMonth = $date->copy()->month($month)->endOfMonth()->format('Y-m-d H:i:s');
+            $total = Invoices::whereBetween('created_at', [$startMonth, $endMonth])->sum('total_price');
+            $totals[] = [
+                'month' => $month,
+                'total' => $total,
+            ];
+        }
+        return $totals;
+        }
+        
+    Public function appointmentStatistics(){
+            $totalCancel = Appointment::where('status',2)->count();
+            $totalDone = Appointment::where('status',1)->count();
+            $totals = [
+                [
+                    'message' => 'Đã hủy',
+                    'count' => $totalCancel
+                ],
+                [
+                    'message' => 'Đã xong',
+                    'count' => $totalDone
+                ]
+            ];
+        return $totals;
+        }
 
 
-}
+    }
+
+
+
+

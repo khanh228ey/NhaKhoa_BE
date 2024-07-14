@@ -31,4 +31,14 @@ class OverviewController extends Controller
         ];
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$data,200);
     }
+
+    Public function monthlyStatistics(){
+        $statistics = $this->overviewRepository->monthlyStatistics();
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$statistics,200);
+    }
+
+    Public function appointmentStatistics(){
+        $statistics = $this->overviewRepository->appointmentStatistics();
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$statistics,200);
+    }
 }

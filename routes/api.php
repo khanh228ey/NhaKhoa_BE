@@ -124,6 +124,8 @@ Route::prefix('v1')->controller(ClientController::class)->group(function(){
 });
 Route::prefix('v1/overview')->controller(OverviewController::class)->group(function(){
     Route::get('/','totalOverView');
+    Route::get('/invoice','monthlyStatistics');
+    Route::get('/appointment','appointmentStatistics');
 });
 
 
