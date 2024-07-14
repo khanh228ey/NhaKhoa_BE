@@ -129,7 +129,7 @@ class ClientController extends Controller
         {
             $perPage = $request->get('limit', 10);
             $page = $request->get('page'); 
-            $query = Category::where('status',1);
+            $query = Category::with('services')->where('status',1);
             if (!is_null($page)) {
                 $data = $query->paginate($perPage, ['*'], 'page', $page);
                 $category = $data->items();
@@ -141,6 +141,7 @@ class ClientController extends Controller
                     'id' => $item->id,
                     'name' => $item->name,
                     'image' => $item->image,
+                   
                 ];
             });
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);

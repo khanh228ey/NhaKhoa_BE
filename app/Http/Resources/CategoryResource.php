@@ -25,6 +25,15 @@ class CategoryResource extends JsonResource
         if($request->route()->getName() === 'category.detail')  {
             $data = array_merge($data, [
                 'description' => $this->description,
+                'services' => $this->services ? $this->services->map(function ($service) {
+                    return [
+                        'id' => $service->id,
+                        'name' => $service->name,
+                        'image' => $service->image,
+                        'unit' => $service->unit,
+                        'min_price' => $service->min_price
+                    ];
+                }) : null, 
             ]);
         }
     

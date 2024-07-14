@@ -31,18 +31,14 @@ class ScheduleController extends Controller
     {
         $dateInput = $request->get('date');
         $date = $dateInput ? Carbon::parse($dateInput)->setTimezone('Asia/Ho_Chi_Minh') : Carbon::now('Asia/Ho_Chi_Minh');
-        // Xác định ngày bắt đầu (Thứ Hai) của tuần cho ngày đã cho
         $startDate = $date->startOfWeek(Carbon::MONDAY);
-        // Lấy 6 ngày tiếp theo (Thứ Hai đến Thứ Bảy)
-        $endDate = $startDate->copy()->addDays(5); // Thứ Bảy
+        $endDate = $startDate->copy()->addDays(5);
         // Lấy tất cả lịch trình trong khoảng thời gian này
         $query = Schedule::query()->with(['doctor', 'time'])
                     ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
                     ->orderBy('date', 'ASC')
                     ->orderBy('doctor_id', 'ASC');
-    
         $schedules = $query->get();
-    
         $result = [];
         foreach ($schedules as $schedule) {
             $dateKey = $schedule->date;
@@ -62,12 +58,10 @@ class ScheduleController extends Controller
                     'times' => []
                 ];
             }
-            // Thêm khung giờ, bỏ qua trùng lặp
             if (!in_array($schedule->time->time, $result[$dateKey]['doctors'][$doctorKey]['times'])) {
                 $result[$dateKey]['doctors'][$doctorKey]['times'][] = $schedule->time->time;
             }
         }
-        // Gộp các khung giờ liền nhau cho mỗi bác sĩ trong cùng ngày
         foreach ($result as &$daySchedule) {
             foreach ($daySchedule['doctors'] as &$doctorSchedule) {
                 sort($doctorSchedule['times']);

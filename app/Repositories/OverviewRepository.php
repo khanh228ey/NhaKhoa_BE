@@ -135,8 +135,10 @@ class OverviewRepository{
         return $totals;
         }
 
+    
 
-    }
+
+}
 
 
 
