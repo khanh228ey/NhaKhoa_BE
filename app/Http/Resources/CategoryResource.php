@@ -31,7 +31,8 @@ class CategoryResource extends JsonResource
                         'name' => $service->name,
                         'image' => $service->image,
                         'unit' => $service->unit,
-                        'min_price' => $service->min_price
+                        'min_price' => $service->min_price,
+                        'quantity_sold' => $service->quantity_sold,
                     ];
                 }) : null, 
             ]);

@@ -128,23 +128,6 @@ Route::prefix('v1/overview')->controller(OverviewController::class)->group(funct
     Route::get('/appointment','appointmentStatistics');
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Route::prefix('v2')->controller(ClientController::class)->group(function(){
     Route::prefix('doctor')->group(function(){
         Route::get('/','getDoctor');

@@ -27,6 +27,7 @@ class ScheduleController extends Controller
         }
         return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
     }
+
     public function getSchedule(Request $request)
     {
         $dateInput = $request->get('date');
@@ -106,6 +107,10 @@ class ScheduleController extends Controller
         return $mergedTimes;
     }
     
+
+    Public function updateSchedule(){
+
+    }
     
     
 }

@@ -30,4 +30,8 @@ class ScheduleRepository{
         return true;
     }
 
+    Public function updatee($schedule){
+
+    }
+
 }
