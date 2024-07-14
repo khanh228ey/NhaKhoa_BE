@@ -31,7 +31,7 @@ class AppointmentController extends Controller
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {
-            return JsonResponse::handle(200, ConstantsMessage::Add, $appointment['appointment'], 200);     
+            return JsonResponse::handle(200, "Đặt lịch hẹn thành công", $appointment['appointment'], 200);     
         }
         return JsonResponse::error(401,$appointment['message'],401);
     }

@@ -52,6 +52,9 @@ class ClientController extends Controller
                 'name' => $doctor->name,
                 'description' => $doctor->description,
                 'avatar' => $doctor->avatar,
+                'birthday' => $doctor->birthday,
+                'email' => $doctor->email,
+                'gender' => $doctor->gender,
             ];
      
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);

@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
-use App\Models\Appointment;
 use App\Repositories\OverviewRepository;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+
 
 class OverviewController extends Controller
 {
@@ -21,6 +19,16 @@ class OverviewController extends Controller
 
     
     public function totalOverView(){
-        
+        $invoice = $this->overviewRepository->totalTurnover();
+        $appointment = $this->overviewRepository->totalAppointment();
+        $history = $this->overviewRepository->totalHistory();
+        $customer = $this->overviewRepository->totalCustomer();
+        $data = [
+            $invoice,
+            $appointment,
+            $history,
+            $customer
+        ];
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$data,200);
     }
 }
