@@ -34,19 +34,29 @@ class ScheduleController extends Controller
         $date = $dateInput ? Carbon::parse($dateInput)->setTimezone('Asia/Ho_Chi_Minh') : Carbon::now('Asia/Ho_Chi_Minh');
         $startDate = $date->startOfWeek(Carbon::MONDAY);
         $endDate = $startDate->copy()->addDays(5);
-        // Lấy tất cả lịch trình trong khoảng thời gian này
+    
         $query = Schedule::query()->with(['doctor', 'time'])
                     ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
                     ->orderBy('date', 'ASC')
                     ->orderBy('doctor_id', 'ASC');
         $schedules = $query->get();
         $result = [];
+        $weekDays = [
+            Carbon::MONDAY => '2',
+            Carbon::TUESDAY => '3',
+            Carbon::WEDNESDAY => '4',
+            Carbon::THURSDAY => '5',
+            Carbon::FRIDAY => '6',
+            Carbon::SATURDAY => '7',
+        ];
         foreach ($schedules as $schedule) {
             $dateKey = $schedule->date;
             $doctorKey = $schedule->doctor_id;
+            $dayOfWeek = Carbon::parse($schedule->date)->dayOfWeek;
     
             if (!isset($result[$dateKey])) {
                 $result[$dateKey] = [
+                    'Today' => $weekDays[$dayOfWeek],
                     'date' => $schedule->date,
                     'doctors' => []
                 ];
@@ -63,6 +73,7 @@ class ScheduleController extends Controller
                 $result[$dateKey]['doctors'][$doctorKey]['times'][] = $schedule->time->time;
             }
         }
+    
         foreach ($result as &$daySchedule) {
             foreach ($daySchedule['doctors'] as &$doctorSchedule) {
                 sort($doctorSchedule['times']);

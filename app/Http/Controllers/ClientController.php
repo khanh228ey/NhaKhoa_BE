@@ -45,19 +45,23 @@ class ClientController extends Controller
     }
 
     Public function getDoctorDetail($id){
-        $doctor = User::where('role_id',1)->where('status',1)->find($id);
-        $result = 
-             [
-                'id' => $doctor->id,
-                'name' => $doctor->name,
-                'description' => $doctor->description,
-                'avatar' => $doctor->avatar,
-                'birthday' => $doctor->birthday,
-                'email' => $doctor->email,
-                'gender' => $doctor->gender,
-            ];
-     
+        try{
+            $doctor = User::where('role_id',1)->where('status',1)->findOrFail($id);
+            $result = 
+                [
+                    'id' => $doctor->id,
+                    'name' => $doctor->name,
+                    'description' => $doctor->description,
+                    'avatar' => $doctor->avatar,
+                    'birthday' => $doctor->birthday,
+                    'email' => $doctor->email,
+                    'gender' => $doctor->gender,
+                ];
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
+        }catch(ModelNotFoundException $e){
+            return JsonResponse::handle(200,"Không tìm thấy bác sĩ",null,200);
+        }
+        
     }
 
     
