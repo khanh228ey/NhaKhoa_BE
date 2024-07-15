@@ -42,12 +42,12 @@ class ScheduleController extends Controller
         $schedules = $query->get();
         $result = [];
         $weekDays = [
-            Carbon::MONDAY => '2',
-            Carbon::TUESDAY => '3',
-            Carbon::WEDNESDAY => '4',
-            Carbon::THURSDAY => '5',
-            Carbon::FRIDAY => '6',
-            Carbon::SATURDAY => '7',
+            Carbon::MONDAY => 'monday',
+            Carbon::TUESDAY => 'tuesday',
+            Carbon::WEDNESDAY => 'wednesday',
+            Carbon::THURSDAY => 'thursday',
+            Carbon::FRIDAY => 'friday',
+            Carbon::SATURDAY => 'saturday',
         ];
         foreach ($schedules as $schedule) {
             $dateKey = $schedule->date;
