@@ -42,12 +42,12 @@ class ScheduleController extends Controller
     $schedules = $query->get();
     $result = [];
     $weekDays = [
-        Carbon::MONDAY => 'monday',
-        Carbon::TUESDAY => 'tuesday',
-        Carbon::WEDNESDAY => 'wednesday',
-        Carbon::THURSDAY => 'thursday',
-        Carbon::FRIDAY => 'friday',
-        Carbon::SATURDAY => 'saturday',
+        Carbon::MONDAY => '2',
+        Carbon::TUESDAY => '3',
+        Carbon::WEDNESDAY => '4',
+        Carbon::THURSDAY => '5',
+        Carbon::FRIDAY => '6',
+        Carbon::SATURDAY => '7',
     ];
 
     foreach ($schedules as $schedule) {
@@ -57,7 +57,7 @@ class ScheduleController extends Controller
 
         if (!isset($result[$dateKey])) {
             $result[$dateKey] = [
-                'today' => $weekDays[$dayOfWeek],
+                'key' => $weekDays[$dayOfWeek],
                 'date' => $schedule->date,
                 'doctor' => []
             ];
@@ -78,8 +78,6 @@ class ScheduleController extends Controller
         foreach ($daySchedule['doctor'] as &$doctorchedule) {
             sort($doctorchedule['times']);
             $doctorchedule['times'] = $this->mergeSameDayTimes($doctorchedule['times']);
-            
-            // Thêm key 'time' cho mỗi thời gian
             $doctorchedule['times'] = array_map(function ($time) {
                 return ['time' => $time];
             }, $doctorchedule['times']);
@@ -92,16 +90,13 @@ class ScheduleController extends Controller
     return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
 }
 
-    
-    private function mergeSameDayTimes($times)
-    {
+    private function mergeSameDayTimes($times){
         if (empty($times)) {
             return [];
         }
     
         $mergedTimes = [];
         $currentRange = $times[0];
-    
         foreach ($times as $time) {
             if ($currentRange != $time) {
                 list($currentStart, $currentEnd) = explode(' - ', $currentRange);
@@ -120,7 +115,6 @@ class ScheduleController extends Controller
         return $mergedTimes;
     }
     
-
     Public function updateSchedule(){
         
     }
