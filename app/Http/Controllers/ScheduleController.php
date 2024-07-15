@@ -56,7 +56,7 @@ class ScheduleController extends Controller
     
             if (!isset($result[$dateKey])) {
                 $result[$dateKey] = [
-                    'Today' => $weekDays[$dayOfWeek],
+                    'today' => $weekDays[$dayOfWeek],
                     'date' => $schedule->date,
                     'doctors' => []
                 ];
