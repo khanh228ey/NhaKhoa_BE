@@ -72,6 +72,7 @@ class ScheduleController extends Controller
             }
             if (!isset($result[$dateKey]['doctor'][$doctorKey])) {
                 $result[$dateKey]['doctor'][$doctorKey] = [
+                    'id' => $schedule->doctor->id,
                     'name' => $schedule->doctor->name,
                     'times' => []
                 ];
