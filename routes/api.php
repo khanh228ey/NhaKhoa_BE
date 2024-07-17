@@ -91,7 +91,7 @@ Route::prefix('v1/schedule')->controller(ScheduleController::class)->group(funct
     Route::get('/','getSchedule');
     Route::post('/','createSchedule');
     Route::put('/','updateSchedule');
-    Route::delete('/{id}','deleteSchedule');
+    Route::delete('/','deleteSchedule');
 });
 
 Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(function () {
