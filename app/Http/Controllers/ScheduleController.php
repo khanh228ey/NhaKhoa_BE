@@ -128,10 +128,9 @@ class ScheduleController extends Controller
             return JsonResponse::handle(400, "Không tìm tháy", null, 400);
         }
     
-        $date = Carbon::parse($dateInput)->setTimezone('Asia/Ho_Chi_Minh');
         $schedules = Schedule::query()
                     ->with(['doctor', 'time'])
-                    ->where('date', $date->format('Y-m-d'))
+                    ->where('date', $dateInput)
                     ->where('doctor_id', $doctorId)
                     ->orderBy('time_id', 'ASC')
                     ->get();
@@ -153,7 +152,7 @@ class ScheduleController extends Controller
             }
         }
         $result = [
-            'date' => $date,
+            'date' => $dateInput,
             'doctor' => [
                 'id' => $doctor->id,
                 'name' => $doctor->name,
