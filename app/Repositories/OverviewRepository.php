@@ -9,6 +9,15 @@ use Carbon\Carbon;
 
 class OverviewRepository{
 
+    
+    Public function responseOverview($total,$message){
+        $data = [
+            'total' => $total,
+            'message' => $message,
+        ];
+        return $data;
+    }
+
     public function totalAppointment(){
             $date = Carbon::now('Asia/Ho_Chi_Minh');
             //Tháng hiện tại
@@ -28,10 +37,7 @@ class OverviewRepository{
             } else {
                 $message = 'Tăng 0 lịch hẹn so với tháng trước.';
             }
-            return [
-                'total' => $totalCurrent,
-                'message' => $message,
-            ];
+            return $this->responseOverview($totalCurrent,$message);
     }
 
 
@@ -58,11 +64,7 @@ class OverviewRepository{
         } else {
             $message = 'Tăng ' . $totalAppointmentCurrentMonth . ' lịch khám so với tháng trước.';
         }
-
-        return  [
-            'total' => $totalAppointmentCurrentMonth,
-            'message' => $message,
-        ];
+        return $this->responseOverview($totalAppointmentCurrentMonth,$message);
     }
 
     Public function totalTurnover(){
@@ -82,10 +84,7 @@ class OverviewRepository{
         } elseif ($percentageChange < 0) {
             $message = 'Giảm ' . number_format(abs($percentageChange), 1) . '% doanh thu so với tháng trước.';
         }
-        return [
-            'total' => $totalCurrent,
-            'message' => $message,
-        ];
+        return $this->responseOverview($totalCurrent,$message);
     }
     
     Public function totalCustomer(){
@@ -97,11 +96,10 @@ class OverviewRepository{
         $totalCustomer = User::count();
         // Tháng trước
         $message = 'Có '. $totalCurrent.' khách hàng mới trong tháng';
-        return [
-            'total' => $totalCurrent.'/'.$totalCustomer,
-            'message' => $message,
-        ];
+        $total = $totalCurrent.'/'.$totalCustomer;
+        return $this->responseOverview($total,$message);
     }
+
 
 
 
@@ -111,28 +109,21 @@ class OverviewRepository{
             $startMonth = $date->copy()->month($month)->startOfMonth()->format('Y-m-d H:i:s');
             $endMonth = $date->copy()->month($month)->endOfMonth()->format('Y-m-d H:i:s');
             $total = Invoices::whereBetween('created_at', [$startMonth, $endMonth])->sum('total_price');
-            $totals[] = [
-                'month' => $month,
-                'total' => $total,
-            ];
+            $totals[] = $this->responseOverview($total,$month);
         }
         return $totals;
         }
+ 
+        public function appointmentStatistics() {
+            $totalCancel = Appointment::where('status', 2)->count();
+            $totalDone = Appointment::where('status', 1)->count();
         
-    Public function appointmentStatistics(){
-            $totalCancel = Appointment::where('status',2)->count();
-            $totalDone = Appointment::where('status',1)->count();
             $totals = [
-                [
-                    'message' => 'Đã hủy',
-                    'count' => $totalCancel
-                ],
-                [
-                    'message' => 'Đã xong',
-                    'count' => $totalDone
-                ]
+                $this->responseOverview($totalCancel, 'Đã hủy'),
+                $this->responseOverview($totalDone, 'Đã xong')
             ];
-        return $totals;
+        
+            return $totals;
         }
 
     
