@@ -50,7 +50,10 @@ class ScheduleRepository{
     }
 
     Public function deleteSchedule($schedules){
-        // $schedules
+        foreach($schedules as $item){
+            $item->delete();
+        }
+        return true;
     }
 
 }
