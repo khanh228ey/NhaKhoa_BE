@@ -28,15 +28,31 @@ class ScheduleController extends Controller
         return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
     }
 
-    Public function updateSchedule(Request $request){
-        $history = $this->ScheduleRepository->updateSchedule($request->all());
-        if ($history == false) {
-                return JsonResponse::error(401,ConstantsMessage::ERROR,401);
+    Public function updateSchedule(Request $request,$doctor_id,$date){
+        $schedules = Schedule::where('date',$date)->where('doctor_id',$doctor_id)->get();
+        if($schedules ){
+            $schedule = $this->ScheduleRepository->updateSchedule($request,$schedules);
+            if($schedule ==true){
+                return JsonResponse::handle(200,ConstantsMessage::Update,null,200);
+            }
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }else{
+            return JsonResponse::handle(404,"Không tìm thấy lịch làm việc",null,404);
         }
-        return JsonResponse::handle(200, ConstantsMessage::Update, $history, 200);
     }
 
-
+    Public function deleteSchedule($doctor_id,$date){
+        $schedules = Schedule::where('date',$date)->where('doctor_id',$doctor_id)->get();
+        if($schedules ){
+            $schedule = $this->ScheduleRepository->deleteSchedule($schedules);
+            if($schedule ==true){
+                return JsonResponse::handle(200,ConstantsMessage::Delete,null,200);
+            }
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }else{
+            return JsonResponse::handle(404,"Không tìm thấy lịch làm việc",null,404);
+        }   
+    }
     
     public function getSchedule(Request $request){
         $dateInput = $request->get('date');
@@ -162,21 +178,7 @@ class ScheduleController extends Controller
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
     
-    Public function deleteSchedule(Request $request){
-        $data = $request->all();
-        $schedules = Schedule::where('date',$data['date'])->where('doctor_id',$data['doctor_id'])->get();
-        if($schedules ){
-            $schedule = $this->ScheduleRepository->deleteSchedule($schedules);
-            if($schedule ==true){
-                return JsonResponse::handle(200,ConstantsMessage::Delete,null,200);
-            }
-            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
-        }else{
-            return JsonResponse::handle(404,"Không tìm thấy lịch làm việc",null,404);
-        }
-       
-        
-    }
+
     
     
 }

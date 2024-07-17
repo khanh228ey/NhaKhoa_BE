@@ -90,8 +90,8 @@ Route::prefix('v1/appointment')->controller(AppointmentController::class)->group
 Route::prefix('v1/schedule')->controller(ScheduleController::class)->group(function () {
     Route::get('/','getSchedule');
     Route::post('/','createSchedule');
-    Route::put('/','updateSchedule');
-    Route::delete('/','deleteSchedule');
+    Route::put('/{doctor_id}/{date}','updateSchedule');
+    Route::delete('/{doctor_id}/{date}','deleteSchedule');
 });
 
 Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(function () {

@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Schedule;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
 
 class ScheduleRepository{
 
@@ -30,8 +32,9 @@ class ScheduleRepository{
         return true;
     }
 
-    Public function updateSchedule($data){
-        $schedules = Schedule::where('date',$data['date'])->where('doctor_id',$data['doctor_id'])->get();
+    Public function updateSchedule(Request $request,$schedules){
+     try{
+        $data = $request->all();
         foreach ($schedules as $schedule) {
             $schedule->delete();
         }
@@ -47,13 +50,19 @@ class ScheduleRepository{
             $schedule->save();
         }
         return true;
-    }
-
-    Public function deleteSchedule($schedules){
-        foreach($schedules as $item){
-            $item->delete();
+        }catch(Exception $e){
+            return false;
         }
-        return true;
     }
 
+    public function deleteSchedule($schedules){
+        try {
+            foreach($schedules as $item){
+                $item->delete();
+            }
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 }
