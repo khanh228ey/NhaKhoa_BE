@@ -165,8 +165,11 @@ class ScheduleController extends Controller
     Public function deleteSchedule(Request $request){
         $data = $request->all();
         $schedules = Schedule::where('date',$data['date'])->where('doctor_id',$data['doctor_id'])->get();
-        if($schedules == true ){
+        if($schedules ){
+            $schedule = $this->ScheduleRepository->deleteSchedule($schedules);
+            if($schedule ==true){
                 return JsonResponse::handle(200,ConstantsMessage::Delete,null,200);
+            }
         }else{
             return JsonResponse::handle(404,"Không tìm thấy lịch làm việc",null,404);
         }
