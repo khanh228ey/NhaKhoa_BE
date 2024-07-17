@@ -170,6 +170,7 @@ class ScheduleController extends Controller
             if($schedule ==true){
                 return JsonResponse::handle(200,ConstantsMessage::Delete,null,200);
             }
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }else{
             return JsonResponse::handle(404,"Không tìm thấy lịch làm việc",null,404);
         }
