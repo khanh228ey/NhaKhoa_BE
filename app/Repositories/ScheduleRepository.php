@@ -30,8 +30,23 @@ class ScheduleRepository{
         return true;
     }
 
-    Public function findSchedule($schedule){
-
+    Public function updateSchedule($data){
+        $schedules = Schedule::where('date',$data['date'])->where('doctor_id',$data['doctor_id'])->get();
+        foreach ($schedules as $schedule) {
+            $schedule->delete();
+        }
+         $times = $data['time'];
+        foreach($times as $item){
+            $schedule = new Schedule();
+            $schedule->date = $data['date'];
+            $schedule->doctor_id = $data['doctor_id'];
+            $schedule->time_id = $item;
+            $schedule->created_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $schedule->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $schedule->status = 1;
+            $schedule->save();
+        }
+        return true;
     }
 
 }

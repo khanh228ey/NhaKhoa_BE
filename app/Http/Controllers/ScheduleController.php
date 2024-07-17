@@ -28,50 +28,57 @@ class ScheduleController extends Controller
         return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
     }
 
-    public function getSchedule(Request $request)
-{
-    $dateInput = $request->get('date');
-    $date = $dateInput ? Carbon::parse($dateInput)->setTimezone('Asia/Ho_Chi_Minh') : Carbon::now('Asia/Ho_Chi_Minh');
-    $startDate = $date->startOfWeek(Carbon::MONDAY);
-    $endDate = $startDate->copy()->addDays(5);
+    Public function updateSchedule(Request $request){
+        $history = $this->ScheduleRepository->updateSchedule($request->all());
+        if ($history == false) {
+                return JsonResponse::error(401,ConstantsMessage::ERROR,401);
+        }
+        return JsonResponse::handle(200, ConstantsMessage::Update, $history, 200);
+    }
+
+
     
-    $query = Schedule::query()->with(['doctor', 'time'])
-                ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
-                ->orderBy('date', 'ASC')
-                ->orderBy('doctor_id', 'ASC');
-    $schedules = $query->get();
-    $result = [];
-    $weekDays = [
-        Carbon::MONDAY => '2',
-        Carbon::TUESDAY => '3',
-        Carbon::WEDNESDAY => '4',
-        Carbon::THURSDAY => '5',
-        Carbon::FRIDAY => '6',
-        Carbon::SATURDAY => '7',
-    ];
+    public function getSchedule(Request $request){
+        $dateInput = $request->get('date');
+        $date = $dateInput ? Carbon::parse($dateInput)->setTimezone('Asia/Ho_Chi_Minh') : Carbon::now('Asia/Ho_Chi_Minh');
+        $startDate = $date->startOfWeek(Carbon::MONDAY);
+        $endDate = $startDate->copy()->addDays(5);
+        
+        $query = Schedule::query()->with(['doctor', 'time'])
+                    ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+                    ->orderBy('date', 'ASC')
+                    ->orderBy('doctor_id', 'ASC');
+        $schedules = $query->get();
+        $result = [];
+        $weekDays = [
+            Carbon::MONDAY => '2',
+            Carbon::TUESDAY => '3',
+            Carbon::WEDNESDAY => '4',
+            Carbon::THURSDAY => '5',
+            Carbon::FRIDAY => '6',
+            Carbon::SATURDAY => '7',
+        ];
+        foreach ($schedules as $schedule) {
+            $dateKey = $schedule->date;
+            $doctorKey = $schedule->doctor_id;
+            $dayOfWeek = Carbon::parse($schedule->date)->dayOfWeek;
 
-    foreach ($schedules as $schedule) {
-        $dateKey = $schedule->date;
-        $doctorKey = $schedule->doctor_id;
-        $dayOfWeek = Carbon::parse($schedule->date)->dayOfWeek;
-
-        if (!isset($result[$dateKey])) {
-            $result[$dateKey] = [
-                'key' => $weekDays[$dayOfWeek],
-                'date' => $schedule->date,
-                'doctor' => []
-            ];
-        }
-        if (!isset($result[$dateKey]['doctor'][$doctorKey])) {
-            $result[$dateKey]['doctor'][$doctorKey] = [
-                'id' => $schedule->doctor_id,
-                'name' => $schedule->doctor->name,
-                'times' => []
-            ];
-        }
-        if (!in_array($schedule->time->time, $result[$dateKey]['doctor'][$doctorKey]['times'])) {
-            $result[$dateKey]['doctor'][$doctorKey]['times'][] = $schedule->time->time;
-        }
+            if (!isset($result[$dateKey])) {
+                $result[$dateKey] = [
+                    'key' => $weekDays[$dayOfWeek],
+                    'date' => $schedule->date,
+                    'doctor' => []
+                ];
+            }
+            if (!isset($result[$dateKey]['doctor'][$doctorKey])) {
+                $result[$dateKey]['doctor'][$doctorKey] = [
+                    'name' => $schedule->doctor->name,
+                    'times' => []
+                ];
+            }
+            if (!in_array($schedule->time->time, $result[$dateKey]['doctor'][$doctorKey]['times'])) {
+                $result[$dateKey]['doctor'][$doctorKey]['times'][] = $schedule->time->time;
+            }
     }
 
     foreach ($result as &$daySchedule) {
@@ -94,7 +101,6 @@ class ScheduleController extends Controller
         if (empty($times)) {
             return [];
         }
-    
         $mergedTimes = [];
         $currentRange = $times[0];
         foreach ($times as $time) {
@@ -109,15 +115,55 @@ class ScheduleController extends Controller
                 }
             }
         }
-
         $mergedTimes[] = $currentRange;
     
         return $mergedTimes;
     }
     
-    Public function updateSchedule(){
-        
+    public function getScheduleDetails(Request $request) {
+        $dateInput = $request->get('date');
+        $doctorId = $request->get('doctor_id');
+        if (!$dateInput || !$doctorId) {
+            return JsonResponse::handle(400, "Không tìm tháy", null, 400);
+        }
+    
+        $date = Carbon::parse($dateInput)->setTimezone('Asia/Ho_Chi_Minh');
+        $schedules = Schedule::query()
+                    ->with(['doctor', 'time'])
+                    ->where('date', $date->format('Y-m-d'))
+                    ->where('doctor_id', $doctorId)
+                    ->orderBy('time_id', 'ASC')
+                    ->get();
+        if ($schedules->isEmpty()) {
+            return JsonResponse::handle(404,'Không tìm thấy lịch làm việc',null,404);
+        }
+        $doctor = $schedules->first()->doctor;
+        $uniqueTimes = [];
+        $times = [];
+        foreach ($schedules as $schedule) {
+            $timeId = $schedule->time_id;
+            $time = $schedule->time->time;
+            if (!in_array($time, $uniqueTimes)) {
+                $uniqueTimes[] = $time;
+                $times[] = [
+                    'schedule_id' => $schedule->id,
+                    'id' => $timeId,
+                    'time' => $time
+                ];
+            }
+        }
+        $result = [
+            'date' => $date,
+            'doctor' => [
+                'id' => $doctor->id,
+                'name' => $doctor->name,
+                'times' => $times
+            ]
+        ];
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
+    
+    
     
     
 }

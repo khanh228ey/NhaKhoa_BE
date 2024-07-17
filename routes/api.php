@@ -13,7 +13,6 @@ use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -154,3 +153,4 @@ Route::post('/v2/appointment',[AppointmentController::class,'createAppointment']
 
 
 Route::post('/v1/print',[InvoiceController::class,'printInvoice']);
+Route::get('/v1/workday',[ScheduleController::class,'getScheduleDetails']);

@@ -123,7 +123,8 @@ class ClientController extends Controller
     {
         $time = Schedule_time::all();
         $timeslots = $time->map(function ($item) {
-            return ['time' => $item->time];
+            return ['id' => $item->id ,
+                    'time' => $item->time];
         })->toArray();
         
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
