@@ -49,4 +49,8 @@ class ScheduleRepository{
         return true;
     }
 
+    Public function deleteSchedule($schedules){
+        // $schedules
+    }
+
 }

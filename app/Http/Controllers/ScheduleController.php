@@ -147,7 +147,6 @@ class ScheduleController extends Controller
             if (!in_array($time, $uniqueTimes)) {
                 $uniqueTimes[] = $time;
                 $times[] = [
-                    'schedule_id' => $schedule->id,
                     'id' => $timeId,
                     'time' => $time
                 ];
@@ -164,7 +163,9 @@ class ScheduleController extends Controller
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
     
-    
+    Public function deleteSchedule(){
+
+    }
     
     
 }
