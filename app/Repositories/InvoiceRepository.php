@@ -23,7 +23,6 @@ class InvoiceRepository{
                 $price = $service->pivot->price;
                 $total += $quantity * $price ;
             }
-            
         } else {
             $total = 200000;
         }

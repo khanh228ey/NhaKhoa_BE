@@ -28,10 +28,19 @@ class UploadController extends Controller
 
         try {
             // Sử dụng facade Cloudinary để tải lên hình ảnh
-            $uploadedFileUrl = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+            // $uploadedFileUrl = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+            $image = $request->file('image');
+            $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
+                'transformation' => [
+                    'width' => 800,
+                    'height' => 800,
+                    'crop' => 'limit'
+                ]
+            ])->getSecurePath();
+
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS,['url' => $uploadedFileUrl], 200);
         } catch (\Exception $e) {
-            return JsonResponse::error(500, $e->getMessage(), 500);
+            return JsonResponse::error(500, ConstantsMessage::error, 500);
         }
     }
     //Upload image lên Minio
@@ -54,42 +63,8 @@ class UploadController extends Controller
     //     return JsonResponse::error(400,ConstantsMessage::ERROR,400);
     // }
 
-//    // Upload ảnh lên cloudinary
-//     public function uploadImage(Request $request)
-//     {
-       
-//         $validator = Validator::make($request->all(), [
-//             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-//         ]);
-    
-//         if ($validator->fails()) {
-//             return JsonResponse::error(400,$validator->messages(),400);
-//         }
-//         $uploadedFileUrl = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
-//         return JsonResponse::handle(200,ConstantsMessage::ERROR,$uploadedFileUrl,200);
-//     }
 
-    // public function uploadImage(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-    //     ]);
-    //     if ($validator->fails()) {
-    //         return JsonResponse::handle(400,ConstantsMessage::Bad_Request,$validator->messages(),400);
-    //     }
-    //     if ($request->hasFile('file') && $request->file('file')->isValid()) {
-    //         $file = $request->file('file');
-    //         $fileName = time() . '_' . $file->getClientOriginalName();
-    //         $destinationPath = 'uploads';
 
-    //         $file->move(public_path($destinationPath), $fileName);
-
-    //         $url = asset($destinationPath . '/' . $fileName);
-
-    //         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, ['url' => $url], 200);
-    //     }
-    //     return JsonResponse::error(400, ConstantsMessage::ERROR, 400);
-    // }
 
 
 }
