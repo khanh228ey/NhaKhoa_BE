@@ -36,9 +36,6 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-
- 
-
     public function logout()
     {
         auth()->logout();

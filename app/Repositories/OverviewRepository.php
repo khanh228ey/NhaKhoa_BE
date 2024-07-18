@@ -33,9 +33,9 @@ class OverviewRepository{
             $difference = $totalCurrent - $totalPrevious;
             $message = '';
             if ($difference > 0) {
-                $message = 'Tăng<span style ="color:blue;">' . $difference . '</span> lịch hẹn so với tháng trước.';
+                $message = 'Tăng <span style ="color:blue;">'.$difference.'</span> lịch hẹn so với tháng trước.';
             } elseif ($difference < 0) {
-                $message = 'Giảm <span style ="color:blue;">' . abs($difference) . '</span> lịch hẹn so với tháng trước.';
+                $message = 'Giảm <span style ="color:blue;">'.$difference.'</span> lịch hẹn so với tháng trước.';
             } else {
                 $message = 'Tăng <span style ="color:blue;">0</span> lịch hẹn so với tháng trước.';
             }
@@ -59,9 +59,9 @@ class OverviewRepository{
         $message = '';
         if ($totalAppointmentPreviousMonth > 0) {
             if ($difference > 0) {
-                $message = 'Tăng <span style ="color:blue;">' . $difference . '</span> lịch khám so với tháng trước.';
+                $message = 'Tăng <span style ="color:blue;">'.$difference.'</span> lịch khám so với tháng trước.';
             } elseif ($difference < 0) {
-                $message = 'Giảm <span style ="color:blue;">' . abs($difference) . '<span> lịch khám so với tháng trước.';
+                $message = 'Giảm <span style ="color:blue;">'.$difference. '<span> lịch khám so với tháng trước.';
             } else {
                 $message = 'Tăng <span style ="color:blue;">0</span> lịch khám so với tháng trước.';
             }
@@ -72,7 +72,7 @@ class OverviewRepository{
     }
 
     Public function totalTurnover(){
-        $title = "Tổng danh thu(VND):";
+        $title = "Tổng doanh thu (VND):";
         $date = Carbon::now('Asia/Ho_Chi_Minh');
         //Tháng hiện tại
         $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
@@ -85,9 +85,9 @@ class OverviewRepository{
         $percentageChange = $totalPrevious > 0 ? (($totalCurrent - $totalPrevious) / $totalPrevious) * 100 : ($totalCurrent > 0 ? 100 : 0);
         $message = '';
         if ($percentageChange >= 0) {
-            $message = 'Tăng <span style ="color:blue;">' . number_format($percentageChange, 1) . '%</span> doanh thu so với tháng trước.';
+            $message = 'Tăng <span style ="color:blue;">'.number_format($percentageChange, 1).'%</span> doanh thu so với tháng trước.';
         } elseif ($percentageChange < 0) {
-            $message = 'Giảm <span style ="color:blue;">' . number_format(abs($percentageChange), 1) . '%</span> doanh thu so với tháng trước.';
+            $message = 'Giảm <span style ="color:blue;">'.number_format(abs($percentageChange),1).'%</span> doanh thu so với tháng trước.';
         }
         return $this->responseOverview($title,number_format($totalCurrent),$message);
     }
@@ -101,7 +101,7 @@ class OverviewRepository{
         $totalCurrent = User::whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->count();
         $totalCustomer = User::count();
         // Tháng trước
-        $message = 'Có <span style ="color:blue;">'. $totalCurrent.'</span> khách hàng mới trong tháng';
+        $message = 'Có <span style ="color:blue;">'.$totalCurrent.'</span> khách hàng mới trong tháng';
         $total = $totalCurrent.'/'.$totalCustomer;
         return $this->responseOverview($title,$total,$message);
     }
@@ -128,8 +128,8 @@ class OverviewRepository{
             $totalDone = Appointment::where('status', 1)->count();
         
             $totals = [
-                $this->responseOverview('Số lịch hẹn đã bị hủy',$totalCancel, 'Đã hủy'),
-                $this->responseOverview('Sô lịch hẹn đã xong,',$totalDone, 'Đã xong')
+                $this->responseOverview('Số lịch hẹn đã bị hủy ',$totalCancel, 'Đã hủy'),
+                $this->responseOverview('Sô lịch hẹn đã xong ,',$totalDone, 'Đã xong')
             ];
         
             return $totals;
