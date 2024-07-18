@@ -33,11 +33,11 @@ class OverviewRepository{
             $difference = $totalCurrent - $totalPrevious;
             $message = '';
             if ($difference > 0) {
-                $message = 'Tăng <p style ="color:blue;">' . $difference . '</p> lịch hẹn so với tháng trước.';
+                $message = 'Tăng<span style ="color:blue;">' . $difference . '</span> lịch hẹn so với tháng trước.';
             } elseif ($difference < 0) {
-                $message = 'Giảm <p style ="color:blue;">' . abs($difference) . '</p> lịch hẹn so với tháng trước.';
+                $message = 'Giảm <span style ="color:blue;">' . abs($difference) . '</span> lịch hẹn so với tháng trước.';
             } else {
-                $message = 'Tăng <p style ="color:blue;">0</p> lịch hẹn so với tháng trước.';
+                $message = 'Tăng <span style ="color:blue;">0</span> lịch hẹn so với tháng trước.';
             }
             return $this->responseOverview($title,$totalCurrent,$message);
     }
@@ -59,11 +59,11 @@ class OverviewRepository{
         $message = '';
         if ($totalAppointmentPreviousMonth > 0) {
             if ($difference > 0) {
-                $message = 'Tăng <p style ="color:blue;">' . $difference . '</p> lịch khám so với tháng trước.';
+                $message = 'Tăng <span style ="color:blue;">' . $difference . '</span> lịch khám so với tháng trước.';
             } elseif ($difference < 0) {
-                $message = 'Giảm <p style ="color:blue;">' . abs($difference) . '<p> lịch khám so với tháng trước.';
+                $message = 'Giảm <span style ="color:blue;">' . abs($difference) . '<span> lịch khám so với tháng trước.';
             } else {
-                $message = 'Tăng <p style ="color:blue;">0</p> lịch khám so với tháng trước.';
+                $message = 'Tăng <span style ="color:blue;">0</span> lịch khám so với tháng trước.';
             }
         } else {
             $message = 'Tăng ' . $totalAppointmentCurrentMonth . ' lịch khám so với tháng trước.';
@@ -85,9 +85,9 @@ class OverviewRepository{
         $percentageChange = $totalPrevious > 0 ? (($totalCurrent - $totalPrevious) / $totalPrevious) * 100 : ($totalCurrent > 0 ? 100 : 0);
         $message = '';
         if ($percentageChange >= 0) {
-            $message = 'Tăng <p style ="color:blue;">' . number_format($percentageChange, 1) . '%</p> doanh thu so với tháng trước.';
+            $message = 'Tăng <span style ="color:blue;">' . number_format($percentageChange, 1) . '%</span> doanh thu so với tháng trước.';
         } elseif ($percentageChange < 0) {
-            $message = 'Giảm <p style ="color:blue;">' . number_format(abs($percentageChange), 1) . '%</p> doanh thu so với tháng trước.';
+            $message = 'Giảm <span style ="color:blue;">' . number_format(abs($percentageChange), 1) . '%</span> doanh thu so với tháng trước.';
         }
         return $this->responseOverview($title,number_format($totalCurrent),$message);
     }
@@ -101,7 +101,7 @@ class OverviewRepository{
         $totalCurrent = User::whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->count();
         $totalCustomer = User::count();
         // Tháng trước
-        $message = 'Có <p style ="color:blue;">'. $totalCurrent.'</p> khách hàng mới trong tháng';
+        $message = 'Có <span style ="color:blue;">'. $totalCurrent.'</span> khách hàng mới trong tháng';
         $total = $totalCurrent.'/'.$totalCustomer;
         return $this->responseOverview($title,$total,$message);
     }
