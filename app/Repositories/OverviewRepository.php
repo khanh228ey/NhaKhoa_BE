@@ -113,7 +113,7 @@ class OverviewRepository{
         for ($month = 1; $month <= 12; $month++) {
             $startMonth = $date->copy()->month($month)->startOfMonth()->format('Y-m-d H:i:s');
             $endMonth = $date->copy()->month($month)->endOfMonth()->format('Y-m-d H:i:s');
-            $total = Invoices::whereBetween('created_at', [$startMonth, $endMonth])->sum('total_price');
+            $total = (int)Invoices::whereBetween('created_at', [$startMonth, $endMonth])->sum('total_price');
             $title = $title. $month;
             $message = $month."/".date('Y');
             $totals[] = $this->responseOverview($title,$total,$message);
