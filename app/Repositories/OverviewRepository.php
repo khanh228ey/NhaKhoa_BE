@@ -20,7 +20,7 @@ class OverviewRepository{
     }
 
     public function totalAppointment(){
-            $title = "Tổng số lịch hẹn";
+            $title = "Tổng số lịch hẹn:";
             $date = Carbon::now('Asia/Ho_Chi_Minh');
             //Tháng hiện tại
             $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
@@ -33,18 +33,18 @@ class OverviewRepository{
             $difference = $totalCurrent - $totalPrevious;
             $message = '';
             if ($difference > 0) {
-                $message = 'Tăng ' . $difference . ' lịch hẹn so với tháng trước.';
+                $message = 'Tăng <p style ="color:blue;">' . $difference . '</p> lịch hẹn so với tháng trước.';
             } elseif ($difference < 0) {
-                $message = 'Giảm ' . abs($difference) . ' lịch hẹn so với tháng trước.';
+                $message = 'Giảm <p style ="color:blue;">' . abs($difference) . '</p> lịch hẹn so với tháng trước.';
             } else {
-                $message = 'Tăng 0 lịch hẹn so với tháng trước.';
+                $message = 'Tăng <p style ="color:blue;">0</p> lịch hẹn so với tháng trước.';
             }
             return $this->responseOverview($title,$totalCurrent,$message);
     }
 
 
     Public function totalHistory(){
-         $title = "Tổng số lịch khám";
+         $title = "Tổng số lịch khám:";
         $date = Carbon::now('Asia/Ho_Chi_Minh');
         //Tháng hiện tại
         $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
@@ -55,14 +55,15 @@ class OverviewRepository{
         $endOfPreviousMonth = $date->subMonthsNoOverflow(0)->format('Y-m-d H:i:s');
         $totalAppointmentPreviousMonth = History::where('status',1)->whereBetween('created_at', [$startOfPreviousMonth, $endOfPreviousMonth])->count();
         $difference = $totalAppointmentCurrentMonth - $totalAppointmentPreviousMonth;
+        
         $message = '';
         if ($totalAppointmentPreviousMonth > 0) {
             if ($difference > 0) {
-                $message = 'Tăng ' . $difference . ' lịch khám so với tháng trước.';
+                $message = 'Tăng <p style ="color:blue;">' . $difference . '</p> lịch khám so với tháng trước.';
             } elseif ($difference < 0) {
-                $message = 'Giảm ' . abs($difference) . ' lịch khám so với tháng trước.';
+                $message = 'Giảm <p style ="color:blue;">' . abs($difference) . '<p> lịch khám so với tháng trước.';
             } else {
-                $message = 'Tăng 0 lịch khám so với tháng trước.';
+                $message = 'Tăng <p style ="color:blue;">0</p> lịch khám so với tháng trước.';
             }
         } else {
             $message = 'Tăng ' . $totalAppointmentCurrentMonth . ' lịch khám so với tháng trước.';
@@ -71,7 +72,7 @@ class OverviewRepository{
     }
 
     Public function totalTurnover(){
-        $title = "Tổng danh thu";
+        $title = "Tổng danh thu(VND):";
         $date = Carbon::now('Asia/Ho_Chi_Minh');
         //Tháng hiện tại
         $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
@@ -84,15 +85,15 @@ class OverviewRepository{
         $percentageChange = $totalPrevious > 0 ? (($totalCurrent - $totalPrevious) / $totalPrevious) * 100 : ($totalCurrent > 0 ? 100 : 0);
         $message = '';
         if ($percentageChange >= 0) {
-            $message = 'Tăng ' . number_format($percentageChange, 1) . '% doanh thu so với tháng trước.';
+            $message = 'Tăng <p style ="color:blue;">' . number_format($percentageChange, 1) . '%</p> doanh thu so với tháng trước.';
         } elseif ($percentageChange < 0) {
-            $message = 'Giảm ' . number_format(abs($percentageChange), 1) . '% doanh thu so với tháng trước.';
+            $message = 'Giảm <p style ="color:blue;">' . number_format(abs($percentageChange), 1) . '%</p> doanh thu so với tháng trước.';
         }
         return $this->responseOverview($title,number_format($totalCurrent),$message);
     }
     
     Public function totalCustomer(){
-         $title = "Số lượng khách hàng mới";
+         $title = "Số lượng khách hàng mới:";
         $date = Carbon::now('Asia/Ho_Chi_Minh');
         //Tháng hiện tại
         $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
@@ -100,22 +101,23 @@ class OverviewRepository{
         $totalCurrent = User::whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->count();
         $totalCustomer = User::count();
         // Tháng trước
-        $message = 'Có '. $totalCurrent.' khách hàng mới trong tháng';
+        $message = 'Có <p style ="color:blue;">'. $totalCurrent.'</p> khách hàng mới trong tháng';
         $total = $totalCurrent.'/'.$totalCustomer;
         return $this->responseOverview($title,$total,$message);
     }
 
 
-
-
     Public function monthlyStatistics(){
-        $title = "Doanh thu nha khoa trong 12 tháng";
+        $title = "Doanh thu trong tháng ";
         $date = Carbon::now('Asia/Ho_Chi_Minh');
         for ($month = 1; $month <= 12; $month++) {
             $startMonth = $date->copy()->month($month)->startOfMonth()->format('Y-m-d H:i:s');
             $endMonth = $date->copy()->month($month)->endOfMonth()->format('Y-m-d H:i:s');
             $total = Invoices::whereBetween('created_at', [$startMonth, $endMonth])->sum('total_price');
-            $totals[] = $this->responseOverview($title,$total,$month);
+            $title = $title. $month;
+            $message = $month."/".date('Y');
+            $totals[] = $this->responseOverview($title,$total,$message);
+            $title = "Doanh thu trong tháng ";
         }
         return $totals;
         }
@@ -137,7 +139,6 @@ class OverviewRepository{
 
 
 }
-
 
 
 
