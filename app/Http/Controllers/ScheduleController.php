@@ -30,7 +30,7 @@ class ScheduleController extends Controller
 
     Public function updateSchedule(Request $request,$doctor_id,$date){
         $schedules = Schedule::where('date',$date)->where('doctor_id',$doctor_id)->get();
-        if($schedules ){
+        if($schedules->isNotEmpty()){
             $schedule = $this->ScheduleRepository->updateSchedule($request,$schedules);
             if($schedule ==true){
                 return JsonResponse::handle(200,ConstantsMessage::Update,null,200);
@@ -43,7 +43,7 @@ class ScheduleController extends Controller
 
     Public function deleteSchedule($doctor_id,$date){
         $schedules = Schedule::where('date',$date)->where('doctor_id',$doctor_id)->get();
-        if($schedules ){
+        if($schedules->isNotEmpty()){
             $schedule = $this->ScheduleRepository->deleteSchedule($schedules);
             if($schedule ==true){
                 return JsonResponse::handle(200,ConstantsMessage::Delete,null,200);

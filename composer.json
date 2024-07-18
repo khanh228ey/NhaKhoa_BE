@@ -9,7 +9,7 @@
         "barryvdh/laravel-dompdf": "^2.2",
         "cloudinary-labs/cloudinary-laravel": "^2.1",
         "fruitcake/laravel-cors": "^2.0.5",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",

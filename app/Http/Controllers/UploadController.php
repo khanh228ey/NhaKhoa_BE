@@ -15,40 +15,59 @@ use Illuminate\Support\Facades\Validator;
 
 class UploadController extends Controller
 {
-    //Upload image lên Minio
-    public function uploadMinIO(Request $request)
+
+    public function uploadImage(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-    
+
         if ($validator->fails()) {
-            return JsonResponse::error(400,$validator->messages(),400);
+            return JsonResponse::error(400, $validator->messages(), 400);
         }
-        if ($request->hasFile('file') && $request->file('file')->isValid()) {
-            $file = $request->file('file');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $path = $file->storeAs('uploads', $fileName, 's3');
-            $url = Storage::disk('s3')->url($path);
-            return JsonResponse::handle(200,ConstantsMessage::SUCCESS,['url' => $url],200);
+
+        try {
+            // Sử dụng facade Cloudinary để tải lên hình ảnh
+            $uploadedFileUrl = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS,['url' => $uploadedFileUrl], 200);
+        } catch (\Exception $e) {
+            return JsonResponse::error(500, $e->getMessage(), 500);
         }
-        return JsonResponse::error(400,ConstantsMessage::ERROR,400);
     }
-
-   // Upload ảnh lên cloudinary
-    // public function uploadImage(Request $request)
+    //Upload image lên Minio
+    // public function uploadMinIO(Request $request)
     // {
-    //     // Validate the request
-    //     $request->validate([
-    //         'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //     $validator = Validator::make($request->all(), [
+    //         'file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
     //     ]);
-
-    //     // Upload the image to Cloudinary
-    //     $uploadedFileUrl = Cloudinary::upload($request->file('file')->getRealPath())->getSecurePath();
-
-    //     // Return the URL of the uploaded image
-    //     return response()->json(['url' => $uploadedFileUrl], 200);
+    
+    //     if ($validator->fails()) {
+    //         return JsonResponse::error(400,$validator->messages(),400);
+    //     }
+    //     if ($request->hasFile('file') && $request->file('file')->isValid()) {
+    //         $file = $request->file('file');
+    //         $fileName = time() . '_' . $file->getClientOriginalName();
+    //         $path = $file->storeAs('uploads', $fileName, 's3');
+    //         $url = Storage::disk('s3')->url($path);
+    //         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,['url' => $url],200);
+    //     }
+    //     return JsonResponse::error(400,ConstantsMessage::ERROR,400);
     // }
+
+//    // Upload ảnh lên cloudinary
+//     public function uploadImage(Request $request)
+//     {
+       
+//         $validator = Validator::make($request->all(), [
+//             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+//         ]);
+    
+//         if ($validator->fails()) {
+//             return JsonResponse::error(400,$validator->messages(),400);
+//         }
+//         $uploadedFileUrl = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+//         return JsonResponse::handle(200,ConstantsMessage::ERROR,$uploadedFileUrl,200);
+//     }
 
     // public function uploadImage(Request $request)
     // {

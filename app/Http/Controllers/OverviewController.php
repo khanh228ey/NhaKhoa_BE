@@ -17,7 +17,6 @@ class OverviewController extends Controller
       
     }
 
-    
     public function totalOverView(){
         $invoice = $this->overviewRepository->totalTurnover();
         $appointment = $this->overviewRepository->totalAppointment();
