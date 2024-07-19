@@ -19,26 +19,36 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['except' => ['login','refresh']]);
     }
 
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['phone_number','email', 'password']);
-        if (isset($credentials['phone_number'])) {
-            $user = User::where('phone_number', $credentials['phone_number'])->first();
-        } elseif (isset($credentials['email'])) {
-            $user = User::where('email', $credentials['email'])->first();
+        $account = $request->input('account');
+        $password = $request->input('password');
+        $credentials = [
+            'password' => $password,
+        ];
+        $userQuery = User::query();
+        if (filter_var($account, FILTER_VALIDATE_EMAIL)) {
+            $userQuery->where('email', $account);
+            $credentials['email'] = $account;
+        } else {
+            $userQuery->where('phone_number', $account);
+            $credentials['phone_number'] = $account;
         }
+        $user = $userQuery->first();
+    
         if (!$user) {
             return JsonResponse::handle(401, 'Không tìm thấy tài khoản', null, 401);
         }
-        if($user->status != 1){
-            return JsonResponse::handle(401,'Tài khoản đã bị khóa',null,401);
+        if ($user->status != 1) {
+            return JsonResponse::handle(401, 'Tài khoản đã bị khóa', null, 401);
         }
-        if (! $token = auth()->attempt($credentials)) {
-            return JsonResponse::handle(401,'Tài khoản mật khẩu chưa chính xác',null,401);
+        if (!$token = auth()->attempt($credentials)) {
+            return JsonResponse::handle(401, 'Tài khoản hoặc mật khẩu chưa chính xác', null, 401);
         }
+
         return $this->respondWithToken($token);
     }
-
+    
     public function logout()
     {
         auth()->logout();
