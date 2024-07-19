@@ -21,8 +21,12 @@ class AuthController extends Controller
 
     public function login()
     {
-        $credentials = request(['phone_number', 'password']);
-        $user =User::where('phone_number', $credentials['phone_number'])->first();
+        $credentials = request(['phone_number','email', 'password']);
+        if (isset($credentials['phone_number'])) {
+            $user = User::where('phone_number', $credentials['phone_number'])->first();
+        } elseif (isset($credentials['email'])) {
+            $user = User::where('email', $credentials['email'])->first();
+        }
         if (!$user) {
             return JsonResponse::handle(401, 'Không tìm thấy tài khoản', null, 401);
         }
@@ -32,7 +36,6 @@ class AuthController extends Controller
         if (! $token = auth()->attempt($credentials)) {
             return JsonResponse::handle(401,'Tài khoản mật khẩu chưa chính xác',null,401);
         }
-        // $refreshToken = $this->createRefreshToken();
         return $this->respondWithToken($token);
     }
 

@@ -129,7 +129,7 @@ class OverviewRepository{
         
             $totals = [
                 $this->responseOverview('Số lịch hẹn đã bị hủy ',$totalCancel, 'Đã hủy'),
-                $this->responseOverview('Sô lịch hẹn đã xong ,',$totalDone, 'Đã xong')
+                $this->responseOverview('Sô lịch hẹn hoàn thành ',$totalDone, 'Hoàn thành')
             ];
         
             return $totals;

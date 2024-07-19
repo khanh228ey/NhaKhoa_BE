@@ -11,4 +11,13 @@ class History_detail extends Model
     public $timestamps = false;
     protected $table = 'history_detail';
 
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
+
+    public function history()
+    {
+        return $this->belongsTo(History::class);
+    }
 }

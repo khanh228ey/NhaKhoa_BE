@@ -11,6 +11,7 @@ use App\Http\Controllers\OverviewController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -120,10 +121,16 @@ Route::prefix('v1')->controller(ClientController::class)->group(function(){
     });
     Route::get('/time','getTime');
 });
+//OverView
 Route::prefix('v1/overview')->controller(OverviewController::class)->group(function(){
     Route::get('/','totalOverView');
     Route::get('/invoice','monthlyStatistics');
     Route::get('/appointment','appointmentStatistics');
+});
+
+//Thống kê
+Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(function(){
+    Route::get('/','getServiceStatistics');
 });
 
 Route::prefix('v2')->controller(ClientController::class)->group(function(){
