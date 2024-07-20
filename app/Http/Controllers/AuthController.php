@@ -7,9 +7,9 @@ use App\Commons\Responses\JsonResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie ;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
-use Symfony\Component\HttpFoundation\Cookie;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -48,9 +48,9 @@ class AuthController extends Controller
             return JsonResponse::handle(404, 'Tài khoản hoặc mật khẩu chưa chính xác', null, 404);
         }
         $role = Hash::make($user->role->name);
-        $cookie = cookie('status', 'true', 600);
+        $cookie = Cookie::make('status', 'true', 600,null,null,false,false);
         $response = $this->respondWithToken($token,$role);
-        return $response->headers->setCookie($cookie);
+        return $response->withCookie($cookie);
     }
     
     public function logout()
