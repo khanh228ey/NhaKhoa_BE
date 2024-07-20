@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Commons\Responses\JsonResponse;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
@@ -44,7 +45,8 @@ class CheckCookie
         } else {
             // Xóa cookie nếu không có token làm mới
             $cookie = Cookie::forget('refresh_token');
-            return response()->json(['error' => 'Unauthorized'], 401)->withCookie($cookie);
+            // return response()->json(['error' => 'Unauthorized'], 401)->withCookie($cookie);
+            JsonResponse::handle(401,'Yêu cầu đăng nhập',null,401)->withCookie($cookie);
         }
     }
 }

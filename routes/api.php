@@ -44,7 +44,7 @@ Route::group([
     Route::get('profile', [AuthController::class,'profile']);
 });
 //Middelware check token đăng nhập
-Route::middleware(['check.token', 'check.cookie'])->group(function () {
+Route::middleware(['check.token'])->group(function () {
 Route::prefix('v1/user')->controller(UserController::class)->group(function(){
     Route::get('/','getUsers');
     Route::post('/','createUser');
