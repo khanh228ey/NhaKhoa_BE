@@ -7,7 +7,9 @@ use App\Commons\Responses\JsonResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Symfony\Component\HttpFoundation\Cookie;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -45,8 +47,8 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($credentials)) {
             return JsonResponse::handle(404, 'Tài khoản hoặc mật khẩu chưa chính xác', null, 404);
         }
-
-        return $this->respondWithToken($token);
+        $role = Hash::make($user->role->name);
+        return $this->respondWithToken($token,$role);
     }
     
     public function logout()
@@ -76,12 +78,13 @@ class AuthController extends Controller
     // }
 
 
-    protected function respondWithToken($token)
+    protected function respondWithToken($token,$role)
     {
         $data = [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() * 60,
+            'role' => $role,
         ];
         return JsonResponse::handle(200,"Đăng nhập thành công",$data,200);
     }

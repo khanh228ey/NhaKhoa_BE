@@ -19,6 +19,7 @@ class ExportController extends Controller
         $pdf->render();
         return $pdf->stream('invoice.pdf');
     }
+
     public function export(Request $request)
     {
         $data = $request->input('data');
@@ -27,14 +28,14 @@ class ExportController extends Controller
             return JsonResponse::handle(400,'Lỗi dữ liệu',null,400);
         }
         $formattedData = array_map(function($item) {
-            return [
-                'service_id' => $item['service']['id'],
-                'service_name' => $item['service']['name'],
-                'quantity' => $item['quantity'],
-                'price' => $item['price'],
-            ];
+                return [
+                    'Mã dịch vụ' => $item['service']['id'],
+                    'Tên dịch vụ' => $item['service']['name'],
+                    'Số lượng bán ra' => $item['quantity'] ?? 0,
+                    'Tổng thu' => $item['price'] ?? 0,
+                ];
         }, $data);
 
-        return Excel::download(new ServicesExport($formattedData), 'services.xlsx');
+        return Excel::download(new ServicesExport($formattedData), 'ServicesStatistics.xlsx');
     }
 }
