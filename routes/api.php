@@ -43,7 +43,8 @@ Route::group([
     Route::post('refresh', [AuthController::class,'refresh']);
     Route::get('profile', [AuthController::class,'profile']);
 });
-
+//Middelware check token đăng nhập
+Route::middleware(['check.token', 'check.cookie'])->group(function () {
 Route::prefix('v1/user')->controller(UserController::class)->group(function(){
     Route::get('/','getUsers');
     Route::post('/','createUser');
@@ -141,7 +142,7 @@ Route::prefix('v1')->controller(ExportController::class)->group(function(){
 });
 Route::post('/v1/print',[InvoiceController::class,'printInvoice']);
 
-
+});
 
 //route khách hàng
 Route::prefix('v2')->controller(ClientController::class)->group(function(){

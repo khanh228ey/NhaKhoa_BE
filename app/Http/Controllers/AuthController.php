@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie ;
@@ -48,10 +49,16 @@ class AuthController extends Controller
             return JsonResponse::handle(404, 'Tài khoản hoặc mật khẩu chưa chính xác', null, 404);
         }
         $role = Hash::make($user->role->name);
-        $cookie = Cookie::make('status', 'true', 600,'/');
+        $refreshToken = $this->createRefreshToken($user);
+        $cookie = Cookie::make('refresh_token', $refreshToken, 120,'/');
         $response = $this->respondWithToken($token,$role);
         return $response->withCookie($cookie);
     }
+
+  
+    private function createRefreshToken($user){
+    return JWTAuth::fromUser($user, ['exp' => Carbon::now()->addDays(30)->timestamp]);
+}
     
     public function logout()
     {
@@ -60,26 +67,7 @@ class AuthController extends Controller
         
     }
 
-    // public function refresh()
-    // {
-    //     $refreshToken = request()->refresh_token;
-    //     try{
-    //         $decoded = JWTAuth::getJWTProvider()->decode($refreshToken);
-    //         $user = User::find($decoded['sub']);
-    //         if(!$user){
-    //             return response()->json(['error'=> "User not found"],404);
-    //         }
-    //         $token = auth()->user()->token;
-    //         JWTAuth::invalidate($token);
-    //         $token = auth()->login($user);
-    //         $refreshToken = $this->createRefreshToken();
-    //         return $this->respondWithToken($token,$refreshToken);
-    //     }catch(JWTException $exception){
-    //         return response()->json(['error'=> 'Refresh Token Invalid'],500);
-    //     }
-    // }
-
-
+    
     protected function respondWithToken($token,$role)
     {
         $data = [
@@ -108,4 +96,22 @@ class AuthController extends Controller
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
     
+      // public function refresh($token)
+    // {
+    //     $refreshToken = $token;
+    //     try{
+    //         $decoded = JWTAuth::getJWTProvider()->decode($refreshToken);
+    //         $user = User::find($decoded['sub']);
+    //         if(!$user){
+    //             return response()->json(['message'=> "User not found"],404);
+    //         }
+    //         $token = auth()->user()->token;
+    //         JWTAuth::invalidate($token);
+    //         $token = auth()->login($user);
+    //         $refreshToken = $this->createRefreshToken();
+    //         return $this->respondWithToken($token,$refreshToken);
+    //     }catch(JWTException $exception){
+    //         return response()->json(['message'=> 'Refresh Token Invalid'],500);
+    //     }
+    // }
 }
