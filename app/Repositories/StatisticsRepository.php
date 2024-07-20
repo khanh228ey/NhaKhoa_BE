@@ -45,8 +45,8 @@ class StatisticsRepository{
                 'price' => $totalPrice,
             ];
         });
-    
-        return $result;
+        $sortedResult = $result->sortByDesc('price')->values();
+        return $sortedResult;
     }
     
     

@@ -20,5 +20,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::post('/upload',[UploadController::class,'uploadImage']);
+Route::get('/invoice', function () {
+    return view('invoice.index');
+});
