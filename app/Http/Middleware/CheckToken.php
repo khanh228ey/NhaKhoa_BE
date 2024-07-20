@@ -30,7 +30,7 @@ class CheckToken
             // Token không hợp lệ hoặc không được cung cấp
             $cookie = Cookie::forget('refresh_token');
             // return response()->json(['error' => 'Unauthorized'], 401)->withCookie($cookie);
-            JsonResponse::handle(401,'Unauthorized',null,401)->withCookie($cookie);
+            return JsonResponse::handle(401,'Unauthorized',null,401)->withCookie($cookie);
         }
         return $next($request);
     }
