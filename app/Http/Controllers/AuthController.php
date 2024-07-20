@@ -48,7 +48,7 @@ class AuthController extends Controller
             return JsonResponse::handle(404, 'Tài khoản hoặc mật khẩu chưa chính xác', null, 404);
         }
         $role = Hash::make($user->role->name);
-        $cookie = cookie('status', 'true', 600, "/",null, false ,true);
+        $cookie = cookie('status', 'true', 600, "/",null, false ,false);
         $response = $this->respondWithToken($token,$role);
         return $response->cookie($cookie);
     }
