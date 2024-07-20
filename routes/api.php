@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OverviewController;
@@ -131,8 +132,18 @@ Route::prefix('v1/overview')->controller(OverviewController::class)->group(funct
 //Thống kê
 Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(function(){
     Route::get('/','getServiceStatistics');
+
 });
 
+
+Route::prefix('v1')->controller(ExportController::class)->group(function(){
+    Route::post('/statistics','export');
+});
+Route::post('/v1/print',[InvoiceController::class,'printInvoice']);
+
+
+
+//route khách hàng
 Route::prefix('v2')->controller(ClientController::class)->group(function(){
     Route::prefix('doctor')->group(function(){
         Route::get('/','getDoctor');
@@ -158,5 +169,5 @@ Route::prefix('v2')->controller(ClientController::class)->group(function(){
 Route::post('/v2/appointment',[AppointmentController::class,'createAppointment']);
 
 
-Route::post('/v1/print',[InvoiceController::class,'printInvoice']);
+
 Route::get('/v1/workday',[ScheduleController::class,'getScheduleDetails']);

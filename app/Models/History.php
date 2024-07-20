@@ -28,11 +28,10 @@ class History extends Model
         return $this->hasOne(Invoices::class,'history_id');
     }
 
-    // protected static function booted()
-    // {
-    //     static::saved(function ($history) {
-    //         // thiết lập hóa đơn nếu là bệnh án
-            
-    //     });
-    // }
+
+    public function historyDetails()
+    {
+        return $this->hasMany(History_detail::class);
+    }
+
 }

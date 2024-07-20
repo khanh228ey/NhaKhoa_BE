@@ -37,13 +37,13 @@ class AuthController extends Controller
         $user = $userQuery->first();
     
         if (!$user) {
-            return JsonResponse::handle(401, 'Không tìm thấy tài khoản', null, 401);
+            return JsonResponse::handle(404, 'Không tìm thấy tài khoản', null, 404);
         }
         if ($user->status != 1) {
-            return JsonResponse::handle(401, 'Tài khoản đã bị khóa', null, 401);
+            return JsonResponse::handle(404, 'Tài khoản đã bị khóa', null, 404);
         }
         if (!$token = auth()->attempt($credentials)) {
-            return JsonResponse::handle(401, 'Tài khoản hoặc mật khẩu chưa chính xác', null, 401);
+            return JsonResponse::handle(404, 'Tài khoản hoặc mật khẩu chưa chính xác', null, 404);
         }
 
         return $this->respondWithToken($token);
