@@ -36,6 +36,6 @@ class ExportController extends Controller
                 ];
         }, $data);
 
-        return Excel::download(new ServicesExport($formattedData), 'ServicesStatistics.xlsx');
+        return Excel::download(new ServicesExport($formattedData), 'Thống kê tháng '.$data.'.xlsx');
     }
 }
