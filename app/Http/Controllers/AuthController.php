@@ -117,20 +117,30 @@ class AuthController extends Controller
     //             try {
     //                 $newToken = JWTAuth::refresh($refreshToken);
     //                 $user = JWTAuth::setToken($newToken)->toUser();
-    //                 $newRefreshToken = JWTAuth::fromUser($user, ['exp' => now()->addDays(30)->timestamp]);
+    //                 $newRefreshToken = JWTAuth::fromUser($user, ['exp' => now()->addDays(2)->timestamp]);
     //                 $cookie = Cookie::make('refresh_token', $newRefreshToken, 120, '/','localhost');
     //                 $role = Hash::make($user->role->name);
     //                 $response = $this->respondWithToken($token,$role);
     //                 return $response->withCookie($cookie);
     //             } catch (JWTException $e) {
-    //                 // Refresh token không hợp lệ
-    //                 return response()->json(['error' => 'Invalid refresh token'], 401);
+    //                 return JsonResponse::handle(401,'Unauthorized',null,410);
     //             }
     //         } else {
-    //             return response()->json(['error' => 'Refresh token not found'], 401);
+    //             return JsonResponse::handle(401,'Unauthorized',null,401);
     //         }
     //     } catch (JWTException $e) {
-    //         return response()->json(['error' => 'Unauthorized'], 401);
+    //         return JsonResponse::handle(401,'Unauthorized',null,401);
     //     }
     // }
+    public function changePassword(Request $request)
+    {
+        $data = $request->all();
+        $user = Auth::user();
+        if (!Hash::check($data['password'], $user->password)) {
+            return JsonResponse::handle(400, 'Mật khẩu cũ không đúng', null, 400);
+        }
+        $user->password = Hash::make($data['new_password']);
+        $user->save();
+        return JsonResponse::handle(200, 'Đổi mật khẩu thành công', null, 200);
+    }
 }

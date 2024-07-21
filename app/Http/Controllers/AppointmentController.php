@@ -20,7 +20,8 @@ class AppointmentController extends Controller
     {
         $this->appointmentValidation = $appointmentValidation;
         $this->appointmentRepository = $appointmentRepository; 
-      
+        
+        
     }
 
     Public function createAppointment(Request $request){
@@ -33,7 +34,7 @@ class AppointmentController extends Controller
         if ($appointment['success'] == true) {
             return JsonResponse::handle(200, "Đặt lịch hẹn thành công", $appointment['appointment'], 200);     
         }
-        return JsonResponse::error(401,$appointment['message'],401);
+        return JsonResponse::error(500,$appointment['message'],500);
     }
 
     public function getAppointment(Request $request)

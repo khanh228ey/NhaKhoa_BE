@@ -40,7 +40,7 @@ class UploadController extends Controller
 
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS,['url' => $uploadedFileUrl], 200);
         } catch (\Exception $e) {
-            return JsonResponse::error(500, ConstantsMessage::error, 500);
+            return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
         }
     }
     //Upload image lên Minio

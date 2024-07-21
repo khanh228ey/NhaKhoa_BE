@@ -16,12 +16,15 @@ class CheckRole
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next,$role)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (Auth::check() && Auth::user()->role_id == $role) {
+        $roles = explode(',', $roles[0]);
+        
+        if (Auth::check() && in_array(Auth::user()->role_id, $roles)) {
             return $next($request);
         }
-        return JsonResponse::handle(403,'Bạn k có quyền truy cập',null,403);
+        
+        return JsonResponse::handle(403, 'Bạn không có quyền truy cập', null, 403);
     }
     
 }

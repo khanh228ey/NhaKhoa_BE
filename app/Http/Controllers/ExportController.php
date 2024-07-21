@@ -24,7 +24,6 @@ class ExportController extends Controller
     public function export(Request $request)
     {
         $data = $request->input('data');
-
         if (empty($data)) {
             return JsonResponse::handle(400,'Lỗi dữ liệu',null,400);
         }
