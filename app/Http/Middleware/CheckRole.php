@@ -21,9 +21,7 @@ class CheckRole
         if (Auth::check() && Auth::user()->role_id == $role) {
             return $next($request);
         }
-
-        // return response()->json(['error' => 'Unauthorized'], 403);
-        return JsonResponse::handle(401,'Bạn k có quyền truy cập',null,401);
+        return JsonResponse::handle(403,'Bạn k có quyền truy cập',null,403);
     }
     
 }

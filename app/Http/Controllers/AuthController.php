@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cookie ;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
@@ -50,7 +51,7 @@ class AuthController extends Controller
         }
         $role = Hash::make($user->role->name);
         $refreshToken = $this->createRefreshToken($user);
-        $cookie = Cookie::make('refresh_token', $refreshToken, 120,'/');
+        $cookie = Cookie::make('refresh_token', $refreshToken, 120,'/','localhost');
         $response = $this->respondWithToken($token,$role);
         return $response->withCookie($cookie);
     }
@@ -92,26 +93,47 @@ class AuthController extends Controller
                 'phone_number' => $profile->phone_number,
                 'birthday' => $profile->birthday,
                 'gender' => $profile->gender,
+                'role' => [
+                    'id' => $profile->role_id,
+                    'name' => $profile->role->name,
+                ]
             ];
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
     
-      // public function refresh($token)
+    // public function refresh(Request $request)
     // {
-    //     $refreshToken = $token;
-    //     try{
-    //         $decoded = JWTAuth::getJWTProvider()->decode($refreshToken);
-    //         $user = User::find($decoded['sub']);
-    //         if(!$user){
-    //             return response()->json(['message'=> "User not found"],404);
+    //     $token = $request->bearerToken();
+    //     try {
+    //         if (JWTAuth::setToken($token)->check()) {
+    //             $newToken = JWTAuth::refresh($token);
+    //             $user = JWTAuth::setToken($newToken)->toUser();
+    //             $newRefreshToken = JWTAuth::fromUser($user, ['exp' => now()->addDays(30)->timestamp]);
+    //             $cookie = Cookie::make('refresh_token', $newRefreshToken, 120, '/','localhost');
+    //             $role = Hash::make($user->role->name);
+    //             $response = $this->respondWithToken($token,$role);
+    //             return $response->withCookie($cookie);
     //         }
-    //         $token = auth()->user()->token;
-    //         JWTAuth::invalidate($token);
-    //         $token = auth()->login($user);
-    //         $refreshToken = $this->createRefreshToken();
-    //         return $this->respondWithToken($token,$refreshToken);
-    //     }catch(JWTException $exception){
-    //         return response()->json(['message'=> 'Refresh Token Invalid'],500);
+    //     } catch (TokenExpiredException $e) {
+    //         $refreshToken = $request->cookie('refresh_token');
+    //         if ($refreshToken) {
+    //             try {
+    //                 $newToken = JWTAuth::refresh($refreshToken);
+    //                 $user = JWTAuth::setToken($newToken)->toUser();
+    //                 $newRefreshToken = JWTAuth::fromUser($user, ['exp' => now()->addDays(30)->timestamp]);
+    //                 $cookie = Cookie::make('refresh_token', $newRefreshToken, 120, '/','localhost');
+    //                 $role = Hash::make($user->role->name);
+    //                 $response = $this->respondWithToken($token,$role);
+    //                 return $response->withCookie($cookie);
+    //             } catch (JWTException $e) {
+    //                 // Refresh token không hợp lệ
+    //                 return response()->json(['error' => 'Invalid refresh token'], 401);
+    //             }
+    //         } else {
+    //             return response()->json(['error' => 'Refresh token not found'], 401);
+    //         }
+    //     } catch (JWTException $e) {
+    //         return response()->json(['error' => 'Unauthorized'], 401);
     //     }
     // }
 }
