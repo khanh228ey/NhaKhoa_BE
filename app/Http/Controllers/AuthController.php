@@ -6,6 +6,7 @@ use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie ;
@@ -51,14 +52,14 @@ class AuthController extends Controller
         }
         $role = Hash::make($user->role->name);
         $refreshToken = $this->createRefreshToken($user);
-        $cookie = Cookie::make('refresh_token', $refreshToken, 120,'/','localhost');
+        $cookie = Cookie::make('refresh_token', $refreshToken, 7,'/','localhost');
         $response = $this->respondWithToken($token,$role);
         return $response->withCookie($cookie);
     }
 
   
     private function createRefreshToken($user){
-    return JWTAuth::fromUser($user, ['exp' => Carbon::now()->addDays(2)->timestamp]);
+    return JWTAuth::fromUser($user, ['exp' => Carbon::now()->addDays(7)->timestamp]);
 }
     
     public function logout()
@@ -98,40 +99,29 @@ class AuthController extends Controller
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
     
-    // public function refresh(Request $request)
-    // {
-    //     $token = $request->bearerToken();
-    //     try {
-    //         if (JWTAuth::setToken($token)->check()) {
-    //             $newToken = JWTAuth::refresh($token);
-    //             $user = JWTAuth::setToken($newToken)->toUser();
-    //             $newRefreshToken = JWTAuth::fromUser($user, ['exp' => now()->addDays(30)->timestamp]);
-    //             $cookie = Cookie::make('refresh_token', $newRefreshToken, 120, '/','localhost');
-    //             $role = Hash::make($user->role->name);
-    //             $response = $this->respondWithToken($token,$role);
-    //             return $response->withCookie($cookie);
-    //         }
-    //     } catch (TokenExpiredException $e) {
-    //         $refreshToken = $request->cookie('refresh_token');
-    //         if ($refreshToken) {
-    //             try {
-    //                 $newToken = JWTAuth::refresh($refreshToken);
-    //                 $user = JWTAuth::setToken($newToken)->toUser();
-    //                 $newRefreshToken = JWTAuth::fromUser($user, ['exp' => now()->addDays(2)->timestamp]);
-    //                 $cookie = Cookie::make('refresh_token', $newRefreshToken, 120, '/','localhost');
-    //                 $role = Hash::make($user->role->name);
-    //                 $response = $this->respondWithToken($token,$role);
-    //                 return $response->withCookie($cookie);
-    //             } catch (JWTException $e) {
-    //                 return JsonResponse::handle(401,'Unauthorized',null,410);
-    //             }
-    //         } else {
-    //             return JsonResponse::handle(401,'Unauthorized',null,401);
-    //         }
-    //     } catch (JWTException $e) {
-    //         return JsonResponse::handle(401,'Unauthorized',null,401);
-    //     }
-    // }
+    public function refresh(Request $request)
+    {
+        try {
+            $refreshToken = Cookie::get('refreshToken');
+            if (!$refreshToken) {
+                return JsonResponse::handle(401,'Phiên đăng nhập hết hạn',null,401);
+            }
+            try {
+                $token = JWTAuth::refresh($refreshToken);
+                // Lưu refresh token mới vào cookie
+                // Cookie::queue('refreshToken', $newToken, config('jwt.refresh_ttl'));
+                // Trả về access token mới
+                // return response()->json(['token' => $newToken]);
+                return $this->respondWithToken($token,null);
+            } catch (JWTException $e) {
+                return JsonResponse::handle(401,'Phiên đăng nhập hết hạn',null,401);
+            }
+        } catch (Exception $e) {
+            // Trả về lỗi chung nếu có lỗi xảy ra
+            return JsonResponse::handle(500,'Phiên đăng nhập hết hạn',null,500);
+        }
+    }
+
     public function changePassword(Request $request)
     {
         $data = $request->all();
@@ -140,7 +130,7 @@ class AuthController extends Controller
             return JsonResponse::handle(400, 'Mật khẩu cũ không đúng', null, 400);
         }
         $user->password = Hash::make($data['new_password']);
-        $user->save();
+        $user->save();  
         return JsonResponse::handle(200, 'Đổi mật khẩu thành công', null, 200);
     }
 }
