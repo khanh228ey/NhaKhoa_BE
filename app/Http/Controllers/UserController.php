@@ -22,6 +22,7 @@ class UserController extends Controller
     {
         $this->userValidation = $userValidation;
         $this->userRepository = $userRepository; 
+        $this->middleware('check.role:3');
       
     }
 

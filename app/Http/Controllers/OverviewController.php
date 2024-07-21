@@ -13,8 +13,9 @@ class OverviewController extends Controller
     protected $overviewRepository;
     public function __construct( OverviewRepository $historyRepository)
     {
+
         $this->overviewRepository = $historyRepository; 
-      
+        $this->middleware('check.role:3');
     }
 
     public function totalOverView(){

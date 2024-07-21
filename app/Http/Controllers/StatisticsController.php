@@ -14,7 +14,7 @@ class StatisticsController extends Controller
     public function __construct( StatisticsRepository $statisticsRepository)
     {
         $this->statisticsRepository = $statisticsRepository; 
-      
+        $this->middleware('check.role:3');
     }
 
     Public function getServiceStatistics(Request $request){

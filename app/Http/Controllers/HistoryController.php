@@ -11,6 +11,7 @@ use App\Repositories\InvoiceRepository;
 use App\RequestValidations\HistoryValidation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HistoryController extends Controller
 {
@@ -40,6 +41,9 @@ class HistoryController extends Controller
             $query->select('services.id', 'services.name')
                   ->withPivot('quantity','price'); 
         }])->OrderBy('created_at','DESC');
+        if(Auth::check() && Auth::user()->role_id ==  1){
+            $query->where('doctor_id',Auth::user()->id);
+        }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
             $history = collect($data->items());

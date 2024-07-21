@@ -11,6 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class ExportController extends Controller
 {
     //
+
     public function printInvoicePdf(Request $request)
     {
         $pdf = new Dompdf();

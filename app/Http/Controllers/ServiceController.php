@@ -24,7 +24,7 @@ class ServiceController extends Controller
     {
         $this->serviceValidation = $serviceValidation;
         $this->serviceRepository = $serviceRepository; 
-      
+        $this->middleware('check.role:3')->except('getServices');;
     }
     public function getServices(Request $request)
     {

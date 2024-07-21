@@ -57,7 +57,7 @@ class AuthController extends Controller
 
   
     private function createRefreshToken($user){
-    return JWTAuth::fromUser($user, ['exp' => Carbon::now()->addDays(30)->timestamp]);
+    return JWTAuth::fromUser($user, ['exp' => Carbon::now()->addDays(2)->timestamp]);
 }
     
     public function logout()

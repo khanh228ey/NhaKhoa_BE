@@ -21,7 +21,7 @@ class CustomerController extends Controller
     {
         $this->customerValidation = $customerValidation;
         $this->customerRepository = $customerRepository; 
-      
+        
     }
     
     public function getCutomer(Request $request)
