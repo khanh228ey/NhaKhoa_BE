@@ -102,7 +102,7 @@ class AuthController extends Controller
     public function refresh(Request $request)
     {
         try {
-            $refreshToken = Cookie::get('refreshToken');
+            $refreshToken = Cookie::get('refresh_token');
             if (!$refreshToken) {
                 return JsonResponse::handle(401,'Phiên đăng nhập hết hạn',null,401);
             }
