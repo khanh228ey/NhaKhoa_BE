@@ -93,10 +93,7 @@ class AuthController extends Controller
                 'phone_number' => $profile->phone_number,
                 'birthday' => $profile->birthday,
                 'gender' => $profile->gender,
-                'role' => [
-                    'id' => $profile->role_id,
-                    'name' => $profile->role->name,
-                ]
+                'role' => $profile->role->name,
             ];
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
