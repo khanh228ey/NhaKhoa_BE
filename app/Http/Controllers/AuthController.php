@@ -52,7 +52,7 @@ class AuthController extends Controller
         }
         $role = Hash::make($user->role->name);
         $refreshToken = $this->createRefreshToken($user);
-        $cookie = Cookie::make('refresh_token', $refreshToken, 10080,'/', null, false, true);
+        $cookie = Cookie::make('refresh_token', $refreshToken, 10080,'/', null, false, false);
         $response = $this->respondWithToken($token,$role);
         return $response->withCookie($cookie);
     }
@@ -117,13 +117,9 @@ class AuthController extends Controller
                 return JsonResponse::handle(401, 'Token không hợp lệ', 2, 401);
             }
     
-            // Tạo token mới cho người dùng
             $newToken = JWTAuth::fromUser($user);
-            
-            // Tạo refresh token mới
-            $newRefreshToken = JWTAuth::fromUser($user, ['exp' => Carbon::now()->addDays(7)->timestamp]);
-            
-            // Trả về token mới
+            $ttl = config('jwt.refresh_ttl'); 
+            $newRefreshToken = JWTAuth::fromUser($user, ['exp' => Carbon::now()->addMinutes($ttl)->timestamp]);
             return $this->respondWithToken($newToken, null);
             
         } catch (TokenExpiredException $e) {
