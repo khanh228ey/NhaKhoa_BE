@@ -30,7 +30,6 @@ class StatisticsRepository{
             $totalQuantity = $service->histories->sum(function ($history) {
                 return $history->historyDetails->sum('quantity');
             });
-    
             $totalPrice = $service->histories->sum(function ($history) {
                 return $history->historyDetails->sum(function ($detail) {
                     return $detail->quantity * $detail->price;
