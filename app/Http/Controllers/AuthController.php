@@ -51,17 +51,23 @@ class AuthController extends Controller
             return JsonResponse::handle(404, 'Tài khoản hoặc mật khẩu chưa chính xác', null, 404);
         }
         $role = Hash::make($user->role->name);
-        $refreshToken = $this->createRefreshToken($user);
-        $cookie = Cookie::make('refresh_token', $refreshToken, 10080,'/', null, false, false);
+        $refreshToken = $this->createRefreshToken($token);
+        $cookie = Cookie::make('refresh_token', $refreshToken, 60 * 24 * 24, '/', null, true, false, false, 'none');
         $response = $this->respondWithToken($token,$role);
         return $response->withCookie($cookie);
     }
 
   
-    private function createRefreshToken($user){
-    return JWTAuth::fromUser($user, ['exp' => Carbon::now()->addDays(7)->timestamp]);
-}
+    private function createRefreshToken($user)
+    {
+        
+        $ttl = config('jwt.refresh_ttl'); 
+        $payload = JWTAuth::getPayloadFactory()->customClaims([
+            'exp' => Carbon::now()->addMinutes($ttl)->timestamp,
+        ])->make();
+        return JWTAuth::encode($payload)->__toString();
     
+    }
     public function logout()
     {
         auth()->logout();
@@ -102,24 +108,17 @@ class AuthController extends Controller
     
     public function refresh(Request $request)
     {
-        // Lấy giá trị refresh token từ cookie
         $refreshToken = $request->cookie('refresh_token');
         if (!$refreshToken) {
             return JsonResponse::handle(401, 'Phiên đăng nhập hết hạn', 1, 401);
         }
-    
         try {
-            // Xác thực người dùng từ refresh token
             JWTAuth::setToken($refreshToken);
-            $user = JWTAuth::authenticate();  // Lấy người dùng từ token
-    
+            $user = JWTAuth::authenticate(); 
             if (!$user) {
                 return JsonResponse::handle(401, 'Token không hợp lệ', 2, 401);
             }
-    
             $newToken = JWTAuth::fromUser($user);
-            $ttl = config('jwt.refresh_ttl'); 
-            $newRefreshToken = JWTAuth::fromUser($user, ['exp' => Carbon::now()->addMinutes($ttl)->timestamp]);
             return $this->respondWithToken($newToken, null);
             
         } catch (TokenExpiredException $e) {
