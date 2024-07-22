@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('COR_FE'),env('COR_FE')],
+    'allowed_origins' => [env('COR_FE'),env('COR_BE')],
 
     'allowed_origins_patterns' => [],
 
