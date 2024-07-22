@@ -52,7 +52,7 @@ class AuthController extends Controller
         }
         $role = Hash::make($user->role->name);
         $refreshToken = $this->createRefreshToken($user);
-        $cookie = Cookie::make('refresh_token', $refreshToken, 7,'/','localhost');
+        $cookie = Cookie::make('refresh_token', $refreshToken, 10080,'/', null, false, true);
         $response = $this->respondWithToken($token,$role);
         return $response->withCookie($cookie);
     }
@@ -65,7 +65,8 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-        return JsonResponse::handle(200,'Đăng xuất thành công',null,200);
+        $cookie = Cookie::forget('refresh_token');
+        return JsonResponse::handle(200,'Đăng xuất thành công',null,200)->withCookie($cookie);
         
     }
 
@@ -101,26 +102,38 @@ class AuthController extends Controller
     
     public function refresh(Request $request)
     {
+        // Lấy giá trị refresh token từ cookie
+        $refreshToken = $request->cookie('refresh_token');
+        if (!$refreshToken) {
+            return JsonResponse::handle(401, 'Phiên đăng nhập hết hạn', 1, 401);
+        }
+    
         try {
-            $refreshToken = Cookie::get('refresh_token');
-            if (!$refreshToken) {
-                return JsonResponse::handle(401,'Phiên đăng nhập hết hạn',null,401);
+            // Xác thực người dùng từ refresh token
+            JWTAuth::setToken($refreshToken);
+            $user = JWTAuth::authenticate();  // Lấy người dùng từ token
+    
+            if (!$user) {
+                return JsonResponse::handle(401, 'Token không hợp lệ', 2, 401);
             }
-            try {
-                $token = JWTAuth::refresh($refreshToken);
-                // Lưu refresh token mới vào cookie
-                // Cookie::queue('refreshToken', $newToken, config('jwt.refresh_ttl'));
-                // Trả về access token mới
-                // return response()->json(['token' => $newToken]);
-                return $this->respondWithToken($token,null);
-            } catch (JWTException $e) {
-                return JsonResponse::handle(401,'Phiên đăng nhập hết hạn',null,401);
-            }
-        } catch (Exception $e) {
-            // Trả về lỗi chung nếu có lỗi xảy ra
-            return JsonResponse::handle(500,'Phiên đăng nhập hết hạn',null,500);
+    
+            // Tạo token mới cho người dùng
+            $newToken = JWTAuth::fromUser($user);
+            
+            // Tạo refresh token mới
+            $newRefreshToken = JWTAuth::fromUser($user, ['exp' => Carbon::now()->addDays(7)->timestamp]);
+            
+            // Trả về token mới
+            return $this->respondWithToken($newToken, null);
+            
+        } catch (TokenExpiredException $e) {
+            return JsonResponse::handle(401, 'Refresh token đã hết hạn', 3, 401);
+        } catch (JWTException $e) {
+            return JsonResponse::handle(401, 'Token không hợp lệ', 4, 401);
         }
     }
+    
+
 
     public function changePassword(Request $request)
     {
