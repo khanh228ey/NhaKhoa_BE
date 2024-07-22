@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Commons\Responses\JsonResponse;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -21,16 +22,15 @@ class CheckToken
     public function handle(Request $request, Closure $next)
     {
         try {
-            // Kiểm tra xem token chính có hợp lệ không
-            JWTAuth::parseToken()->authenticate();
+             JWTAuth::parseToken()->authenticate();
+            if(Auth::user()->status ==0 ){
+                $cookie = Cookie::forget('refresh_token');
+                return JsonResponse::handle(401,'Tài khoản bạn đã bị khóa',null,401)->withCookie($cookie);
+            }
         } catch (TokenExpiredException $e) {
-            // Token chính hết hạn, tiếp tục đến middleware tiếp theo để kiểm tra token làm mới
-            return $next($request);
+           return JsonResponse::handle(401,'Phiên đăng nhập hết hạn',null,401);
         } catch (\Exception $e) {
-            // Token không hợp lệ hoặc không được cung cấp
-            $cookie = Cookie::forget('refresh_token');
-            // return response()->json(['error' => 'Unauthorized'], 401)->withCookie($cookie);
-            return JsonResponse::handle(401,'Unauthorized',null,401)->withCookie($cookie);
+            return JsonResponse::handle(401,'Phiên đăng nhập hết hạn',null,401);
         }
         return $next($request);
     }
