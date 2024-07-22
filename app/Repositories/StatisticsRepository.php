@@ -26,7 +26,6 @@ class StatisticsRepository{
                   ->where('status', 1); 
         }])->get();
         $result = $services->map(function ($service) use ($startMonth, $endMonth) {
-            // Tính tổng số lượng và giá từ các chi tiết lịch sử
             $totalQuantity = $service->histories->sum(function ($history) {
                 return $history->historyDetails->sum('quantity');
             });
@@ -40,8 +39,8 @@ class StatisticsRepository{
                    'id' => $service->id,
                     'name'=> $service->name,
                 ],
-                'quantity' => $totalQuantity,
-                'price' => $totalPrice,
+                'quantity_sold' => $totalQuantity,
+                'total_price' => $totalPrice,
             ];
         });
         $sortedResult = $result->sortByDesc('price')->values();

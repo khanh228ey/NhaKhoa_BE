@@ -66,7 +66,7 @@ class ScheduleController extends Controller
                     ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
                     ->orderBy('date', 'ASC')
                     ->orderBy('doctor_id', 'ASC');
-        if(Auth::check() && Auth::user()->id == 1 ){
+        if(Auth::check() && Auth::user()->role_id == 1 ){
             $query->where('doctor_id',Auth::user()->id);
         }
         $schedules = $query->get();
@@ -115,7 +115,6 @@ class ScheduleController extends Controller
     }
 
     $result = array_values($result);
-
     return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
 }
 

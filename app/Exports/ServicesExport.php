@@ -71,6 +71,22 @@ class ServicesExport implements FromCollection, WithHeadings, WithTitle, WithEve
             ],
         ]);
 
+        // Apply borders and center alignment to data rows
+        $rowCount = count($event->sheet->getDelegate()->toArray());
+        $event->sheet->getStyle('A3:D' . ($rowCount + 1))->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+            ],
+        ]);
+
         $event->sheet->getRowDimension(1)->setRowHeight(30);
+
+        $event->sheet->getDelegate()->getStyle('C3:D' . ($rowCount + 1))->getNumberFormat()
+            ->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER);
     }
 }

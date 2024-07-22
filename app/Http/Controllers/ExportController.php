@@ -24,21 +24,28 @@ class ExportController extends Controller
 
     public function export(Request $request)
     {
-        $data = $request->all();
-        $date = Carbon::createFromFormat('Y-m-d', $data['date'], 'Asia/Ho_Chi_Minh');
-        $month = $date->format('m');
-        if (empty($data)) {
-            return JsonResponse::handle(400,'Lỗi dữ liệu',null,400);
+            $data = $request->all();
+        if (empty($data['services']) || empty($data['date'])) {
+            return JsonResponse::handle(400, 'Lỗi dữ liệu', null, 400);
         }
+        try {
+            $date = Carbon::createFromFormat('Y-m-d', $data['date'], 'Asia/Ho_Chi_Minh');
+            $month = $date->format('m'); 
+        } catch (\Exception $e) {
+            return JsonResponse::handle(400, 'Lỗi ngày tháng không hợp lệ', null, 400);
+        }
+        $services = $data['services'];
         $formattedData = array_map(function($service) {
-                return [
-                    'Mã dịch vụ' => $service['id'],
-                    'Tên dịch vụ' => $service['name'],
-                    'Số lượng bán ra' => $service['quantity'] ?? 0,
-                    'Tổng thu' => $service['price'] ?? 0,
-                ];
-        }, $data);
-
-        return Excel::download(new ServicesExport($formattedData), 'Thống kê tháng '.$month.'.xlsx');
+            return [
+                'Mã dịch vụ' => $service['service']['id'] ?? 'N/A',
+                'Tên dịch vụ' => $service['service']['name'] ?? 'N/A',
+                'Số lượng bán ra' => $service['quantity'] ?? 0,
+                'Tổng thu' => $service['price'] ?? 0,
+            ];
+        }, $services);
+        
+        $filename = "Thống kê tháng $month.xlsx";
+        
+        return Excel::download(new ServicesExport($formattedData), $filename);
     }
 }
