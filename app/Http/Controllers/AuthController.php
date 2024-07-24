@@ -52,9 +52,15 @@ class AuthController extends Controller
         }
         $role = Hash::make($user->role->name);
         $refreshToken = $this->createRefreshToken($token);
-        $cookie = Cookie::make('refresh_token', $refreshToken, 60 * 24 * 24, '/', null, true, false, false, 'none');
+        $cookie = $this->setCookie($refreshToken);
         $response = $this->respondWithToken($token,$role);
         return $response->withCookie($cookie);
+    }
+
+
+    private function setCookie($refreshToken){
+        $cookie = Cookie::make('refresh_token', $refreshToken, 60 * 24 * 24, '/', null, true, false, false, 'none');
+        return $cookie;
     }
 
   

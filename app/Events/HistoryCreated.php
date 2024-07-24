@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Appointment;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -10,9 +9,8 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class AppointmentCreatedEvent implements ShouldBroadcast
+class HistoryCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,12 +19,9 @@ class AppointmentCreatedEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public $appointment;
-
-    public function __construct(Appointment $appointment)
+    public function __construct()
     {
-        $this->appointment = $appointment;
-        Log::info('Lịch hẹn đã được tạo ' . $appointment->id);
+        //
     }
 
     /**
@@ -36,20 +31,6 @@ class AppointmentCreatedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('appointments');
-    }
-
-    public function broadcastWith()
-    {
-        return [
-            'id' => $this->appointment->id,
-            'name' => $this->appointment->name,
-            'phone' => $this->appointment->phone,
-        ];
-    }
-
-    public function broadcastAs()
-    {
-        return 'appointment';
+        return new Channel('history');
     }
 }

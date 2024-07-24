@@ -63,6 +63,7 @@ class AppointmentRepository{
             }
                
             if ($appointment->save()) {
+                event(new AppointmentCreatedEvent($appointment));
                 if (isset($data['services']) && is_array($data['services'])) {
                     $serviceIds = collect($data['services'])->pluck('id')->toArray();
                     $appointment->Services()->attach($serviceIds);

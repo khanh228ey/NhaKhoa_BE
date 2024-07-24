@@ -21,7 +21,7 @@ class CategoryController extends Controller
     {
         $this->categoryValidation = $categoryValidation;
         $this->categoryRepository = $categoryRepository; 
-        $this->middleware('check.role:3')->except('getCategories');
+        // $this->middleware('check.role:3')->except('getCategories');
     }
     public function getCategories(Request $request)
     {

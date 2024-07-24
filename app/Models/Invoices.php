@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\InvoiceCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,4 +21,8 @@ class Invoices extends Model
         return $this->belongsTo(User::class,'user_id');
     }
 
+
+    protected $dispatchesEvents = [
+        'created' => InvoiceCreated::class,
+    ];
 }

@@ -16,13 +16,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
-        $this->app->singleton(Client::class, function ($app) {
-            return new Client([
-                'verify' => storage_path('app/public/cacert.pem'),
-            ]);
-        });
-
-        // Cấu hình Cloudinary SDK để sử dụng các tham số từ .env
         $this->app->singleton(Cloudinary::class, function ($app) {
             return new Cloudinary([
                 'cloud' => [

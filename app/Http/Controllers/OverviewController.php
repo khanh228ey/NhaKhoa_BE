@@ -15,7 +15,7 @@ class OverviewController extends Controller
     {
 
         $this->overviewRepository = $historyRepository; 
-        $this->middleware('check.role:3');
+        // $this->middleware('check.role:3');
     }
 
     public function totalOverView(){
