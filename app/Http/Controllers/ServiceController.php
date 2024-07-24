@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
+use App\Http\Resources\DeleteResource;
 use App\Http\Resources\ServiceResource;
 use App\Models\Appointment_detail;
 use App\Models\Category;
@@ -60,6 +61,7 @@ class ServiceController extends Controller
         if ($service == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
+        $service = new ServiceResource($service);
         return JsonResponse::handle(200, ConstantsMessage::Add, $service, 200);
     }
      
@@ -84,8 +86,9 @@ class ServiceController extends Controller
                     return JsonResponse::handle(400,$firstError,$validator->messages(),400);
                 }
             }
-            $category = $this->serviceRepository->updateService($request,$service);
-            return JsonResponse::handle(200, ConstantsMessage::Update, $category, 200);
+            $service = $this->serviceRepository->updateService($request,$service);
+            $service = new ServiceResource($service);
+            return JsonResponse::handle(200, ConstantsMessage::Update, $service, 200);
         } catch (ModelNotFoundException $e) {
 
             return JsonResponse::handle(404, "Dịch vụ không tồn tại", null, 404);
@@ -106,7 +109,8 @@ class ServiceController extends Controller
                     return JsonResponse::error(409, 'Ràng buộc khóa ngoại', 409);
             }
             $service->delete();
-            return JsonResponse::handle(200, ConstantsMessage::Delete,null, 200);
+            $service = new DeleteResource($service);
+            return JsonResponse::handle(200, ConstantsMessage::Delete,$service, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, "Dịch vụ không tồn tại", null, 404);
         } catch (\Exception $e) {

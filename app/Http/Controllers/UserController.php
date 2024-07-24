@@ -76,6 +76,7 @@ class UserController extends Controller
         if ($user == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
+        $user = new UserResource($user);
         return JsonResponse::handle(200, ConstantsMessage::Add, $user, 200);
     }
 
@@ -90,6 +91,7 @@ class UserController extends Controller
                     }
             }
             $user = $this->userRepository->update($request,$user);
+            $user = new UserResource($user);
             return JsonResponse::handle(200, ConstantsMessage::Update, $user, 200);
         } catch (ModelNotFoundException $e) {
 
@@ -98,7 +100,6 @@ class UserController extends Controller
         } catch (\Exception $e) {
 
             return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
-
         }
     }
 

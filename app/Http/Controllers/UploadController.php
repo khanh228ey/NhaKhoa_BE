@@ -27,8 +27,6 @@ class UploadController extends Controller
         }
 
         try {
-            // Sử dụng facade Cloudinary để tải lên hình ảnh
-            // $uploadedFileUrl = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
             $image = $request->file('image');
             $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
                 'transformation' => [

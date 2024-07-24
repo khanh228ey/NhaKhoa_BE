@@ -24,6 +24,7 @@ class InvoiceController extends Controller
         if ($invoices == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
+        $invoices = new InvoiceResource($invoices);
         return JsonResponse::handle(200, ConstantsMessage::Add, $invoices, 200);
     }
 
@@ -31,7 +32,7 @@ class InvoiceController extends Controller
         try{
             $invoices = Invoices::findOrFail($id);
             $invoices = $this->invoiceRepository->update($request,$invoices);
-            $history = new InvoiceResource($invoices);
+            $invoices = new InvoiceResource($invoices);
             return JsonResponse::handle(200, ConstantsMessage::Update, $invoices, 200);
         }catch(ModelNotFoundException $e){
             return JsonResponse::handle(200, "Không tìm thấy hóa đơn", null, 200);

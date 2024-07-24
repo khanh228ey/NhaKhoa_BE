@@ -23,11 +23,11 @@ class ScheduleController extends Controller
       
     }
     Public function createSchedule(Request $request){
-        $history = $this->ScheduleRepository->addSchedule($request->all());
-        if ($history == false) {
+        $schedule = $this->ScheduleRepository->addSchedule($request->all());
+        if ($schedule == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
+        return JsonResponse::handle(200, ConstantsMessage::Add, $schedule, 200);
     }
 
     Public function updateSchedule(Request $request,$doctor_id,$date){
