@@ -30,6 +30,7 @@ class HistoryController extends Controller
         if ($history == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
+        $history = new HistoryResource($history);
         return JsonResponse::handle(200, ConstantsMessage::Add, $history, 200);
     }
 
@@ -79,6 +80,7 @@ class HistoryController extends Controller
                 $invoiceRepository = new InvoiceRepository();
                 $invoiceRepository->addInvoice($id);
             }
+            $history = new HistoryResource($history);
             return JsonResponse::handle(200, ConstantsMessage::Update, $history, 200);
         }catch(ModelNotFoundException $e){
             return JsonResponse::handle(404, "Không tìm thấy lịch sử khám", null, 404);

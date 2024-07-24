@@ -52,6 +52,7 @@ class CustomerController extends Controller
                 return JsonResponse::handle(400,$firstError,$validator->messages(),400);
             }
             $customer = $this->customerRepository->AddCustomer($request);
+            $customer = new CustomerResource($customer);
             if ($customer == false) {
                     return JsonResponse::error(401,ConstantsMessage::ERROR,401);
             }
@@ -79,6 +80,7 @@ class CustomerController extends Controller
         if ($customer == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
+        $customer = new CustomerResource($customer);
         return JsonResponse::handle(200, ConstantsMessage::Update, $customer, 200);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\DeleteResource;
 use App\Models\Category;
 use App\Models\Service;
 use App\Repositories\CategoryRepository;
@@ -23,6 +24,7 @@ class CategoryController extends Controller
         $this->categoryRepository = $categoryRepository; 
         // $this->middleware('check.role:3')->except('getCategories');
     }
+
     public function getCategories(Request $request)
     {
         $perPage = $request->get('limit', 10);
@@ -56,6 +58,7 @@ class CategoryController extends Controller
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
+        $category = new CategoryResource($category);
         return JsonResponse::handle(200, ConstantsMessage::Add, $category, 200);
     }
     
@@ -82,6 +85,7 @@ class CategoryController extends Controller
                     }
                 }  
                 $category = $this->categoryRepository->updateCategory($request,$category);
+                $category = new CategoryResource($category);
                 return JsonResponse::handle(200, ConstantsMessage::Update, $category, 200);
             }catch (ModelNotFoundException $e){
                 return JsonResponse::handle(404, "Danh mục không tồn tại", null, 404);
@@ -98,7 +102,8 @@ class CategoryController extends Controller
                 return JsonResponse::error(409, 'Ràng buộc dữ liệu', 409);
             }
             $category->delete();
-            return JsonResponse::handle(200, ConstantsMessage::Delete,null, 200);
+            $category = new DeleteResource($category);
+            return JsonResponse::handle(200, ConstantsMessage::Delete,$category, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, "Danh mục không tồn tại", null, 404);
         } catch (\Exception $e) {
