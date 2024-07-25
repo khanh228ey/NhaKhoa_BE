@@ -110,7 +110,8 @@ class AuthController extends Controller
                 'address' => $profile->address,
                 'role' => $profile->role->name,
             ];
-        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
+        $cookie = Cookie::make('status', true, 60 * 24 * 24, '/', null, false, false, false, 'none');
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200)->withCookie($cookie);
     }
     
     public function refresh(Request $request)
