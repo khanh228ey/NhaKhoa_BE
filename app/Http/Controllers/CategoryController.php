@@ -29,12 +29,8 @@ class CategoryController extends Controller
     {
         $perPage = $request->get('limit', 10);
         $page = $request->get('page'); 
-        $name = $request->get('name');
         $status = $request->get('status');
         $query = Category::query();
-        if ($name) {
-            $query->where('name', 'LIKE', "%{$name}%");
-        }
         if($status){
             $query->where('status',  $status);
         }

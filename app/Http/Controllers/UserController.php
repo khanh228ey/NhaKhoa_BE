@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\UserResource;
-use App\Models\Schedule;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\RequestValidations\UserValidation;
@@ -31,20 +30,12 @@ class UserController extends Controller
         $perPage = $request->get('limit', 10);
         $page = $request->get('page'); 
         $role = $request->get('role_id');
-        $name = $request->get('name');
-        $phone = $request->get('phone');
         $status = $request->get('status');
         $query = User::with('role');
         if ($role) {
             $query->where('role_id', $role);
         }
-        if ($name) {
-            $query->where('name', 'LIKE', "%{$name}%");
-        }
         if($status) {$query->where('status',$status);}
-        if($phone){
-            $query->where('phone_number', 'LIKE', "%{$phone}%");
-        }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
             $users = collect($data->items());

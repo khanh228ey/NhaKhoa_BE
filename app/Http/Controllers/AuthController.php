@@ -89,7 +89,16 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() * 60,
+            'id' => Auth::user()->id,
+            'name' => Auth::user()->name,
+            'phone_number' => Auth::user()->phone_number,
+            'avatar' => Auth::user()->avater,
+            'birthday' => Auth::user()->birthday,
+            'email' => Auth::user()->email,
+            'gender' => Auth::user()->gender,
+            'address' => Auth::user()->address,
             'role' => $role,
+            
         ];
         return JsonResponse::handle(200,"Đăng nhập thành công",$data,200);
     }

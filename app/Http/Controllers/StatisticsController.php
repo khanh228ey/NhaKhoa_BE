@@ -19,6 +19,9 @@ class StatisticsController extends Controller
 
     Public function getServiceStatistics(Request $request){
         $service = $this->statisticsRepository->statisticService($request);
-        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$service,200);
+        $data = [
+            'services' => $service,
+        ];
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$data,200);
     }
 }

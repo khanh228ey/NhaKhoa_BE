@@ -31,15 +31,7 @@ class ServiceController extends Controller
     {
         $perPage = $request->get('limit', 10);
         $page = $request->get('page'); 
-        $name = $request->get('name');
-        $category = $request->get('category_id');
         $query = Service::with('category');
-        if ($name) {
-            $query->where('name', 'LIKE', "%{$name}%");
-        }
-        if ($category) {
-            $query->where('category_id', 'LIKE', "%{$category}%");
-        }
         if (!is_null($page)) {
             $data = $query->paginate($perPage, ['*'], 'page', $page);
             $service = collect($data->items());
@@ -105,16 +97,16 @@ class ServiceController extends Controller
                 $service = Service::findOrFail($id); 
                 $checkHistory = History_detail::where('service_id',$id)->first();
                 $checkAppointment = Appointment_detail::where('service_id',$id)->first();
-            if($checkHistory || $checkAppointment){
+                if($checkHistory || $checkAppointment){
                     return JsonResponse::error(409, 'Ràng buộc khóa ngoại', 409);
-            }
-            $service->delete();
-            $service = new DeleteResource($service);
-            return JsonResponse::handle(200, ConstantsMessage::Delete,$service, 200);
+                }
+                $service->delete();
+                $service = new DeleteResource($service);
+                return JsonResponse::handle(200, ConstantsMessage::Delete,$service, 200);
         } catch (ModelNotFoundException $e) {
-            return JsonResponse::handle(404, "Dịch vụ không tồn tại", null, 404);
+                return JsonResponse::handle(404, "Dịch vụ không tồn tại", null, 404);
         } catch (\Exception $e) {
-        return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
-    }
+                return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
+        }
     }    
 }
