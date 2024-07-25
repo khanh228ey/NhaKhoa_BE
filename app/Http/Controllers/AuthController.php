@@ -50,7 +50,8 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($credentials)) {
             return JsonResponse::handle(404, 'Tài khoản hoặc mật khẩu chưa chính xác', null, 404);
         }
-        $role = Hash::make($user->role->name);
+        // $role = Hash::make($user->role->name);
+        $role = $user->role->name;
         $refreshToken = $this->createRefreshToken($token);
         $cookie = $this->setCookie($refreshToken);
         $response = $this->respondWithToken($token,$role);
@@ -92,7 +93,7 @@ class AuthController extends Controller
             'id' => Auth::user()->id,
             'name' => Auth::user()->name,
             'phone_number' => Auth::user()->phone_number,
-            'avatar' => Auth::user()->avater,
+            'avatar' => Auth::user()->avatar,
             'birthday' => Auth::user()->birthday,
             'email' => Auth::user()->email,
             'gender' => Auth::user()->gender,
