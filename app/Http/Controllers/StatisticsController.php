@@ -19,7 +19,9 @@ class StatisticsController extends Controller
 
     Public function getServiceStatistics(Request $request){
         $service = $this->statisticsRepository->statisticService($request);
+        $turnover = $this->statisticsRepository->statisticInvoice($request);
         $data = [
+            'turnover' => $turnover,
             'services' => $service,
         ];
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$data,200);

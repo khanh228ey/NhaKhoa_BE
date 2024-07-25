@@ -101,7 +101,24 @@ class StatisticsRepository{
             $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endOfDay()->format('Y-m-d H:i:s');
         }
         $turnover = Invoices::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
-        // $turnover = 
+        $turnoverMethod_0 =  Invoices::where('status',1)->where('method_payment',0)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
+        $turnoverMethod_1 =  Invoices::where('status',1)->where('method_payment',1)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
+
+        $data = [
+            [
+                'title' => 'Tổng doanh thu',
+                'total_price' => $turnover,
+            ],
+            [
+                'title' => 'Tổng doanh thu thanh toán tiền mặt',
+                'total_price' => $turnoverMethod_0,
+            ],
+            [
+                'title' => 'Tổng doanh thu thanh toán chuuyển khoản',
+                'total_price' => $turnoverMethod_1,
+            ]
+        ];
+        return $data;
     }
             
     
