@@ -135,7 +135,8 @@ class AuthController extends Controller
                 return JsonResponse::handle(401, 'Token không hợp lệ', 2, 401);
             }
             $newToken = JWTAuth::fromUser($user);
-            return $this->respondWithToken($newToken, null);
+            $role = $user->role->name;
+            return $this->respondWithToken($newToken,$role);
             
         } catch (TokenExpiredException $e) {
             return JsonResponse::handle(401, 'Refresh token đã hết hạn', 3, 401);
