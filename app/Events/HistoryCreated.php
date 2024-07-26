@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\History;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -19,9 +20,11 @@ class HistoryCreated
      *
      * @return void
      */
-    public function __construct()
+    public $history;
+    public function __construct(History $history)
     {
         //
+        $this->history = $history;
     }
 
     /**

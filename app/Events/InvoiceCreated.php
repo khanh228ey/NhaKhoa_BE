@@ -32,6 +32,6 @@ class InvoiceCreated
      */
     public function broadcastOn()
     {
-        return new Channel('invoices');
+        return new Channel('invoice');
     }
 }

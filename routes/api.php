@@ -45,7 +45,7 @@ Route::group([
     Route::post('change-password', [AuthController::class,'changePassword']);
 });
 //Middelware check token đăng nhập
-// Route::middleware('check_token')->group(function () {
+Route::middleware('check_token')->group(function () {
 Route::prefix('v1/user')->controller(UserController::class)->group(function(){
     Route::get('/','getUsers');
     Route::post('/','createUser');
@@ -140,10 +140,11 @@ Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(f
 
 Route::prefix('v1')->controller(ExportController::class)->group(function(){
     Route::post('/statistics','export');
+    Route::get('/print','printInvoicePdf');
 });
-Route::post('/v1/print',[InvoiceController::class,'printInvoice']);
 
-// });
+
+});
 
 //route khách hàng
 Route::prefix('v2')->controller(ClientController::class)->group(function(){

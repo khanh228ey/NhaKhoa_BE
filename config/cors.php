@@ -21,7 +21,8 @@ return [
 
     'allowed_origins' => [env('COR_FE'),
                           env('COR_BE'),
-                          env('COR_FE_USER_HOST')],
+                          env('COR_FE_USER_HOST'),
+                        env('COR_FE_ADMIN_HOST')],
 
     'allowed_origins_patterns' => [],
 

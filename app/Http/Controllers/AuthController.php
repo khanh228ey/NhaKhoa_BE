@@ -77,9 +77,13 @@ class AuthController extends Controller
     }
     public function logout()
     {
-        auth()->logout();
-        $cookie = Cookie::forget('refresh_token');
-        return JsonResponse::handle(200,'Đăng xuất thành công',null,200)->withCookie($cookie);
+        try{
+            auth()->logout();
+            $cookie = Cookie::forget('refresh_token');
+            return JsonResponse::handle(200,'Đăng xuất thành công',null,200)->withCookie($cookie);
+        }catch(Exception $e){
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }
         
     }
 
@@ -110,8 +114,7 @@ class AuthController extends Controller
                 'address' => $profile->address,
                 'role' => $profile->role->name,
             ];
-        $cookie = Cookie::make('status', true, 60 * 24 * 24, '/', null, false, false, false, 'none');
-        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200)->withCookie($cookie);
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
     
     public function refresh(Request $request)
@@ -127,7 +130,6 @@ class AuthController extends Controller
                 return JsonResponse::handle(401, 'Token không hợp lệ', 2, 401);
             }
             $newToken = JWTAuth::fromUser($user);
-            $role = $user->role->name;
             return $this->respondWithToken($newToken);
             
         } catch (TokenExpiredException $e) {

@@ -25,7 +25,7 @@ class ExportController extends Controller
     public function export(Request $request)
     {
             $data = $request->all();
-        if (empty($data['services']) || empty($data['date'])) {
+        if (empty($data['end']) || empty($data['begin'])) {
             return JsonResponse::handle(400, 'Lỗi dữ liệu', null, 400);
         }
         try {
