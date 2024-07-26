@@ -3,6 +3,7 @@
 use App\Http\Controllers\ServiceControl;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UploadController;
+use App\Models\Invoices;
 use App\Models\Service;
 use Illuminate\Support\Facades\Route;
 
@@ -21,5 +22,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/invoice', function () {
-    return view('invoice.index');
+    $invoice = Invoices::findorFail(1);
+    return view('invoice.index',compact('invoice'));
 });

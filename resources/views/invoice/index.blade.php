@@ -6,7 +6,7 @@
     <title>Phiếu Thu</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'DejaVu Sans', Arial, sans-serif;
             margin: 20px;
         }
         .container {
@@ -14,6 +14,7 @@
             margin: 0 auto;
             border: 1px solid #000;
             padding: 20px;
+            box-sizing: border-box; /* Thêm để quản lý padding và border */
         }
         .header {
             text-align: center;
@@ -29,12 +30,18 @@
             margin-bottom: 10px;
         }
         .signatures {
-            display: flex;
-            justify-content: space-between;
+            display: table;
+            width: 100%;
         }
         .signatures div {
-            width: 45%;
+            display: table-cell;
+            width: 50%;
+            vertical-align: top; /* Căn chỉnh theo chiều dọc */
             text-align: center;
+            box-sizing: border-box; /* Thêm để quản lý padding và border */
+        }
+        .highlight {
+            font-weight: bold;
         }
     </style>
 </head>
@@ -47,30 +54,30 @@
             <h2>PHIẾU THU</h2>
         </div>
         <div class="info">
-            <div>Ngày lập phiếu: 16/04/2021</div>
-            <div>Mã hồ sơ: 61</div>
-            <div>Họ và tên: Nguyễn Thị Trang</div>
-            <div>Điện thoại: 0342231544</div>
-            <div>Địa chỉ: Từ Liêm</div>
-            <div>Nội dung: Nhổ răng</div>
-            <div>Tổng chi phí: 2,000,000 VND</div>
-            <div>Bằng chữ: Hai triệu đồng</div>
-            <div>Hình thức thanh toán: Tiền mặt</div>
+            <div><span class="highlight">Mã hồ sơ: </span>{{$invoice->history_id}}</div>
+            <div><span class="highlight">Ngày lập phiếu: </span><span>{{$invoice->created_at}}</span></div>
+            <div><span class="highlight">Họ và tên: </span>{{$invoice->history->customer->name}}</div>
+            <div><span class="highlight">Điện thoại: </span><span>{{$invoice->history->customer->phone_number}}</span></div>
+            <div><span class="highlight">Nội dung: </span><span>{{$invoice->history->noted}}</span></div>
+            <div><span class="highlight">Tổng chi phí: </span><span>{{ number_format($invoice->total_price, 0, '.', ',') }} VND</span></div>
+            @if ($invoice->method_payment == 1)
+            <div><span class="highlight">Hình thức thanh toán: </span><span>Tiền mặt</span></div>
+            @else
+            <div><span class="highlight">Hình thức thanh toán: </span><span>Chuyển khoản</span></div>
+            @endif
         </div>
         <div class="signatures">
             <div>
-                <p>Người thu</p>
-                <br>
+                <p class="highlight">Người thu</p>
                 <p>(ký và ghi rõ họ tên)</p>
-                <br>
-                <p>Ngô Thị Ngọc Anh</p>
+                <br><br>
+                <p class="highlight">{{$invoice->user->name}}</p>
             </div>
             <div>
-                <p>Người nộp</p>
-                <br>
+                <p class="highlight">Người nộp</p>
                 <p>(ký và ghi rõ họ tên)</p>
-                <br>
-                <p>Nguyễn Thị Trang</p>
+                <br><br>
+                <p class="highlight">{{$invoice->history->customer->name}}</p>
             </div>
         </div>
     </div>

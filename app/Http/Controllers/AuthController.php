@@ -54,7 +54,7 @@ class AuthController extends Controller
         $role = $user->role->name;
         $refreshToken = $this->createRefreshToken($token);
         $cookie = $this->setCookie($refreshToken);
-        $response = $this->respondWithToken($token,$user);
+        $response = $this->respondWithToken($token,"Đăng nhập thành công",$user);
         return $response->withCookie($cookie);
     }
 
@@ -91,12 +91,10 @@ class AuthController extends Controller
     }
 
     
-    protected function respondWithToken($token,$profile)
+    protected function respondWithToken($token,$message,$profile)
     {
         $data = [
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 60,
             'id' => $profile->id,
             'name' => $profile->name,
             'email' => $profile->email,
@@ -107,7 +105,7 @@ class AuthController extends Controller
             'address' => $profile->address,
             'role' => $profile->role->name,
         ];
-        return JsonResponse::handle(200,"Đăng nhập thành công",$data,200);
+        return JsonResponse::handle(200,$message,$data,200);
     }
 
 
@@ -133,21 +131,21 @@ class AuthController extends Controller
     {
         $refreshToken = $request->cookie('refresh_token');
         if (!$refreshToken) {
-            return JsonResponse::handle(401, 'Phiên đăng nhập hết hạn', 1, 401);
+            return JsonResponse::handle(401, 'Phiên đăng nhập hết hạn', null, 401);
         }
         try {
             JWTAuth::setToken($refreshToken);
             $user = JWTAuth::authenticate(); 
             if (!$user) {
-                return JsonResponse::handle(401, 'Token không hợp lệ', 2, 401);
+                return JsonResponse::handle(401, 'Token không hợp lệ', null, 401);
             }
             $newToken = JWTAuth::fromUser($user);
-            return $this->respondWithToken($newToken,$user);
+            return $this->respondWithToken($newToken,"Refresh Token thành công",$user);
             
         } catch (TokenExpiredException $e) {
-            return JsonResponse::handle(401, 'Refresh token đã hết hạn', 3, 401);
+            return JsonResponse::handle(401, 'Refresh token đã hết hạn', null, 401);
         } catch (JWTException $e) {
-            return JsonResponse::handle(401, 'Token không hợp lệ', 4, 401);
+            return JsonResponse::handle(401, 'Token không hợp lệ', null, 401);
         }
     }
     

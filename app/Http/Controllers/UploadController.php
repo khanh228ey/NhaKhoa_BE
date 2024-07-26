@@ -25,7 +25,6 @@ class UploadController extends Controller
         if ($validator->fails()) {
             return JsonResponse::error(400, $validator->messages(), 400);
         }
-
         try {
             $image = $request->file('image');
             $uploadedFileUrl = Cloudinary::upload($image->getRealPath(), [
