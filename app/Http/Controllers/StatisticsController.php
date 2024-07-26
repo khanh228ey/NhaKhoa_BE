@@ -17,13 +17,16 @@ class StatisticsController extends Controller
         // $this->middleware('check.role:3');
     }
 
-    Public function getServiceStatistics(Request $request){
+    Public function getStatistics(Request $request){
         $service = $this->statisticsRepository->statisticService($request);
         $turnover = $this->statisticsRepository->statisticInvoice($request);
+        $invoice = $this->statisticsRepository->getInvoice($request);
         $data = [
             'turnover' => $turnover,
+            'invoice' => $invoice,
             'services' => $service,
         ];
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$data,200);
     }
+    
 }

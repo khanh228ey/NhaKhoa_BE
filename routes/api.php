@@ -52,14 +52,14 @@ Route::prefix('v1/user')->controller(UserController::class)->group(function(){
     Route::get('/{id}','findById')->name('user.detail');
     Route::put('/{id}','updateUser');
 });
-
+//customer
 Route::prefix('v1/customer')->controller(CustomerController::class)->group(function () {
     Route::get('/','getCutomer');
     Route::post('/','createCustomer');
     Route::get('/{id}','findById')->name('customer.detail');
     Route::put('/{id}','updateCustomer');
 });
-
+//category
 Route::prefix('v1/category')->controller(CategoryController::class)->group(function(){
     Route::get('/','getCategories');
     Route::get('/{id}','findById')->name('category.detail');
@@ -67,7 +67,7 @@ Route::prefix('v1/category')->controller(CategoryController::class)->group(funct
     Route::put('/{id}','updateCategory');
     Route::delete('/{id}','deleteCategory');
 });
-
+//service
 Route::prefix('v1/service')->controller(ServiceController::class)->group(function () {
     Route::get('/','getServices');
     Route::post('/','createService');
@@ -75,14 +75,14 @@ Route::prefix('v1/service')->controller(ServiceController::class)->group(functio
     Route::put('/{id}','updateService');
     Route::delete('/{id}','deleteService');
 });
-
+//history
 Route::prefix('v1/history')->controller(HistoryController::class)->group(function () {
     Route::get('/','getHistory');
     Route::post('/','createHistory');
     Route::get('/{id}','findById')->name('history.detail');
     Route::put('/{id}','updateHistory');
 });
-
+//appointment
 Route::prefix('v1/appointment')->controller(AppointmentController::class)->group(function () {
     Route::get('/','getAppointment');
     Route::post('/','createAppointment');
@@ -90,14 +90,14 @@ Route::prefix('v1/appointment')->controller(AppointmentController::class)->group
     Route::put('/{id}','updateAppointment');
     Route::delete('/{id}','deleteAppointment');
 });
-
+//schedule
 Route::prefix('v1/schedule')->controller(ScheduleController::class)->group(function () {
     Route::get('/','getSchedule');
     Route::post('/','createSchedule');
     Route::put('/{doctor_id}/{date}','updateSchedule');
     Route::delete('/{doctor_id}/{date}','deleteSchedule');
 });
-
+//invoice
 Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(function () {
     Route::get('/','getInvoice');
     Route::post('/','createInvoice');
@@ -105,13 +105,13 @@ Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(functio
     Route::put('/{id}','updateInvoice');
   
 });
-
+//role
 Route::prefix('v1/role')->controller(RoleController::class)->group(function(){
     Route::get('/','getRoles');
     Route::get('/{id}','findByID');
     Route::put('/update/{id}','updatePermissions');
 });
-
+//datlich
 Route::prefix('v1')->controller(ClientController::class)->group(function(){
     Route::prefix('doctor')->group(function(){
         Route::get('/','getDoctor');
@@ -128,19 +128,21 @@ Route::prefix('v1/overview')->controller(OverviewController::class)->group(funct
     Route::get('/','totalOverView');
     Route::get('/invoice','monthlyStatistics');
     Route::get('/appointment','appointmentStatistics');
+    
 });
 
-//Thống kê
-Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(function(){
-    Route::get('/','getServiceStatistics');
 
-});
 
 });
 Route::prefix('v1')->controller(ExportController::class)->group(function(){
-    Route::post('/statistics','export');
+    Route::post('/export','export');
     Route::post('/print','printInvoicePdf');
 });
+//Thống kê
+Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(function(){
+    Route::get('/','getStatistics');
+});
+
 //route khách hàng
 Route::prefix('v2')->controller(ClientController::class)->group(function(){
     Route::prefix('doctor')->group(function(){
