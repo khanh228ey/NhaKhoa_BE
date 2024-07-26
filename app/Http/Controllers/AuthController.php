@@ -67,12 +67,15 @@ class AuthController extends Controller
   
     private function createRefreshToken($user)
     {
-        
-        $ttl = config('jwt.refresh_ttl'); 
-        $payload = JWTAuth::getPayloadFactory()->customClaims([
-            'exp' => Carbon::now()->addMinutes($ttl)->timestamp,
-        ])->make();
-        return JWTAuth::encode($payload)->__toString();
+        try{
+            $ttl = config('jwt.refresh_ttl'); 
+            $payload = JWTAuth::getPayloadFactory()->customClaims([
+                'exp' => Carbon::now()->addMinutes($ttl)->timestamp,
+            ])->make();
+            return JWTAuth::encode($payload)->__toString();
+        }catch(Exception $e){
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }
     
     }
     public function logout()

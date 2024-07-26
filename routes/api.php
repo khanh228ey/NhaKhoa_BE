@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-
+Route::post('v1/upload', [UploadController::class, 'uploadImage']);
 Route::group([
 
     'middleware' => 'api',
@@ -111,7 +111,6 @@ Route::prefix('v1/role')->controller(RoleController::class)->group(function(){
     Route::get('/{id}','findByID');
     Route::put('/update/{id}','updatePermissions');
 });
-Route::post('v1/upload', [UploadController::class, 'uploadImage']);
 
 Route::prefix('v1')->controller(ClientController::class)->group(function(){
     Route::prefix('doctor')->group(function(){
