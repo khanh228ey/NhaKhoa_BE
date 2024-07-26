@@ -54,7 +54,7 @@ class AuthController extends Controller
         $role = $user->role->name;
         $refreshToken = $this->createRefreshToken($token);
         $cookie = $this->setCookie($refreshToken);
-        $response = $this->respondWithToken($token);
+        $response = $this->respondWithToken($token,$user);
         return $response->withCookie($cookie);
     }
 
@@ -91,12 +91,21 @@ class AuthController extends Controller
     }
 
     
-    protected function respondWithToken($token)
+    protected function respondWithToken($token,$profile)
     {
         $data = [
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() * 60,
+            'id' => $profile->id,
+            'name' => $profile->name,
+            'email' => $profile->email,
+            'avatar' => $profile->avatar,
+            'phone_number' => $profile->phone_number,
+            'birthday' => $profile->birthday,
+            'gender' => $profile->gender,
+            'address' => $profile->address,
+            'role' => $profile->role->name,
         ];
         return JsonResponse::handle(200,"Đăng nhập thành công",$data,200);
     }
@@ -133,7 +142,7 @@ class AuthController extends Controller
                 return JsonResponse::handle(401, 'Token không hợp lệ', 2, 401);
             }
             $newToken = JWTAuth::fromUser($user);
-            return $this->respondWithToken($newToken);
+            return $this->respondWithToken($newToken,$user);
             
         } catch (TokenExpiredException $e) {
             return JsonResponse::handle(401, 'Refresh token đã hết hạn', 3, 401);

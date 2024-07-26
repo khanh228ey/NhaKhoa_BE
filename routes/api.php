@@ -136,15 +136,11 @@ Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(f
 
 });
 
-
+});
 Route::prefix('v1')->controller(ExportController::class)->group(function(){
     Route::post('/statistics','export');
-    Route::get('/print','printInvoicePdf');
+    Route::post('/print','printInvoicePdf');
 });
-
-
-});
-
 //route khách hàng
 Route::prefix('v2')->controller(ClientController::class)->group(function(){
     Route::prefix('doctor')->group(function(){

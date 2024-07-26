@@ -15,11 +15,89 @@ class ExportController extends Controller
 
     public function printInvoicePdf(Request $request)
     {
-        $pdf = new Dompdf();
         $html = $request->input('html');
-        $pdf->loadHtml($html);
+
+        $fullHtml = '
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                }
+                .container {
+                    width: 70%;
+                    margin: 0 auto;
+                    padding: 20px;
+                    border: 1px solid #000;
+                    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+                }
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 20px;
+                }
+                .header img {
+                    max-width: 100px;
+                }
+                .header .info {
+                    text-align: right;
+                }
+                .header .info p {
+                    margin: 2px 0;
+                }
+                .title {
+                    text-align: center;
+                    font-weight: bold;
+                    text-decoration: underline;
+                    margin-bottom: 20px;
+                }
+                .details, .content {
+                    margin-bottom: 20px;
+                }
+                .details .row, .content .row {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 5px;
+                }
+                .details .row p, .content .row p {
+                    margin: 0;
+                }
+                .content p {
+                    margin: 0;
+                }
+                .footer {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 50px;
+                }
+                .footer .sign {
+                    text-align: center;
+                    width: 45%;
+                }
+                .footer .sign p {
+                    margin: 0;
+                }
+                .field-label {
+                    font-weight: bold;
+                }
+                .field-value {
+                    font-style: italic;
+                }
+                .money {
+                    font-weight: bold;
+                }
+            </style>
+        </head>
+        <body>' . $html . '</body>
+        </html>';
+
+        $pdf = new Dompdf();
+        $pdf->loadHtml($fullHtml);
+        $pdf->setPaper('A4', 'portrait');
         $pdf->render();
-        return $pdf->stream('invoice.pdf');
+
+        return $pdf->stream('invoice.pdf', ["Attachment" => false]);
     }
 
     public function export(Request $request)

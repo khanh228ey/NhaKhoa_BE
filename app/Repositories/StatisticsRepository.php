@@ -12,41 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class StatisticsRepository{
 
-
-  
-    // public function statisticService(Request $request)
-    // {
-    //     // Lấy tham số ngày từ query
-    //     $dateParam = $request->query('date');
-    //     $date = empty($dateParam) ? Carbon::now('Asia/Ho_Chi_Minh') : Carbon::createFromFormat('Y-m-d', $dateParam, 'Asia/Ho_Chi_Minh');
-    //     $startMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
-    //     $endMonth = $date->endOfMonth()->format('Y-m-d H:i:s');
-    
-    //     $services = Service::with(['histories' => function ($query) use ($startMonth, $endMonth) {
-    //         $query->whereBetween('created_at', [$startMonth, $endMonth])
-    //               ->where('status', 1); 
-    //     }])->get();
-    //     $result = $services->map(function ($service) use ($startMonth, $endMonth) {
-    //         $totalQuantity = $service->histories->sum(function ($history) {
-    //             return $history->historyDetails->sum('quantity');
-    //         });
-    //         $totalPrice = $service->histories->sum(function ($history) {
-    //             return $history->historyDetails->sum(function ($detail) {
-    //                 return $detail->quantity * $detail->price;
-    //             });
-    //         });
-    //         return [
-    //             'service' => [
-    //                'id' => $service->id,
-    //                 'name'=> $service->name,
-    //             ],
-    //             'quantity_sold' => $totalQuantity,
-    //             'total_price' => $totalPrice,
-    //         ];
-    //     });
-    //     $sortedResult = $result->sortByDesc('price')->values();
-    //     return $sortedResult;
-    // }
     
     public function statisticService(Request $request)
         {
