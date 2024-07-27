@@ -143,10 +143,10 @@ Route::prefix('v1')->controller(ExportController::class)->group(function(){
 });
 //Thống kê
 Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(function(){
-    Route::get('/invoice','statisticsStatistics');
-    Route::get('/service','statisticsService');
-    Route::get('/history','statisticstHistories');
-    Route::get('/appointment','statisticsAppointment');
+    Route::get('/invoice','getStatistics');
+    Route::get('/service','getService');
+    Route::get('/history','getHistories');
+    Route::get('appointment','getAppointment');
 });
 
 //route khách hàng

@@ -40,6 +40,7 @@ class StatisticsController extends Controller
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$histories,200);
     }
     Public function getAppointment(Request $request){
-        
+        $appointment = $this->statisticsRepository->statisticsAppointment($request);
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$appointment,200);
     }
 }
