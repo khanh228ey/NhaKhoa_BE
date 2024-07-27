@@ -11,7 +11,6 @@ use Dompdf\Options;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class InvoiceController extends Controller
 {
@@ -83,15 +82,7 @@ class InvoiceController extends Controller
             $pdf->loadHtml($html);
             $pdf->setPaper('A4', 'portrait');
             $pdf->render();
-            $response = new Response($pdf->output(), 200, [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="invoice.pdf"',
-                'Access-Control-Allow-Origin' => env('COR_FE'),
-                'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
-                'Access-Control-Allow-Headers' => 'Content-Type, X-Auth-Token, Origin, Authorization',
-            ]);
-    
-            return $response;
+            return $pdf->stream('invoice.pdf', ['Attachment' => true]);
         }catch(Exception $e){
             return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }

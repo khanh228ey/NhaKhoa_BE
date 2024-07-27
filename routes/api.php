@@ -103,7 +103,7 @@ Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(functio
     Route::post('/','createInvoice');
     Route::get('/{id}','findById')->name('invoice.detail');
     Route::put('/{id}','updateInvoice');
-    Route::get('/print','printInvoicePdf');
+    Route::post('/print','printInvoicePdf');
   
 });
 //role
@@ -144,7 +144,7 @@ Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(f
     Route::get('/invoice','getStatistics');
     Route::get('/service','getService');
     Route::get('/history','getHistories');
-    Route::get('appointment','getAppointment');
+    Route::get('/appointment','getAppointment');
 });
 
 //route khách hàng
