@@ -103,6 +103,7 @@ Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(functio
     Route::post('/','createInvoice');
     Route::get('/{id}','findById')->name('invoice.detail');
     Route::put('/{id}','updateInvoice');
+    Route::get('/print','printInvoicePdf');
   
 });
 //role
@@ -136,9 +137,6 @@ Route::prefix('v1/overview')->controller(OverviewController::class)->group(funct
 Route::prefix('v1')->controller(ExportController::class)->group(function(){
     Route::prefix('export')->group(function(){
         Route::get('/service','exportService');
-    });
-    Route::prefix('invoice')->group(function(){
-        Route::post('/print','printInvoicePdf');
     });
 });
 //Thống kê

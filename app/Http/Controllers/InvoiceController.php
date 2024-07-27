@@ -6,6 +6,8 @@ use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoices;
 use App\Repositories\InvoiceRepository;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -65,5 +67,26 @@ class InvoiceController extends Controller
         }
     }
 
+    public function printInvoicePdf(Request $request)
+    {
+        try{
+            $id = $request->input('id');
+            $invoice = Invoices::findOrFail($id);
+            if($invoice->status == 0){
+                return JsonResponse::handle(400,"Hóa đơn chưa thanh toán",$invoice->id,400);
+            }
+            $options = new Options();
+            $options->set('defaultFont', 'DejaVu Sans');
+            $pdf = new Dompdf($options);
+            $html = view('invoice.index', ['invoice' => $invoice])->render();
+            $pdf->loadHtml($html);
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->render();
+            return $pdf->stream('invoice.pdf', ['Attachment' => false]);
+        }catch(Exception $e){
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }
+        
+    }
     
 }
