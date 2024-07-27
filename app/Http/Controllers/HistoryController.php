@@ -76,7 +76,7 @@ class HistoryController extends Controller
             if ($history == false) {
                     return JsonResponse::error(500,ConstantsMessage::ERROR,500);
             }
-            if ($history->status = 1) {
+            if ($history->status == 1) {
                 $invoiceRepository = new InvoiceRepository();
                 $invoiceRepository->addInvoice($id);
             }

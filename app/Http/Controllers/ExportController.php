@@ -64,4 +64,20 @@ class ExportController extends Controller
         }
     }
 
+    Public function exportInvoice(Request $request){
+        try {
+            $startDate = $request->query('beginDate');
+            $endDate= $request->query('endDate');
+            if (empty($startDate) || empty($endDate)) {
+                return JsonResponse::handle(400, 'Lỗi dữ liệu', null, 400);
+            }
+            $invoice = new StatisticsRepository;
+            $statisticsInvoice =$invoice->getInvoice($request);
+
+            return $this->exportRepository->exportInvoiceExcel($statisticsInvoice);
+        }catch(Exception $e){
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }
+    }
+
 }

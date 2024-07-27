@@ -137,8 +137,8 @@ Route::prefix('v1')->controller(ExportController::class)->group(function(){
     Route::prefix('export')->group(function(){
         Route::get('/service','exportService');
     });
-    Route::prefix('print')->group(function(){
-        Route::post('/invoice','printInvoicePdf');
+    Route::prefix('invoice')->group(function(){
+        Route::post('/print','printInvoicePdf');
     });
 });
 //Thống kê

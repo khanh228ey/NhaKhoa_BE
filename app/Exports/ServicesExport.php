@@ -38,7 +38,7 @@ class ServicesExport implements FromCollection, WithHeadings, WithEvents
     public static function afterSheet(AfterSheet $event)
 {
     // Đặt tiêu đề bảng thống kê vào ô A1
-    $event->sheet->setCellValue('A1', 'Bảng thống kê doanh thu tháng N');
+    $event->sheet->setCellValue('A1', 'Bảng thống kê doanh thu dịch vụ ');
     $event->sheet->mergeCells('A1:D1');
     $event->sheet->getStyle('A1:D1')->applyFromArray([
         'font' => [

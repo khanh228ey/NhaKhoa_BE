@@ -12,23 +12,30 @@ class ExportRepository{
     
         $formattedData = array_map(function($service) {
             return [
-                 $service['service']['id'] ?? 'N/A',
-                 $service['service']['name'] ?? 'N/A',
-                 $service['quantity_sold'] ?? "0",
-                 $service['total_price'] ?? "0",
+                 $service['service']['id'],
+                 $service['service']['name'],
+                 $service['quantity_sold'] == 0 ? "0" : $service['quantity_sold'],
+                 $service['total_price'] == 0 ? "0" : $service['total_price'],
             ];
         }, $servicesArray);
-    
+        array_unshift($formattedData, ['', '', '', '']);
         $filename = "Thống kê dịch vụ.xlsx";
         return Excel::download(new ServicesExport($formattedData), $filename);
     }
     
-    Public function exportHistoryExcel($history){
-        
-    }
+
+
     Public function exportInvoiceExcel($invoice){
         
     }
+
+
+
+    Public function exportHistoryExcel($history){
+        
+    }
+    
+    
     Public function exportAppointmentExcel($appointment){
         
     }
