@@ -33,10 +33,13 @@ class StatisticsController extends Controller
     }
     Public function getService(Request $request){
         $service = $this->statisticsRepository->statisticService($request);
-        $data = [
-            $service,
-        ];
-        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$data,200);
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$service,200);
     }
-    
+    Public function getHistories(Request $request){
+        $histories = $this->statisticsRepository->statisticsHistory($request);
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$histories,200);
+    }
+    Public function getAppointment(Request $request){
+        
+    }
 }

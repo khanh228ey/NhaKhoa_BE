@@ -38,6 +38,7 @@ class ClientController extends Controller
                 'id' => $item->id,
                 'name' => $item->name,
                 'avatar' => $item->avatar,
+                'phone_number' => $item->phone_number,
                 'description' => $item->description,
             ];
         });

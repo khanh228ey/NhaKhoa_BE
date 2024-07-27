@@ -1,8 +1,11 @@
 <?php
 namespace App\Repositories;
 
+use App\Http\Resources\AppointmentResource;
+use App\Http\Resources\HistoryResource;
 use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\ServiceResource;
+use App\Models\Appointment;
 use App\Models\History;
 use App\Models\History_detail;
 use App\Models\Invoices;
@@ -104,21 +107,39 @@ class StatisticsRepository{
         return $invoice;
     }
 
-    // Public function getHistory(Request $request){
-    //     $startDate = $request->query('beginDate');
-    //     $endDate= $request->query('endDate');
-    //     if (empty($startDate) || empty($endDate)) {
-    //         $date = Carbon::now('Asia/Ho_Chi_Minh');
-    //         $startDate = $date->startOfMonth()->format('Y-m-d H:i:s');
-    //         $endDate = $date->endOfMonth()->format('Y-m-d H:i:s');
-    //     } else {
-    //         $startDate = Carbon::createFromFormat('Y-m-d', $startDate, 'Asia/Ho_Chi_Minh')->startOfDay()->format('Y-m-d H:i:s');
-    //         $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endOfDay()->format('Y-m-d H:i:s');
-    //     }
-    //     $histories = History::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->with('invoice' => function($query){
-    //         $query->orderBy('total_price','DESC');
-    //     }),
-    // }
+    Public function statisticsHistory(Request $request){
+        $startDate = $request->query('beginDate');
+        $endDate= $request->query('endDate');
+        if (empty($startDate) || empty($endDate)) {
+            $date = Carbon::now('Asia/Ho_Chi_Minh');
+            $startDate = $date->startOfMonth()->format('Y-m-d H:i:s');
+            $endDate = $date->endOfMonth()->format('Y-m-d H:i:s');
+        } else {
+            $startDate = Carbon::createFromFormat('Y-m-d', $startDate, 'Asia/Ho_Chi_Minh')->startOfDay()->format('Y-m-d H:i:s');
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endOfDay()->format('Y-m-d H:i:s');
+        }
+        $histories = History::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->with(['invoice' => function($query){
+            $query->orderBy('total_price','DESC');
+        }])->get();
+            $result = HistoryResource::collection($histories);
+            return $result;
+    }
+
+    Public function statisticsAppointment(Request $request){
+        $startDate = $request->query('beginDate');
+        $endDate= $request->query('endDate');
+        if (empty($startDate) || empty($endDate)) {
+            $date = Carbon::now('Asia/Ho_Chi_Minh');
+            $startDate = $date->startOfMonth()->format('Y-m-d H:i:s');
+            $endDate = $date->endOfMonth()->format('Y-m-d H:i:s');
+        } else {
+            $startDate = Carbon::createFromFormat('Y-m-d', $startDate, 'Asia/Ho_Chi_Minh')->startOfDay()->format('Y-m-d H:i:s');
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endOfDay()->format('Y-m-d H:i:s');
+        }
+        $appointment = Appointment::where('status',1)->orderBy('created_at','ASC')->GET();
+            $result = AppointmentResource::collection($appointment);
+            return $result;
+    }
 }
 
     
