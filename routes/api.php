@@ -103,7 +103,7 @@ Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(functio
     Route::post('/','createInvoice');
     Route::get('/{id}','findById')->name('invoice.detail');
     Route::put('/{id}','updateInvoice');
-    Route::post('/print/{id}','printInvoicePdf');
+    Route::get('/print/{id}','printInvoicePdf');
   
 });
 //role
