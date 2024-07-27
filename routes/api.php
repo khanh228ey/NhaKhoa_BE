@@ -103,7 +103,7 @@ Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(functio
     Route::post('/','createInvoice');
     Route::get('/{id}','findById')->name('invoice.detail');
     Route::put('/{id}','updateInvoice');
-    Route::post('/print','printInvoicePdf');
+    Route::post('/print/{id}','printInvoicePdf');
   
 });
 //role
@@ -175,4 +175,4 @@ Route::post('/v2/appointment',[AppointmentController::class,'createAppointment']
 
 
 Route::get('/v1/workday',[ScheduleController::class,'getScheduleDetails']);
-Route::get('/print',[InvoiceController::class,'printInvoicePdf']);
+Route::get('/print/{id}',[InvoiceController::class,'printInvoicePdf']);
