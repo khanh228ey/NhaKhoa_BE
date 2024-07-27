@@ -23,5 +23,13 @@ class ExportRepository{
         return Excel::download(new ServicesExport($formattedData), $filename);
     }
     
-   
+    Public function exportHistoryExcel($history){
+        
+    }
+    Public function exportInvoiceExcel($invoice){
+        
+    }
+    Public function exportAppointmentExcel($appointment){
+        
+    }
 }

@@ -145,6 +145,8 @@ Route::prefix('v1')->controller(ExportController::class)->group(function(){
 Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(function(){
     Route::get('/invoice','getStatistics');
     Route::get('/service','getService');
+    Route::get('/history','getHistories');
+    Route::get('appointment','getAppointment');
 });
 
 //route khách hàng

@@ -48,7 +48,11 @@ class ScheduleController extends Controller
         if($schedules->isNotEmpty()){
             $schedule = $this->ScheduleRepository->deleteSchedule($schedules);
             if($schedule ==true){
-                return JsonResponse::handle(200,ConstantsMessage::Delete,null,200);
+                $data = [
+                    'doctor_id' => $doctor_id,
+                    'date' => $date,
+                ];
+                return JsonResponse::handle(200,ConstantsMessage::Delete,$data,200);
             }
             return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }else{

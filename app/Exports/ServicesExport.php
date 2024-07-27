@@ -22,7 +22,7 @@ class ServicesExport implements FromCollection, WithHeadings, WithEvents
 
     public function collection()
     {
-        return collect($this->data);
+        return new Collection($this->data);
     }
 
     public function headings(): array

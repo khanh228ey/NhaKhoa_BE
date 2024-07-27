@@ -115,7 +115,9 @@ class StatisticsRepository{
     //         $startDate = Carbon::createFromFormat('Y-m-d', $startDate, 'Asia/Ho_Chi_Minh')->startOfDay()->format('Y-m-d H:i:s');
     //         $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endOfDay()->format('Y-m-d H:i:s');
     //     }
-    //     $histories = History::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->with('invoice' => )
+    //     $histories = History::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->with('invoice' => function($query){
+    //         $query->orderBy('total_price','DESC');
+    //     }),
     // }
 }
 
