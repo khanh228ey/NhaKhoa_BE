@@ -175,3 +175,4 @@ Route::post('/v2/appointment',[AppointmentController::class,'createAppointment']
 
 
 Route::get('/v1/workday',[ScheduleController::class,'getScheduleDetails']);
+Route::get('/print',[InvoiceController::class,'printInvoicePdf']);

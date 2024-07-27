@@ -70,7 +70,8 @@ class InvoiceController extends Controller
     public function printInvoicePdf(Request $request)
     {
         try{
-            $id = $request->input('id');
+            // $id = $request->input('id');
+            $id = 1;
             $invoice = Invoices::findOrFail($id);
             if($invoice->status == 0){
                 return JsonResponse::handle(400,"Hóa đơn chưa thanh toán",$invoice->id,400);
@@ -82,11 +83,19 @@ class InvoiceController extends Controller
             $pdf->loadHtml($html);
             $pdf->setPaper('A4', 'portrait');
             $pdf->render();
-            return $pdf->stream('invoice.pdf', ['Attachment' => true]);
+            return $pdf->stream('invoice.pdf', ['Attachment' => false]);
         }catch(Exception $e){
             return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }
         
     }
-    
+    // public function printInvoicePdf(Request $request)
+    // {
+    //     $pdf = new Dompdf();
+    //     $html = $request->input('html');
+    //     $pdf->loadHtml($html);
+    //     $pdf->render();
+    //     return $pdf->stream('invoice.pdf');
+    // }
+
 }
