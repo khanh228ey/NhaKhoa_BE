@@ -25,7 +25,7 @@ class StatisticsRepository{
                 $endDate = $date->endOfMonth()->format('Y-m-d H:i:s');
             } else {
                 $startDate = Carbon::createFromFormat('Y-m-d', $startDate, 'Asia/Ho_Chi_Minh')->startOfDay()->format('Y-m-d H:i:s');
-                $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endDateOfDay()->format('Y-m-d H:i:s');
+                $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endOfDay()->format('Y-m-d H:i:s');
             }
 
             $services = Service::with(['histories' => function ($query) use ($startDate, $endDate) {
@@ -65,7 +65,7 @@ class StatisticsRepository{
             $endDateDate = $date->endOfMonth()->format('Y-m-d H:i:s');
         } else {
             $startDate = Carbon::createFromFormat('Y-m-d', $startDate, 'Asia/Ho_Chi_Minh')->startOfDay()->format('Y-m-d H:i:s');
-            $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endDateOfDay()->format('Y-m-d H:i:s');
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endOfDay()->format('Y-m-d H:i:s');
         }
         $turnover = Invoices::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
         $turnoverMethod_0 =  Invoices::where('status',1)->where('method_payment',0)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
@@ -97,12 +97,26 @@ class StatisticsRepository{
             $endDateDate = $date->endOfMonth()->format('Y-m-d H:i:s');
         } else {
             $startDate = Carbon::createFromFormat('Y-m-d', $startDate, 'Asia/Ho_Chi_Minh')->startOfDay()->format('Y-m-d H:i:s');
-            $endDateDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endDateOfDay()->format('Y-m-d H:i:s');
+            $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endOfDay()->format('Y-m-d H:i:s');
         }
-        $invoice = Invoices::where('status',1)->whereBetween('created_at', [$startDate, $endDateDate])->orderBy('status','DESC')->orderBy('method_payment','ASC')->get();
+        $invoice = Invoices::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->orderBy('status','DESC')->orderBy('method_payment','ASC')->get();
         $invoice = InvoiceResource::collection($invoice);
         return $invoice;
     }
+
+    // Public function getHistory(Request $request){
+    //     $startDate = $request->query('beginDate');
+    //     $endDate= $request->query('endDate');
+    //     if (empty($startDate) || empty($endDate)) {
+    //         $date = Carbon::now('Asia/Ho_Chi_Minh');
+    //         $startDate = $date->startOfMonth()->format('Y-m-d H:i:s');
+    //         $endDate = $date->endOfMonth()->format('Y-m-d H:i:s');
+    //     } else {
+    //         $startDate = Carbon::createFromFormat('Y-m-d', $startDate, 'Asia/Ho_Chi_Minh')->startOfDay()->format('Y-m-d H:i:s');
+    //         $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endOfDay()->format('Y-m-d H:i:s');
+    //     }
+    //     $histories = History::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->with('invoice' => )
+    // }
 }
 
     

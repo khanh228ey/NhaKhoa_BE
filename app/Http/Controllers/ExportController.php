@@ -6,6 +6,8 @@ use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Exports\ServicesExport;
 use App\Models\Invoices;
+use App\Repositories\ExportRepository;
+use App\Repositories\StatisticsRepository;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -16,6 +18,12 @@ use Maatwebsite\Excel\Facades\Excel;
 class ExportController extends Controller
 {
     //
+    protected $exportRepository;
+    public function __construct( ExportRepository $exportRepository)
+    {
+        $this->exportRepository = $exportRepository; 
+        // $this->middleware('check.role:3');
+    }
 
     public function printInvoicePdf(Request $request)
     {
@@ -38,30 +46,22 @@ class ExportController extends Controller
         }
         
     }
-    public function export(Request $request)
-    {
-            $data = $request->all();
-        if (empty($data['end']) || empty($data['begin'])) {
-            return JsonResponse::handle(400, 'Lỗi dữ liệu', null, 400);
-        }
+    
+
+    Public function exportService(Request $request){
         try {
-            $date = Carbon::createFromFormat('Y-m-d', $data['date'], 'Asia/Ho_Chi_Minh');
-            $month = $date->format('m'); 
-        } catch (\Exception $e) {
-            return JsonResponse::handle(400, 'Lỗi ngày tháng không hợp lệ', null, 400);
+                $startDate = $request->query('beginDate');
+                $endDate= $request->query('endDate');
+                if (empty($startDate) || empty($endDate)) {
+                    return JsonResponse::handle(400, 'Lỗi dữ liệu', null, 400);
+                }
+                $service = new StatisticsRepository;
+                $statisticsService =$service->statisticService($request);
+   
+                return $this->exportRepository->exportServiceExcel($statisticsService);
+        }catch(Exception $e){
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }
-        $services = $data['services'];
-        $formattedData = array_map(function($service) {
-            return [
-                'Mã dịch vụ' => $service['service']['id'] ?? 'N/A',
-                'Tên dịch vụ' => $service['service']['name'] ?? 'N/A',
-                'Số lượng bán ra' => $service['quantity'] ?? 0,
-                'Tổng thu' => $service['price'] ?? 0,
-            ];
-        }, $services);
-        
-        $filename = "Thống kê tháng $month.xlsx";
-        
-        return Excel::download(new ServicesExport($formattedData), $filename);
     }
+
 }

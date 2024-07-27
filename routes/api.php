@@ -131,16 +131,20 @@ Route::prefix('v1/overview')->controller(OverviewController::class)->group(funct
     
 });
 
-
-
 });
+//Xuất file và int
 Route::prefix('v1')->controller(ExportController::class)->group(function(){
-    Route::post('/export','export');
-    Route::post('/print','printInvoicePdf');
+    Route::prefix('export')->group(function(){
+        Route::get('/service','exportService');
+    });
+    Route::prefix('print')->group(function(){
+        Route::post('/invoice','printInvoicePdf');
+    });
 });
 //Thống kê
 Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(function(){
-    Route::get('/','getStatistics');
+    Route::get('/invoice','getStatistics');
+    Route::get('/service','getService');
 });
 
 //route khách hàng
