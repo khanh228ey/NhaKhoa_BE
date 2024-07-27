@@ -81,7 +81,7 @@ class InvoiceController extends Controller
             $pdf->loadHtml($html);
             $pdf->setPaper('A4', 'portrait');
             $pdf->render();
-            return $pdf->stream('invoice.pdf', ['Attachment' => false]);
+            return $pdf->stream('invoice.pdf', ['Attachment' => true]);
         }catch(Exception $e){
             return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }
