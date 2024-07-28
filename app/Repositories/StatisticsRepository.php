@@ -16,9 +16,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class StatisticsRepository{
-
     
-    public function statisticService(Request $request)
+        // public function getRequest(Request $request){
+        //     $startDate = $request->query('begin-date');
+        //     $endDate= $request->query('end-date');
+        //     if (empty($startDate) || empty($endDate)) {
+        //         $date = Carbon::now('Asia/Ho_Chi_Minh');
+        //         $startDate = $date->startOfMonth()->format('Y-m-d H:i:s');
+        //         $endDate = $date->endOfMonth()->format('Y-m-d H:i:s');
+        //     } else {
+        //         $startDate = Carbon::createFromFormat('Y-m-d', $startDate, 'Asia/Ho_Chi_Minh')->startOfDay()->format('Y-m-d H:i:s');
+        //         $endDate = Carbon::createFromFormat('Y-m-d', $endDate, 'Asia/Ho_Chi_Minh')->endOfDay()->format('Y-m-d H:i:s');
+        //     }
+        // }
+
+
+    public function getService(Request $request)
         {
             $startDate = $request->query('begin-date');
             $endDate= $request->query('end-date');
@@ -77,15 +90,15 @@ class StatisticsRepository{
         $data = [
             [
                 'title' => 'Tổng doanh thu',
-                'total_price' => $turnover,
+                'content' => $turnover,
             ],
             [
                 'title' => 'Tổng doanh thu thanh toán tiền mặt',
-                'total_price' => $turnoverMethod_0,
+                'content' => $turnoverMethod_0,
             ],
             [
                 'title' => 'Tổng doanh thu thanh toán chuuyển khoản',
-                'total_price' => $turnoverMethod_1,
+                'content' => $turnoverMethod_1,
             ]
         ];
         return $data;
