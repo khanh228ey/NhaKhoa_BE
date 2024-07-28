@@ -90,9 +90,9 @@ class StatisticsRepository{
         $turnoverMethod_1 =  Invoices::where('status',1)->where('method_payment',1)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
 
         $data = [
-            ['title' => 'Tổng doanh thu:','content' => $turnover,],
-            ['title' => 'Thanh toán tiền mặt:','content' => $turnoverMethod_0,],
-            ['title' => 'Thanh toán chuuyển khoản:','content' => $turnoverMethod_1,]
+            ['title' => 'Tổng doanh thu:','content' => number_format($turnover),],
+            ['title' => 'Thanh toán tiền mặt:','content' => number_format($turnoverMethod_0),],
+            ['title' => 'Thanh toán chuyển khoản:','content' => number_format($turnoverMethod_1),]
         ];
         return $data;
     }
