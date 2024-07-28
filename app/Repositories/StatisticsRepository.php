@@ -128,7 +128,7 @@ class StatisticsRepository{
         $history = History::whereBetween('created_at', [$startDate, $endDate]);
         $sumhistory = $history->count();
         $sumhistoryDone = $history->where('status',1)->count();
-        $sumhistoryCancel = $history->where('status',0)->count();
+        $sumhistoryCancel = $history->where('status',2)->count();
         $data = [
             ['title' => 'Tổng số lịch khám:','content' => $sumhistory,],
             ['title' => 'Số lịch khám hoàn thành:','content' => $sumhistoryDone,],
