@@ -57,8 +57,7 @@ class StatisticsRepository{
             $endDate= $request->query('end-date');
             [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
             $services = Service::with(['histories' => function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('created_at', [$startDate, $endDate])
-                    ->where('status', 1); 
+                $query->whereBetween('created_at', [$startDate, $endDate]);
             }])->get();
             $result = $services->map(function ($service) {
                 $totalQuantity = $service->histories->sum(function ($history) {
@@ -73,6 +72,7 @@ class StatisticsRepository{
                     'id' => $service->id,
                     'name' => $service->name,
                     'unit' => $service->unit,
+                    'status' => $service->status,
                     'quantity' => $totalQuantity,
                     'quantity_sold' => $service->quantity_sold,
                     'total_price' => $totalPrice,
