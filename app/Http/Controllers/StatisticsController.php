@@ -42,7 +42,7 @@ class StatisticsController extends Controller
     }
     Public function getHistories(Request $request){
         $statisticsHistory = $this->statisticsRepository->statisticsHistory($request);
-        $history = $this->statisticsRepository->statisticsHistory($request);
+        $history = $this->statisticsRepository->getHistory($request);
         $data = [
             'turnover' => $statisticsHistory,
             'history' => $history,
