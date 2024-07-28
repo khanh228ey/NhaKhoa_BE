@@ -68,10 +68,9 @@ class InvoiceController extends Controller
         }
     }
 
-    public function printInvoicePdf(Request $request)
+    public function printInvoicePdf($id)
     {
         try{
-            $id = 1;
             $invoice = Invoices::findOrFail($id);
             if($invoice->status == 0){
                 return JsonResponse::handle(400,"Hóa đơn chưa thanh toán",$invoice->id,400);

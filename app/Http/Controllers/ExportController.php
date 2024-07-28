@@ -28,8 +28,8 @@ class ExportController extends Controller
     
     public function exportService(Request $request){
         try {
-                $startDate = $request->query('beginDate');
-                $endDate= $request->query('endDate');
+                $startDate = $request->query('begin-date');
+                $endDate= $request->query('end-date');
                 if (empty($startDate) || empty($endDate)) {
                     return JsonResponse::handle(400, 'Lỗi dữ liệu', null, 400);
                 }
