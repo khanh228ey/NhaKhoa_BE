@@ -43,7 +43,7 @@ class StatisticsRepository{
                     ->where('status', 1); 
             }])->first();
             $data = [
-                ['title' => 'Tổng doanh thu:','content' => $turnover],
+                ['title' => 'Tổng doanh thu:','content' => number_format($turnover)],
                 ['title' => 'Tổng số bán ra:','content' => $quantityService],
                 ['title'=> 'Dịch vụ nổi bật:','content' => $service->name],
             ];
@@ -91,8 +91,8 @@ class StatisticsRepository{
 
         $data = [
             ['title' => 'Tổng doanh thu:','content' => $turnover,],
-            ['title' => 'Tổng doanh thu thanh toán tiền mặt:','content' => $turnoverMethod_0,],
-            ['title' => 'Tổng doanh thu thanh toán chuuyển khoản:','content' => $turnoverMethod_1,]
+            ['title' => 'Thanh toán tiền mặt:','content' => $turnoverMethod_0,],
+            ['title' => 'Thanh toán chuuyển khoản:','content' => $turnoverMethod_1,]
         ];
         return $data;
     }

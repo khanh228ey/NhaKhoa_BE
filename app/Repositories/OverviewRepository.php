@@ -55,13 +55,12 @@ class OverviewRepository{
         $endOfPreviousMonth = $date->subMonthsNoOverflow(0)->format('Y-m-d H:i:s');
         $totalAppointmentPreviousMonth = History::where('status',1)->whereBetween('created_at', [$startOfPreviousMonth, $endOfPreviousMonth])->count();
         $difference = $totalAppointmentCurrentMonth - $totalAppointmentPreviousMonth;
-        
         $message = '';
         if ($totalAppointmentPreviousMonth > 0) {
             if ($difference > 0) {
                 $message = 'Tăng <span style ="color:blue;">'.$difference.'</span> lịch khám so với tháng trước.';
             } elseif ($difference < 0) {
-                $message = 'Giảm <span style ="color:blue;">'.$difference. '<span> lịch khám so với tháng trước.';
+                $message = 'Giảm <span style ="color:blue;">'.$difference. '</span> lịch khám so với tháng trước.';
             } else {
                 $message = 'Tăng <span style ="color:blue;">0</span> lịch khám so với tháng trước.';
             }
@@ -93,7 +92,7 @@ class OverviewRepository{
     }
     
     Public function totalCustomer(){
-         $title = "Số lượng khách hàng mới:";
+         $title = "Số khách hàng mới:";
         $date = Carbon::now('Asia/Ho_Chi_Minh');
         //Tháng hiện tại
         $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
