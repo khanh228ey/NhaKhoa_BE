@@ -54,8 +54,8 @@ class ExportController extends Controller
             }
             $invoice = new StatisticsRepository;
             $statisticsInvoice =$invoice->getInvoice($request);
-            $data= $this->exportRepository->exportInvoiceExcel($statisticsInvoice);
-            return Excel::download(new InvoiceExport($data), "Thong ke hoa don");
+            $data = $this->exportRepository->exportInvoiceExcel($statisticsInvoice);
+            return Excel::download(new InvoiceExport($data), "Thong ke hoa don.xlsx");
         }catch(Exception $e){
             return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }

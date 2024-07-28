@@ -139,9 +139,9 @@ Route::prefix('v1/overview')->controller(OverviewController::class)->group(funct
 Route::prefix('v1')->controller(ExportController::class)->group(function(){
     Route::prefix('export')->group(function(){
         Route::post('/service','exportService');
-        Route::post('/invoice','exportInvoice');
+        Route::get('/invoice','exportInvoice');
         Route::post('/appointment','exportAppointment');
-        Route::get('/history','exportHistory');
+        Route::post('/history','exportHistory');
     });
 });
 
