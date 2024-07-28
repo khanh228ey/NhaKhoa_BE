@@ -136,7 +136,7 @@ Route::prefix('v1/overview')->controller(OverviewController::class)->group(funct
 //Xuất file và int
 Route::prefix('v1')->controller(ExportController::class)->group(function(){
     Route::prefix('export')->group(function(){
-        Route::get('/service','exportService');
+        Route::post('/service','exportService');
     });
 });
 //Thống kê
