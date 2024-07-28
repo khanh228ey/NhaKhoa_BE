@@ -40,15 +40,8 @@ class ExportRepository{
         }
         array_unshift($formattedData, ['', '', '', '', '']);
         return $formattedData;
-        }
-
-
-
-    Public function exportHistoryExcel($history){
-        
     }
-    
-    
+
     Public function exportAppointmentExcel($appointments){
         $formattedData = [];
             foreach($appointments as $appointment) {
@@ -62,6 +55,24 @@ class ExportRepository{
             }
             array_unshift($formattedData, ['', '', '', '', '']);
             return $formattedData;
+    }
+
+    
+    Public function exportHistoryExcel($histories){
+        $formattedData = [];
+        foreach($histories as $history) {
+            $formattedData[] = [
+                $history->id,
+                $history->customer->name,
+                $history->doctor->name,
+                $history->date,
+                $history->time,
+                $history->status == 1?"Hoàn thành" :"Đã Hủy",
+                $history->invoice->total_price ?? 0,
+            ];
+        }
+        array_unshift($formattedData, ['', '', '', '', '']);
+        return $formattedData;
     }
     
 }

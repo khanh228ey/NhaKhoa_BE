@@ -36,7 +36,7 @@ class AppointmentCreatedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('appointments');
+        return new Channel('notifications');
     }
 
     public function broadcastWith()
@@ -50,6 +50,6 @@ class AppointmentCreatedEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'appointment';
+        return 'noitice';
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Exports\AppointmentExport;
+use App\Exports\HistoryExport;
 use App\Exports\InvoiceExport;
 use App\Exports\ServicesExport;
 use App\Models\Invoices;
@@ -71,6 +72,22 @@ class ExportController extends Controller
             $statisticsInvoice =$invoice->getAppointment($request);
             $excel =  $this->exportRepository->exportAppointmentExcel($statisticsInvoice);
             return Excel::download(new AppointmentExport($excel),"Thong ke lich hen.xlsx");
+        }catch(Exception $e){
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }
+    }
+
+    public function exportHistory(Request $request){
+        try {
+            $startDate = $request->query('begin-date');
+            $endDate= $request->query('end-date');
+            if (empty($startDate) || empty($endDate)) {
+                return JsonResponse::handle(400, 'Hãy truyền ngày bắt đầu', null, 400);
+            }
+            $invoice = new StatisticsRepository;
+            $statisticsInvoice =$invoice->getHistory($request);
+            $excel =  $this->exportRepository->exportHistoryExcel($statisticsInvoice);
+            return Excel::download(new HistoryExport($excel),"Thong ke lich kham.xlsx");
         }catch(Exception $e){
             return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }

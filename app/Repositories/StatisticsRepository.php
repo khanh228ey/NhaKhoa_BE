@@ -116,7 +116,7 @@ class StatisticsRepository{
         $startDate = $request->query('begin-date');
         $endDate= $request->query('end-date');
         [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-        $histories = History::where('status',1)->whereBetween('created_at', [$startDate, $endDate])
+        $histories = History::whereBetween('created_at', [$startDate, $endDate])
         ->with(['invoice' => function($query){
             $query->orderBy('total_price','DESC');
         }])->get();

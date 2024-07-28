@@ -140,8 +140,8 @@ Route::prefix('v1')->controller(ExportController::class)->group(function(){
     Route::prefix('export')->group(function(){
         Route::post('/service','exportService');
         Route::post('/invoice','exportInvoice');
-        Route::get('/appointment','exportAppointment');
-        // Route::post('/history','exportService');
+        Route::post('/appointment','exportAppointment');
+        Route::get('/history','exportHistory');
     });
 });
 
