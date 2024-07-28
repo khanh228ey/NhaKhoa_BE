@@ -72,6 +72,7 @@ class StatisticsRepository{
                 return [
                     'id' => $service->id,
                     'name' => $service->name,
+                    'unit' => $service->unit,
                     'quantity' => $totalQuantity,
                     'quantity_sold' => $service->quantity_sold,
                     'total_price' => $totalPrice,
