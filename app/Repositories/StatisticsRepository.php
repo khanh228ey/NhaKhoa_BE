@@ -13,7 +13,6 @@ use App\Models\Service;
 use Carbon\Carbon;
 use Database\Seeders\InvoiceSeeder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class StatisticsRepository{
     
@@ -28,7 +27,8 @@ class StatisticsRepository{
             }
             return  [$startDate,$endDate];
         }
-    
+
+        //Thống kê dịch vụ
         public function statisticService(Request $request){
             $startDate = $request->query('begin-date');
             $endDate= $request->query('end-date');
@@ -80,7 +80,7 @@ class StatisticsRepository{
             $sortedResult = $result->sortByDesc('total_price')->values();
             return $sortedResult;
         }
-
+    //Thống kê hóa đơn
     Public function statisticInvoice(Request $request){
         $startDate = $request->query('begin-date');
         $endDate= $request->query('end-date');
@@ -107,23 +107,52 @@ class StatisticsRepository{
     }
 
 
-    
-    Public function statisticsHistory(Request $request){
+    //Thong ke lịch khám
+    Public function getHistory(Request $request){
         $startDate = $request->query('begin-date');
         $endDate= $request->query('end-date');
         [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-        $histories = History::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->with(['invoice' => function($query){
+        $histories = History::where('status',1)->whereBetween('created_at', [$startDate, $endDate])
+        ->with(['invoice' => function($query){
             $query->orderBy('total_price','DESC');
         }])->get();
             $result = HistoryResource::collection($histories);
             return $result;
     }
 
+    // Public function statisticsHistory(Request $request){
+    //     $startDate = $request->query('begin-date');
+    //     $endDate= $request->query('end-date');
+    //     [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
+    //     $history = History::whereBetween('created_at', [$startDate, $endDate]);
+    //     $sumhistory = $history->count();
+    //     $sumhistory = 
+    // }
+
+
+    //thong ke lich hen cua khach hang
     Public function statisticsAppointment(Request $request){
         $startDate = $request->query('begin-date');
         $endDate= $request->query('end-date');
         [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-        $appointment = Appointment::where('status',1)->orderBy('created_at','ASC')->GET();
+        $appointment = Appointment::whereBetween('created_at', [$startDate, $endDate]);
+        $sumApoiment = $appointment->count();
+        $sumApoimentDone = $appointment->where('status',1)->count();
+        $sumApoimentCancel = $appointment->where('status',2)->count();
+        $data = [
+            ['title' => 'Tổng số lịch hẹn:','content' => $sumApoiment,],
+            ['title' => 'Số lịch hẹn hoàn thành:','content' => $sumApoimentDone,],
+            ['title' => 'Số lịch hẹn bị hủy:','content' => $sumApoimentCancel,]
+        ];
+        return $data;
+    }
+
+    Public function getAppointment(Request $request){
+        $startDate = $request->query('begin-date');
+        $endDate= $request->query('end-date');
+        [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
+        $appointment = Appointment::whereBetween('created_at', [$startDate, $endDate])->orderBy('status','DESC')
+        ->get();
             $result = AppointmentResource::collection($appointment);
             return $result;
     }
