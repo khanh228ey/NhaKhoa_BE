@@ -78,7 +78,10 @@ class StatisticsRepository{
                     'total_price' => $totalPrice,
                 ];
             });
-            $sortedResult = $result->sortByDesc('total_price')->values();
+            $filteredResult = $result->filter(function ($service) {
+                return $service['total_price'] > 0;
+            });
+            $sortedResult = $filteredResult->sortByDesc('total_price')->values();
             return $sortedResult;
         }
     //Thống kê hóa đơn
@@ -93,7 +96,7 @@ class StatisticsRepository{
         $data = [
             ['title' => 'Tổng doanh thu:','content' => number_format($turnover).' VND'],
             ['title' => 'Thanh toán tiền mặt:','content' => number_format($turnoverMethod_0).' VND',],
-            ['title' => 'Thanh toán chuyển khoản:','content' => number_format($turnoverMethod_1.' VND'),]
+            ['title' => 'Thanh toán chuyển khoản:','content' => number_format($turnoverMethod_1).' VND',]
         ];
         return $data;
     }

@@ -18,11 +18,11 @@ class StatisticsController extends Controller
     }
 
     Public function getStatistics(Request $request){
-        $startDate = $request->query('begin-date');
-        $endDate = $request->query('end-date');
-        if (empty($startDate) || empty($endDate)) {
-            return JsonResponse::handle(400,"Chọn ngày bắt đầu và ngày kết thúc",null,400);
-        }
+        // $startDate = $request->query('begin-date');
+        // $endDate = $request->query('end-date');
+        // if (empty($startDate) || empty($endDate)) {
+        //     return JsonResponse::handle(400,"Chọn ngày bắt đầu và ngày kết thúc",null,400);
+        // }
         $turnover = $this->statisticsRepository->statisticInvoice($request);
         $invoice = $this->statisticsRepository->getInvoice($request);
         $data = [
