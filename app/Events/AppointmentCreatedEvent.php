@@ -26,7 +26,7 @@ class AppointmentCreatedEvent implements ShouldBroadcast
     public function __construct(Appointment $appointment)
     {
         $this->appointment = $appointment;
-        Log::info('Lịch hẹn đã được tạo ' . $appointment->id);
+        // Log::info('Lịch hẹn đã được tạo ' . $appointment->id);
     }
 
     /**
@@ -50,6 +50,6 @@ class AppointmentCreatedEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'noitice';
+        return 'notice';
     }
 }
