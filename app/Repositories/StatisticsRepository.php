@@ -73,7 +73,7 @@ class StatisticsRepository{
                     'id' => $service->id,
                     'name' => $service->name,
                     'quantity' => $totalQuantity,
-                    'quantity' => $service->quantity_sold,
+                    'quantity_sold' => $service->quantity_sold,
                     'total_price' => $totalPrice,
                 ];
             });
