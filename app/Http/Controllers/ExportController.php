@@ -34,9 +34,8 @@ class ExportController extends Controller
                     return JsonResponse::handle(400, 'Lỗi dữ liệu', null, 400);
                 }
                 $service = new StatisticsRepository;
-                $statisticsService =$service->statisticService($request);
-   
-                return $this->exportRepository->exportServiceExcel($statisticsService);
+                $getService =$service->getService($request);
+                return $this->exportRepository->exportServiceExcel($getService);
         }catch(Exception $e){
             return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }

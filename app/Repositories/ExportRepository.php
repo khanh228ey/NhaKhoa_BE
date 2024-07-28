@@ -12,8 +12,8 @@ class ExportRepository{
     
         $formattedData = array_map(function($service) {
             return [
-                 $service['service']['id'],
-                 $service['service']['name'],
+                 $service['id'],
+                 $service['name'],
                  $service['quantity_sold'] == 0 ? "0" : $service['quantity_sold'],
                  $service['total_price'] == 0 ? "0" : $service['total_price'],
             ];
