@@ -9,7 +9,7 @@ use Cloudinary\Api\Upload\UploadApi;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -31,13 +31,14 @@ class UploadController extends Controller
                 'transformation' => [
                     'width' => 800,
                     'height' => 800,
-                    'crop' => 'limit'
+                    'crop' => 'fit'
                 ]
             ])->getSecurePath();
 
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS,['url' => $uploadedFileUrl], 200);
         } catch (\Exception $e) {
             return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
+            
         }
     }
     //Upload image lên Minio
