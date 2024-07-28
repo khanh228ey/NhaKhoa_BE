@@ -40,10 +40,15 @@ class StatisticsController extends Controller
         ];
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$data,200);
     }
-    // Public function getHistories(Request $request){
-    //     $histories = $this->statisticsRepository->statisticsHistory($request);
-    //     return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$histories,200);
-    // }
+    Public function getHistories(Request $request){
+        $statisticsHistory = $this->statisticsRepository->statisticsHistory($request);
+        $history = $this->statisticsRepository->statisticsHistory($request);
+        $data = [
+            'turnover' => $statisticsHistory,
+            'history' => $history,
+        ];
+        return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$data,200);
+    }
     Public function getAppointment(Request $request){
         $appointment = $this->statisticsRepository->getAppointment($request);
         $statisticsAppointment = $this->statisticsRepository->statisticsAppointment($request);

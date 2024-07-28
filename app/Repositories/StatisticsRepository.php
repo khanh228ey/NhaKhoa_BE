@@ -43,7 +43,7 @@ class StatisticsRepository{
                     ->where('status', 1); 
             }])->first();
             $data = [
-                ['title' => 'Tổng doanh thu:','content' => number_format($turnover)],
+                ['title' => 'Tổng doanh thu:','content' => number_format($turnover).' VND'],
                 ['title' => 'Tổng số bán ra:','content' => $quantityService],
                 ['title'=> 'Dịch vụ nổi bật:','content' => $service->name],
             ];
@@ -78,7 +78,6 @@ class StatisticsRepository{
                     'total_price' => $totalPrice,
                 ];
             });
-
             $sortedResult = $result->sortByDesc('total_price')->values();
             return $sortedResult;
         }
@@ -92,9 +91,9 @@ class StatisticsRepository{
         $turnoverMethod_1 =  Invoices::where('status',1)->where('method_payment',1)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
 
         $data = [
-            ['title' => 'Tổng doanh thu:','content' => number_format($turnover),],
-            ['title' => 'Thanh toán tiền mặt:','content' => number_format($turnoverMethod_0),],
-            ['title' => 'Thanh toán chuyển khoản:','content' => number_format($turnoverMethod_1),]
+            ['title' => 'Tổng doanh thu:','content' => number_format($turnover).' VND'],
+            ['title' => 'Thanh toán tiền mặt:','content' => number_format($turnoverMethod_0).' VND',],
+            ['title' => 'Thanh toán chuyển khoản:','content' => number_format($turnoverMethod_1.' VND'),]
         ];
         return $data;
     }
@@ -122,14 +121,21 @@ class StatisticsRepository{
             return $result;
     }
 
-    // Public function statisticsHistory(Request $request){
-    //     $startDate = $request->query('begin-date');
-    //     $endDate= $request->query('end-date');
-    //     [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-    //     $history = History::whereBetween('created_at', [$startDate, $endDate]);
-    //     $sumhistory = $history->count();
-    //     $sumhistory = 
-    // }
+    Public function statisticsHistory(Request $request){
+        $startDate = $request->query('begin-date');
+        $endDate= $request->query('end-date');
+        [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
+        $history = History::whereBetween('created_at', [$startDate, $endDate]);
+        $sumhistory = $history->count();
+        $sumhistoryDone = $history->where('status',1)->count();
+        $sumhistoryCancel = $history->where('status',0)->count();
+        $data = [
+            ['title' => 'Tổng số lịch khám:','content' => $sumhistory,],
+            ['title' => 'Số lịch khám hoàn thành:','content' => $sumhistoryDone,],
+            ['title' => 'Số lịch khám bị hủy:','content' => $sumhistoryCancel,]
+        ];
+        return $data;
+    }
 
 
     //thong ke lich hen cua khach hang
