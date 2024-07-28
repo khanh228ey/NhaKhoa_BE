@@ -38,14 +38,11 @@ class StatisticsRepository{
                     $query->whereBetween('created_at', [$startDate, $endDate])
                     ->where('status', 1); 
             }])->sum('quantity');
-            $service =  Service::with(['histories' => function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('created_at', [$startDate, $endDate])
-                    ->where('status', 1); 
-            }])->first();
+            $service = $this->getService($request)->first();
             $data = [
                 ['title' => 'Tổng doanh thu:','content' => number_format($turnover).' VND'],
                 ['title' => 'Tổng số bán ra:','content' => $quantityService],
-                ['title'=> 'Dịch vụ nổi bật:','content' => $service->name],
+                ['title'=> 'Dịch vụ nổi bật:','content' =>$service['name']],
             ];
             return $data;
         }
@@ -129,13 +126,13 @@ class StatisticsRepository{
         $endDate= $request->query('end-date');
         [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
         $history = History::whereBetween('created_at', [$startDate, $endDate]);
-        $sumhistory = $history->count();
-        $sumhistoryDone = $history->where('status',1)->count();
-        $sumhistoryCancel = $history->where('status',2)->count();
+        $sumHistory = $history->count();
+        $sumHistoryDone = $history->where('status',1)->count();
+        $sumHistoryCancel = History::whereBetween('created_at', [$startDate, $endDate])->where('status',2)->count();
         $data = [
-            ['title' => 'Tổng số lịch khám:','content' => $sumhistory,],
-            ['title' => 'Số lịch khám hoàn thành:','content' => $sumhistoryDone,],
-            ['title' => 'Số lịch khám bị hủy:','content' => $sumhistoryCancel,]
+            ['title' => 'Tổng số lịch khám:','content' => $sumHistory,],
+            ['title' => 'Số lịch khám hoàn thành:','content' => $sumHistoryDone,],
+            ['title' => 'Số lịch khám bị hủy:','content' => $sumHistoryCancel]
         ];
         return $data;
     }
@@ -149,11 +146,11 @@ class StatisticsRepository{
         $appointment = Appointment::whereBetween('created_at', [$startDate, $endDate]);
         $sumApoiment = $appointment->count();
         $sumApoimentDone = $appointment->where('status',1)->count();
-        $sumApoimentCancel = $appointment->where('status',2)->count();
+        $sumAppointmentCancel = Appointment::whereBetween('created_at', [$startDate, $endDate])->where('status',2)->count();
         $data = [
             ['title' => 'Tổng số lịch hẹn:','content' => $sumApoiment,],
             ['title' => 'Số lịch hẹn hoàn thành:','content' => $sumApoimentDone,],
-            ['title' => 'Số lịch hẹn bị hủy:','content' => $sumApoimentCancel,]
+            ['title' => 'Số lịch hẹn bị hủy:','content' => $sumAppointmentCancel,]
         ];
         return $data;
     }
