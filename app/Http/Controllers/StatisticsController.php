@@ -18,8 +18,8 @@ class StatisticsController extends Controller
     }
 
     Public function getStatistics(Request $request){
-        $startDate = $request->query('beginDate');
-        $endDate = $request->query('endDate');
+        $startDate = $request->query('begin-date');
+        $endDate = $request->query('end-date');
         if (empty($startDate) || empty($endDate)) {
             return JsonResponse::handle(400,"Chọn ngày bắt đầu và ngày kết thúc",null,400);
         }

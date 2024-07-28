@@ -20,8 +20,8 @@ class StatisticsRepository{
     
     public function statisticService(Request $request)
         {
-            $startDate = $request->query('beginDate');
-            $endDate= $request->query('endDate');
+            $startDate = $request->query('begin-date');
+            $endDate= $request->query('end-date');
             if (empty($startDate) || empty($endDate)) {
                 $date = Carbon::now('Asia/Ho_Chi_Minh');
                 $startDate = $date->startOfMonth()->format('Y-m-d H:i:s');
@@ -60,8 +60,8 @@ class StatisticsRepository{
         }
 
     Public function statisticInvoice(Request $request){
-        $startDate = $request->query('beginDate');
-        $endDate= $request->query('endDate');
+        $startDate = $request->query('begin-date');
+        $endDate= $request->query('end-date');
         if (empty($startDate) || empty($endDate)) {
             $date = Carbon::now('Asia/Ho_Chi_Minh');
             $startDate = $date->startOfMonth()->format('Y-m-d H:i:s');
@@ -92,8 +92,8 @@ class StatisticsRepository{
     }
             
     Public function getInvoice(Request $request){
-        $startDate = $request->query('beginDate');
-        $endDate= $request->query('endDate');
+        $startDate = $request->query('begin-date');
+        $endDate= $request->query('end-date');
         if (empty($startDate) || empty($endDate)) {
             $date = Carbon::now('Asia/Ho_Chi_Minh');
             $startDate = $date->startOfMonth()->format('Y-m-d H:i:s');
@@ -108,8 +108,8 @@ class StatisticsRepository{
     }
 
     Public function statisticsHistory(Request $request){
-        $startDate = $request->query('beginDate');
-        $endDate= $request->query('endDate');
+        $startDate = $request->query('begin-date');
+        $endDate= $request->query('end-date');
         if (empty($startDate) || empty($endDate)) {
             $date = Carbon::now('Asia/Ho_Chi_Minh');
             $startDate = $date->startOfMonth()->format('Y-m-d H:i:s');
@@ -126,8 +126,8 @@ class StatisticsRepository{
     }
 
     Public function statisticsAppointment(Request $request){
-        $startDate = $request->query('beginDate');
-        $endDate= $request->query('endDate');
+        $startDate = $request->query('begin-date');
+        $endDate= $request->query('end-date');
         if (empty($startDate) || empty($endDate)) {
             $date = Carbon::now('Asia/Ho_Chi_Minh');
             $startDate = $date->startOfMonth()->format('Y-m-d H:i:s');
