@@ -50,7 +50,7 @@ class InvoiceExport implements FromCollection , WithHeadings, WithEvents
         ]);
 
         // Đặt tiêu đề cột vào ô A2
-        $event->sheet->setCellValue('A2', 'Mã hóa đơns');
+        $event->sheet->setCellValue('A2', 'Mã hóa đơn');
         $event->sheet->setCellValue('B2', 'Tên khách hàng');
         $event->sheet->setCellValue('C2', 'Tổng tiền');
         $event->sheet->setCellValue('D2', 'Phương thức thanh toán');

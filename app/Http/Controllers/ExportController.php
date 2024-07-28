@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
+use App\Exports\AppointmentExport;
+use App\Exports\InvoiceExport;
 use App\Exports\ServicesExport;
 use App\Models\Invoices;
 use App\Repositories\ExportRepository;
@@ -35,9 +37,10 @@ class ExportController extends Controller
                 }
                 $service = new StatisticsRepository;
                 $getService =$service->getService($request);
-                return $this->exportRepository->exportServiceExcel($getService);
+                $data= $this->exportRepository->exportServiceExcel($getService);
+            return Excel::download(new ServicesExport($data), "Thong ke dich vu.xlsx");
         }catch(Exception $e){
-            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+                return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }
     }
 
@@ -50,7 +53,24 @@ class ExportController extends Controller
             }
             $invoice = new StatisticsRepository;
             $statisticsInvoice =$invoice->getInvoice($request);
-            return $this->exportRepository->exportInvoiceExcel($statisticsInvoice);
+            $data= $this->exportRepository->exportInvoiceExcel($statisticsInvoice);
+            return Excel::download(new InvoiceExport($data), "Thong ke hoa don");
+        }catch(Exception $e){
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }
+    }
+
+    public function exportAppointment(Request $request){
+        try {
+            $startDate = $request->query('begin-date');
+            $endDate= $request->query('end-date');
+            if (empty($startDate) || empty($endDate)) {
+                return JsonResponse::handle(400, 'Hãy truyền ngày bắt đầu', null, 400);
+            }
+            $invoice = new StatisticsRepository;
+            $statisticsInvoice =$invoice->getAppointment($request);
+            $excel =  $this->exportRepository->exportAppointmentExcel($statisticsInvoice);
+            return Excel::download(new AppointmentExport($excel),"Thong ke lich hen.xlsx");
         }catch(Exception $e){
             return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }

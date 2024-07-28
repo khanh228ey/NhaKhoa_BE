@@ -22,26 +22,24 @@ class ExportRepository{
             ];
         }, $servicesArray);
         array_unshift($formattedData, ['', '', '', '']);
-        $filename = "Thống kê dịch vụ.xlsx";
-        return Excel::download(new ServicesExport($formattedData), $filename);
+        return $formattedData;
     }
     
 
 
-        public function exportInvoiceExcel($invoices) {
-            $formattedData = [];
-            foreach($invoices as $invoice) {
+    public function exportInvoiceExcel($invoices) {
+        $formattedData = [];
+        foreach($invoices as $invoice) {
                 $formattedData[] = [
-                    $invoice->id,
-                    $invoice->history->customer->name,
-                    number_format($invoice->total_price),
-                    $invoice->method_payment == 0 ? "Tiền mặt" : "Chuyển khoản",
-                    $invoice->user->name,
-                ];
-            }
-            array_unshift($formattedData, ['', '', '', '', '']);
-            $filename = "Thống kê hóa đơn.xlsx";
-            return Excel::download(new InvoiceExport($formattedData), $filename);
+                $invoice->id,
+                $invoice->history->customer->name,
+                number_format($invoice->total_price),
+                $invoice->method_payment == 0 ? "Tiền mặt" : "Chuyển khoản",
+                $invoice->user->name,
+            ];
+        }
+        array_unshift($formattedData, ['', '', '', '', '']);
+        return $formattedData;
         }
 
 
@@ -51,7 +49,19 @@ class ExportRepository{
     }
     
     
-    Public function exportAppointmentExcel($appointment){
-        
+    Public function exportAppointmentExcel($appointments){
+        $formattedData = [];
+            foreach($appointments as $appointment) {
+                $formattedData[] = [
+                    $appointment->id,
+                    $appointment->name,
+                    $appointment->date,
+                    $appointment->time,
+                    $appointment->status == 1?"Hoàn thành" :"Đã Hủy",
+                ];
+            }
+            array_unshift($formattedData, ['', '', '', '', '']);
+            return $formattedData;
     }
+    
 }

@@ -162,10 +162,10 @@ class StatisticsRepository{
         $startDate = $request->query('begin-date');
         $endDate= $request->query('end-date');
         [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-        $appointment = Appointment::whereBetween('created_at', [$startDate, $endDate])->orderBy('status','DESC')
-        ->get();
-            $result = AppointmentResource::collection($appointment);
-            return $result;
+        $appointment = Appointment::whereBetween('created_at', [$startDate, $endDate])
+        ->orderBy('status','DESC')->orderBy('date','DESC')->get();
+        $result = AppointmentResource::collection($appointment);
+        return $result;
     }
 }
 
