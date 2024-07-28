@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
+use App\Events\AppointmentCreatedEvent;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\DeleteResource;
 use App\Models\Appointment;
@@ -33,6 +34,7 @@ class AppointmentController extends Controller
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {
+            event(new AppointmentCreatedEvent($appointment['appointment']));
             $appointment = new AppointmentResource($appointment['appointment']);
             return JsonResponse::handle(200, "Đặt lịch hẹn thành công", $appointment, 200);     
         }

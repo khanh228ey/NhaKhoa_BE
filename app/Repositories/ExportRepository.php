@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Exports\InvoiceExport;
 use App\Exports\ServicesExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -14,7 +15,9 @@ class ExportRepository{
             return [
                  $service['id'],
                  $service['name'],
-                 $service['quantity_sold'] == 0 ? "0" : $service['quantity_sold'],
+                 $service['unit'],
+                 $service['quantity'],
+                 $service['quantity_sold'], 
                  $service['total_price'] == 0 ? "0" : $service['total_price'],
             ];
         }, $servicesArray);
@@ -25,9 +28,21 @@ class ExportRepository{
     
 
 
-    Public function exportInvoiceExcel($invoice){
-        
-    }
+        public function exportInvoiceExcel($invoices) {
+            $formattedData = [];
+            foreach($invoices as $invoice) {
+                $formattedData[] = [
+                    $invoice->id,
+                    $invoice->history->customer->name,
+                    number_format($invoice->total_price),
+                    $invoice->method_payment == 0 ? "Tiền mặt" : "Chuyển khoản",
+                    $invoice->user->name,
+                ];
+            }
+            array_unshift($formattedData, ['', '', '', '', '']);
+            $filename = "Thống kê hóa đơn.xlsx";
+            return Excel::download(new InvoiceExport($formattedData), $filename);
+        }
 
 
 

@@ -132,20 +132,26 @@ Route::prefix('v1/overview')->controller(OverviewController::class)->group(funct
     
 });
 
+//Thống kê
+
 });
 //Xuất file và int
 Route::prefix('v1')->controller(ExportController::class)->group(function(){
     Route::prefix('export')->group(function(){
         Route::post('/service','exportService');
+        Route::post('/invoice','exportInvoice');
+        Route::get('/appointment','history');
+        // Route::post('/history','exportService');
     });
 });
-//Thống kê
+
 Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(function(){
     Route::get('/invoice','getStatistics');
     Route::get('/service','getService');
     Route::get('/history','getHistories');
     Route::get('/appointment','getAppointment');
 });
+
 
 //route khách hàng
 Route::prefix('v2')->controller(ClientController::class)->group(function(){
@@ -172,7 +178,3 @@ Route::prefix('v2')->controller(ClientController::class)->group(function(){
 });
 Route::post('/v2/appointment',[AppointmentController::class,'createAppointment']);
 
-
-
-Route::get('/v1/workday',[ScheduleController::class,'getScheduleDetails']);
-Route::get('/print/{id}',[InvoiceController::class,'printInvoicePdf']);
