@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Models\Appointment;
+use App\Models\Customer;
 use App\Models\History;
 use App\Models\Invoices;
 use App\Models\User;
@@ -23,12 +24,12 @@ class OverviewRepository{
             $title = "Tổng số lịch hẹn:";
             $date = Carbon::now('Asia/Ho_Chi_Minh');
             //Tháng hiện tại
-            $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
-            $endOfCurrentMonth = $date->endOfMonth()->format('Y-m-d H:i:s'); 
+            $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d');
+            $endOfCurrentMonth = $date->endOfMonth()->format('Y-m-d'); 
             $totalCurrent = Appointment::whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->count();
             // Tháng trước
-            $startOfPreviousMonth = $date->subMonthsNoOverflow(1)->startOfMonth()->format('Y-m-d H:i:s');
-            $endOfPreviousMonth = $date->subMonthsNoOverflow(0)->endOfMonth()->format('Y-m-d H:i:s'); 
+            $startOfPreviousMonth = $date->subMonthsNoOverflow(1)->startOfMonth()->format('Y-m-d');
+            $endOfPreviousMonth = $date->subMonthsNoOverflow(0)->endOfMonth()->format('Y-m-d'); 
             $totalPrevious = Appointment::whereBetween('created_at', [$startOfPreviousMonth, $endOfPreviousMonth])->count();
             $difference = $totalCurrent - $totalPrevious;
             $message = '';
@@ -47,12 +48,12 @@ class OverviewRepository{
          $title = "Tổng số lịch khám:";
         $date = Carbon::now('Asia/Ho_Chi_Minh');
         //Tháng hiện tại
-        $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
-        $endOfCurrentMonth = $date->endOfMonth()->format('Y-m-d H:i:s');
+        $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d');
+        $endOfCurrentMonth = $date->endOfMonth()->format('Y-m-d');
         $totalAppointmentCurrentMonth = History::where('status',1)->whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->count();
         //Tháng trước
-        $startOfPreviousMonth = $date->subMonthsNoOverflow(1)->startOfMonth()->format('Y-m-d H:i:s');
-        $endOfPreviousMonth = $date->subMonthsNoOverflow(0)->format('Y-m-d H:i:s');
+        $startOfPreviousMonth = $date->subMonthsNoOverflow(1)->startOfMonth()->format('Y-m-d');
+        $endOfPreviousMonth = $date->subMonthsNoOverflow(0)->endOfMonth()->format('Y-m-d');
         $totalAppointmentPreviousMonth = History::where('status',1)->whereBetween('created_at', [$startOfPreviousMonth, $endOfPreviousMonth])->count();
         $difference = $totalAppointmentCurrentMonth - $totalAppointmentPreviousMonth;
         $message = '';
@@ -76,7 +77,7 @@ class OverviewRepository{
         //Tháng hiện tại
         $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
         $endOfCurrentMonth = $date->endOfMonth()->format('Y-m-d H:i:s'); 
-        $totalCurrent = Invoices::whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->sum('total_price');
+        $totalCurrent = Invoices::where('status',1)->whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->sum('total_price');
         // Tháng trước
         $startOfPreviousMonth = $date->subMonthsNoOverflow(1)->startOfMonth()->format('Y-m-d H:i:s');
         $endOfPreviousMonth = $date->subMonthsNoOverflow(0)->endOfMonth()->format('Y-m-d H:i:s'); 
@@ -95,10 +96,10 @@ class OverviewRepository{
          $title = "Số khách hàng mới:";
         $date = Carbon::now('Asia/Ho_Chi_Minh');
         //Tháng hiện tại
-        $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
-        $endOfCurrentMonth = $date->endOfMonth()->format('Y-m-d H:i:s'); 
-        $totalCurrent = User::whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->count();
-        $totalCustomer = User::count();
+        $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d');
+        $endOfCurrentMonth = $date->endOfMonth()->format('Y-m-d'); 
+        $totalCurrent = Customer::whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->count();
+        $totalCustomer = Customer::count();
         // Tháng trước
         $message = 'Có <span style ="color:blue;">'.$totalCurrent.'</span> khách hàng mới trong tháng';
         $total = $totalCurrent.'/'.$totalCustomer;
@@ -110,9 +111,11 @@ class OverviewRepository{
         $title = "Doanh thu trong tháng ";
         $date = Carbon::now('Asia/Ho_Chi_Minh');
         for ($month = 1; $month <= 12; $month++) {
-            $startMonth = $date->copy()->month($month)->startOfMonth()->format('Y-m-d H:i:s');
-            $endMonth = $date->copy()->month($month)->endOfMonth()->format('Y-m-d H:i:s');
-            $total = (int)Invoices::whereBetween('created_at', [$startMonth, $endMonth])->sum('total_price');
+            $startMonth = $date->month($month)->startOfMonth()->format('Y-m-d');
+            $endMonth = $date->month($month)->endOfMonth()->format('Y-m-d');
+            // dd($endMonth);
+            $total = (int)Invoices::where('status',1)->whereBetween('created_at', [$startMonth, $endMonth])->sum('total_price');
+           
             $title = $title. $month;
             $message = $month."/".date('Y');
             $totals[] = $this->responseOverview($title,$total,$message);

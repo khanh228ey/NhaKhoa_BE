@@ -11,7 +11,6 @@ class CategoryRepository{
 
     public function addCategory(Request $request){
         $data = $request->all();
-
         $category = new Category();
         $category->name = $data['name'];
         $category->created_at = Carbon::now('Asia/Ho_Chi_Minh');

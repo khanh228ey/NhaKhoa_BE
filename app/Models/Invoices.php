@@ -20,9 +20,4 @@ class Invoices extends Model
     Public function user(){
         return $this->belongsTo(User::class,'user_id');
     }
-
-
-    protected $dispatchesEvents = [
-        'created' => InvoiceCreated::class,
-    ];
 }

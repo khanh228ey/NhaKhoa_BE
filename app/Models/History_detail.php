@@ -13,11 +13,11 @@ class History_detail extends Model
 
     public function service()
     {
-        return $this->belongsTo(Service::class);
+        return $this->belongsTo(Service::class,'service_id');
     }
 
     public function history()
     {
-        return $this->belongsTo(History::class);
+        return $this->belongsTo(History::class,'history_id');
     }
 }

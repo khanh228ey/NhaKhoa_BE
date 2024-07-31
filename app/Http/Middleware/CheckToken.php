@@ -27,8 +27,6 @@ class CheckToken
                 $cookie = Cookie::forget('refresh_token');
                 return JsonResponse::handle(401,'Tài khoản bạn đã bị khóa',null,401)->withCookie($cookie);
             }
-        } catch (TokenExpiredException $e) {
-           return JsonResponse::handle(401,'Phiên đăng nhập hết hạn',null,401);
         } catch (\Exception $e) {
             return JsonResponse::handle(401,'Phiên đăng nhập hết hạn',null,401);
         }

@@ -23,7 +23,6 @@ class CheckRole
         if (Auth::check() && in_array(Auth::user()->role_id, $roles)) {
             return $next($request);
         }
-        
         return JsonResponse::handle(403, 'Bạn không có quyền truy cập', null, 403);
     }
     

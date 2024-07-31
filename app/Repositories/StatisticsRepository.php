@@ -34,10 +34,10 @@ class StatisticsRepository{
             $endDate= $request->query('end-date');
             [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
             $turnover = Invoices::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
-            $quantityService = History_detail::with(['history'=> function($query) use($startDate,$endDate){
-                    $query->whereBetween('created_at', [$startDate, $endDate])
-                    ->where('status', 1); 
-            }])->sum('quantity');
+            $quantityService = History_detail::whereHas('history', function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate])
+                      ->where('status', 1);
+            })->sum('quantity'); 
             $service = $this->getService($request)->first();
             $data = [
                 ['title' => 'Tổng doanh thu:','content' => number_format($turnover).' VND'],
@@ -48,123 +48,135 @@ class StatisticsRepository{
         }
 
 
-    public function getService(Request $request)
-        {
+        public function getService(Request $request){
             $startDate = $request->query('begin-date');
-            $endDate= $request->query('end-date');
-            [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
+            $endDate = $request->query('end-date');
+            [$startDate, $endDate] = $this->getRequestDate($startDate, $endDate);
+
             $services = Service::with(['histories' => function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('created_at', [$startDate, $endDate]);
-            }])->get();
+                $query->whereBetween('created_at', [$startDate, $endDate])
+                    ->where('status', 1);
+            }, 'histories.historyDetails'])->get();
+
             $result = $services->map(function ($service) {
-                $totalQuantity = $service->histories->sum(function ($history) {
-                    return $history->historyDetails->sum('quantity');
+                $historyDetails = $service->histories->flatMap(function ($history) {
+                    return $history->historyDetails;
                 });
-                $totalPrice = $service->histories->sum(function ($history) {
-                    return $history->historyDetails->sum(function ($detail) {
-                        return $detail->quantity * $detail->price;
-                    });
+                // Tính tổng số lượng từ các chi tiết lịch sử
+                $totalQuantity = $historyDetails->sum('quantity');
+                dd($totalQuantity);
+                // Tính tổng giá trị từ các chi tiết lịch sử
+                $totalPrice = $historyDetails->sum(function ($detail) {
+                    return $detail->quantity * $detail->price;
                 });
+
                 return [
                     'id' => $service->id,
                     'name' => $service->name,
                     'unit' => $service->unit,
                     'status' => $service->status,
                     'quantity' => $totalQuantity,
-                    'quantity_sold' => $service->quantity_sold,
+                    'quantity_sold' => $service->quantity_sold ?? 0, // Nếu trường `quantity_sold` không tồn tại
                     'total_price' => $totalPrice,
                 ];
             });
+
+            // Lọc các dịch vụ có tổng giá trị lớn hơn 0
             $filteredResult = $result->filter(function ($service) {
                 return $service['total_price'] > 0;
             });
+
+            // Sắp xếp kết quả theo tổng giá trị giảm dần
             $sortedResult = $filteredResult->sortByDesc('total_price')->values();
+
             return $sortedResult;
         }
-    //Thống kê hóa đơn
-    Public function statisticInvoice(Request $request){
-        $startDate = $request->query('begin-date');
-        $endDate= $request->query('end-date');
-        [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-        $turnover = Invoices::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
-        $turnoverMethod_0 =  Invoices::where('status',1)->where('method_payment',0)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
-        $turnoverMethod_1 =  Invoices::where('status',1)->where('method_payment',1)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
 
-        $data = [
-            ['title' => 'Tổng doanh thu:','content' => number_format($turnover).' VND'],
-            ['title' => 'Thanh toán tiền mặt:','content' => number_format($turnoverMethod_0).' VND',],
-            ['title' => 'Thanh toán chuyển khoản:','content' => number_format($turnoverMethod_1).' VND',]
-        ];
-        return $data;
-    }
+                
+            //Thống kê hóa đơn
+            Public function statisticInvoice(Request $request){
+                $startDate = $request->query('begin-date');
+                $endDate= $request->query('end-date');
+                [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
+                $turnover = Invoices::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
+                $turnoverMethod_0 =  Invoices::where('status',1)->where('method_payment',0)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
+                $turnoverMethod_1 =  Invoices::where('status',1)->where('method_payment',1)->whereBetween('created_at', [$startDate, $endDate])->sum('total_price');
 
-    Public function getInvoice(Request $request){
-        $startDate = $request->query('begin-date');
-        $endDate= $request->query('end-date');
-        [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-        $invoice = Invoices::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->orderBy('status','DESC')->orderBy('method_payment','ASC')->get();
-        $invoice = InvoiceResource::collection($invoice);
-        return $invoice;
-    }
+                $data = [
+                    ['title' => 'Tổng doanh thu:','content' => number_format($turnover).' VND'],
+                    ['title' => 'Thanh toán tiền mặt:','content' => number_format($turnoverMethod_0).' VND',],
+                    ['title' => 'Thanh toán chuyển khoản:','content' => number_format($turnoverMethod_1).' VND',]
+                ];
+                return $data;
+            }
 
-
-    //Thong ke lịch khám
-    Public function getHistory(Request $request){
-        $startDate = $request->query('begin-date');
-        $endDate= $request->query('end-date');
-        [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-        $histories = History::whereBetween('created_at', [$startDate, $endDate])
-        ->with(['invoice' => function($query){
-            $query->orderBy('total_price','DESC');
-        }])->get();
-            $result = HistoryResource::collection($histories);
-            return $result;
-    }
-
-    Public function statisticsHistory(Request $request){
-        $startDate = $request->query('begin-date');
-        $endDate= $request->query('end-date');
-        [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-        $history = History::whereBetween('created_at', [$startDate, $endDate]);
-        $sumHistory = $history->count();
-        $sumHistoryDone = $history->where('status',1)->count();
-        $sumHistoryCancel = History::whereBetween('created_at', [$startDate, $endDate])->where('status',2)->count();
-        $data = [
-            ['title' => 'Tổng số lịch khám:','content' => $sumHistory,],
-            ['title' => 'Số lịch khám hoàn thành:','content' => $sumHistoryDone,],
-            ['title' => 'Số lịch khám bị hủy:','content' => $sumHistoryCancel]
-        ];
-        return $data;
-    }
+            Public function getInvoice(Request $request){
+                $startDate = $request->query('begin-date');
+                $endDate= $request->query('end-date');
+                [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
+                $invoice = Invoices::where('status',1)->whereBetween('created_at', [$startDate, $endDate])->orderBy('status','DESC')->orderBy('method_payment','ASC')->get();
+                $invoice = InvoiceResource::collection($invoice);
+                return $invoice;
+            }
 
 
-    //thong ke lich hen cua khach hang
-    Public function statisticsAppointment(Request $request){
-        $startDate = $request->query('begin-date');
-        $endDate= $request->query('end-date');
-        [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-        $appointment = Appointment::whereBetween('created_at', [$startDate, $endDate]);
-        $sumApoiment = $appointment->count();
-        $sumApoimentDone = $appointment->where('status',1)->count();
-        $sumAppointmentCancel = Appointment::whereBetween('created_at', [$startDate, $endDate])->where('status',2)->count();
-        $data = [
-            ['title' => 'Tổng số lịch hẹn:','content' => $sumApoiment,],
-            ['title' => 'Số lịch hẹn hoàn thành:','content' => $sumApoimentDone,],
-            ['title' => 'Số lịch hẹn bị hủy:','content' => $sumAppointmentCancel,]
-        ];
-        return $data;
-    }
+            //Thong ke lịch khám
+            Public function getHistory(Request $request){
+                $startDate = $request->query('begin-date');
+                $endDate= $request->query('end-date');
+                [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
+                $histories = History::whereBetween('created_at', [$startDate, $endDate])
+                ->with(['invoice' => function($query){
+                    $query->orderBy('total_price','DESC');
+                }])->get();
+                    $result = HistoryResource::collection($histories);
+                    return $result;
+            }
 
-    Public function getAppointment(Request $request){
-        $startDate = $request->query('begin-date');
-        $endDate= $request->query('end-date');
-        [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
-        $appointment = Appointment::whereBetween('created_at', [$startDate, $endDate])
-        ->orderBy('status','DESC')->orderBy('date','DESC')->get();
-        $result = AppointmentResource::collection($appointment);
-        return $result;
-    }
-}
+            Public function statisticsHistory(Request $request){
+                $startDate = $request->query('begin-date');
+                $endDate= $request->query('end-date');
+                [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
+                $history = History::whereBetween('created_at', [$startDate, $endDate]);
+                $sumHistory = $history->count();
+                $sumHistoryDone = $history->where('status',1)->count();
+                $sumHistoryCancel = History::whereBetween('created_at', [$startDate, $endDate])->where('status',2)->count();
+                $data = [
+                    ['title' => 'Tổng số lịch khám:','content' => $sumHistory,],
+                    ['title' => 'Số lịch khám hoàn thành:','content' => $sumHistoryDone,],
+                    ['title' => 'Số lịch khám bị hủy:','content' => $sumHistoryCancel]
+                ];
+                return $data;
+            }
+
+
+            //thong ke lich hen cua khach hang
+            Public function statisticsAppointment(Request $request){
+                $startDate = $request->query('begin-date');
+                $endDate= $request->query('end-date');
+                [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
+                $appointment = Appointment::whereBetween('created_at', [$startDate, $endDate]);
+                $sumApoiment = $appointment->count();
+                $sumApoimentDone = $appointment->where('status',1)->count();
+                $sumAppointmentCancel = Appointment::whereBetween('created_at', [$startDate, $endDate])->where('status',2)->count();
+                $data = [
+                    ['title' => 'Tổng số lịch hẹn:','content' => $sumApoiment,],
+                    ['title' => 'Số lịch hẹn hoàn thành:','content' => $sumApoimentDone,],
+                    ['title' => 'Số lịch hẹn bị hủy:','content' => $sumAppointmentCancel,]
+                ];
+                return $data;
+            }
+
+            Public function getAppointment(Request $request){
+                $startDate = $request->query('begin-date');
+                $endDate= $request->query('end-date');
+                [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
+                $appointment = Appointment::whereBetween('created_at', [$startDate, $endDate])
+                ->orderBy('status','DESC')->orderBy('date','DESC')->get();
+                $result = AppointmentResource::collection($appointment);
+                return $result;
+            }
+        }
 
     
 

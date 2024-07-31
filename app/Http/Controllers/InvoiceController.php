@@ -6,7 +6,6 @@ use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoices;
 use App\Repositories\InvoiceRepository;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Exception;
@@ -82,7 +81,6 @@ class InvoiceController extends Controller
             $pdf->loadHtml($html);
             $pdf->setPaper('A4', 'portrait');
             $pdf->render();
-            // return $pdf->stream('invoice.pdf', ['Attachment' => true]);
             return response($pdf->output(), 200)
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'attachment; filename="invoice.pdf"');

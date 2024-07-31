@@ -12,12 +12,12 @@ class Service extends Model
     protected $fillable = ['name', 'status', 'min_price', 'max_price', 'image','unit', 'category_id','description','quantity_sold','updated_at'];
     public function category()
     {
-        return $this->belongsTo(Category::class,'category_id')->select(['id', 'name']);;
+        return $this->belongsTo(Category::class,'category_id');
     }
 
     public function histories()
     {
-        return $this->belongsToMany(History::class, 'history_detail', 'service_id', 'history_id');
+        return $this->belongsToMany(History::class, 'history_detail', 'service_id', 'history_id')->withPivot('quantity','price');
     }
 
     public function appointment()

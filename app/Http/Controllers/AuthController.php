@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie ;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -50,8 +49,6 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($credentials)) {
             return JsonResponse::handle(404, 'Tài khoản hoặc mật khẩu chưa chính xác', null, 404);
         }
-        // $role = Hash::make($user->role->name);
-        $role = $user->role->name;
         $refreshToken = $this->createRefreshToken($token);
         $cookie = $this->setCookie($refreshToken);
         $response = $this->respondWithToken($token,"Đăng nhập thành công",$user);

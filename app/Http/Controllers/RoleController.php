@@ -26,7 +26,7 @@ class RoleController extends Controller
     Public function updatePermissions(Request $request, $id){
         
         $role = Role::findById($id);
-        if($role->name == 'Admin'){
+        if($role->name == 'ADMIN'){
             return JsonResponse::error(403, "Không thể phân quyền cho role Admin", 403);
         }
         if (!$role) {
