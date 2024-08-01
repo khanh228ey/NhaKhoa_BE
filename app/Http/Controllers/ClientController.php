@@ -30,7 +30,7 @@ class ClientController extends Controller
     }
 
     Public function getDoctor(){
-        $doctor = User::where('role_id',1)->where('status',1)->get();
+        $doctor = User::where('role_id',3)->where('status',1)->get();
         $result = $doctor->map(function ($item) {
             return [
                 'id' => $item->id,
@@ -45,7 +45,7 @@ class ClientController extends Controller
 
     Public function getDoctorDetail($id){
         try{
-            $doctor = User::where('role_id',1)->where('status',1)->findOrFail($id);
+            $doctor = User::where('role_id',3)->where('status',1)->findOrFail($id);
             $result = 
                 [
                     'id' => $doctor->id,
@@ -54,7 +54,7 @@ class ClientController extends Controller
                     'avatar' => $doctor->avatar,
                     'birthday' => $doctor->birthday,
                     'email' => $doctor->email,
-                    'gender' => $doctor->gender,
+                    'gender' => (int)$doctor->gender,
                 ];
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
         }catch(ModelNotFoundException $e){
@@ -122,7 +122,7 @@ class ClientController extends Controller
     {
         $time = Schedule_time::all();
         $timeslots = $time->map(function ($item) {
-            return ['id' => $item->id ,
+            return ['id' => (int)$item->id ,
                     'time' => $item->time];
         })->toArray();
         
@@ -142,7 +142,7 @@ class ClientController extends Controller
             }
             $result = $category->map(function ($item) {
                 return [
-                    'id' => $item->id,
+                    'id' => (int)$item->id,
                     'name' => $item->name,
                     'image' => $item->image,
                    

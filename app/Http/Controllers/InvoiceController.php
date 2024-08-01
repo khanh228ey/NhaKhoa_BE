@@ -89,13 +89,5 @@ class InvoiceController extends Controller
         }
         
     }
-    // public function printInvoicePdf(Request $request)
-    // {
-    //     $data = ['title' => 'Đây là một file PDF'];
-
-    //     $pdf = Pdf::loadView('pdf.invoice', $data);
-
-    //     return $pdf->download('invoice.pdf');
-    // }
 
 }

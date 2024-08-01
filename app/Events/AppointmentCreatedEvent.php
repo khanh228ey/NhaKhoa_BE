@@ -42,7 +42,7 @@ class AppointmentCreatedEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'id' => $this->appointment->id,
+            'id' => (int)$this->appointment->id,
             'name' => $this->appointment->name,
             'phone' => $this->appointment->phone,
         ];

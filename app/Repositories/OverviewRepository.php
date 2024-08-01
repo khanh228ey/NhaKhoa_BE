@@ -14,7 +14,7 @@ class OverviewRepository{
     Public function responseOverview($title,$total,$message){
         $data = [
             "title" =>  $title,
-            'total' => $total,
+            'total' => (int)$total,
             'message' => $message,
         ];
         return $data;

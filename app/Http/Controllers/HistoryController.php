@@ -42,7 +42,7 @@ class HistoryController extends Controller
             $query->select('services.id', 'services.name')
                   ->withPivot('quantity','price'); 
         }])->OrderBy('created_at','DESC');
-        if(Auth::check() && Auth::user()->role_id ==  1){
+        if(Auth::check() && Auth::user()->role_id ==  3){
             $query->where('doctor_id',Auth::user()->id);
         }
         if (!is_null($page)) {

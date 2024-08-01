@@ -15,20 +15,20 @@ class ServiceClientResource extends JsonResource
     public function toArray($request)
     {
         $data = [
-            'id' => $this->id,
+            'id' => (int)$this->id,
             'name' => $this->name,
             'image' => $this->image,
             'quantity_sold' => $this->quantity_sold,
-            'min_price' => $this->min_price,
+            'min_price' => (int)$this->min_price,
             'unit' => $this->unit,  
             'category' =>[
-                'id' => $this->category_id,
+                'id' => (int)$this->category_id,
                 'name' => $this->category->name,
             ],
         ];
         if ($request->route()->getName() === 'service.detail') {
             $data = array_merge($data, [
-                'max_price' => $this->max_price,
+                'max_price' => (int)$this->max_price,
                 'description' => $this->description,
             ]);
         }

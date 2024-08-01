@@ -57,28 +57,27 @@ class StatisticsRepository{
                 $query->whereBetween('created_at', [$startDate, $endDate])
                     ->where('status', 1);
             }, 'histories.historyDetails'])->get();
-
             $result = $services->map(function ($service) {
                 $historyDetails = $service->histories->flatMap(function ($history) {
                     return $history->historyDetails;
                 });
                 // Tính tổng số lượng từ các chi tiết lịch sử
                 $totalQuantity = $historyDetails->sum('quantity');
-                dd($totalQuantity);
                 // Tính tổng giá trị từ các chi tiết lịch sử
                 $totalPrice = $historyDetails->sum(function ($detail) {
                     return $detail->quantity * $detail->price;
                 });
-
                 return [
-                    'id' => $service->id,
+                    'id' => (int)$service->id,
                     'name' => $service->name,
                     'unit' => $service->unit,
-                    'status' => $service->status,
-                    'quantity' => $totalQuantity,
-                    'quantity_sold' => $service->quantity_sold ?? 0, // Nếu trường `quantity_sold` không tồn tại
-                    'total_price' => $totalPrice,
+                    'status' => (int)$service->status,
+                    'quantity' => (int)$totalQuantity,
+                    'quantity_sold' => (int)$service->quantity_sold,
+                    'total_price' =>(int) $totalPrice,
                 ];
+                $totalQuantity = 0;
+                $totalPrice =0;
             });
 
             // Lọc các dịch vụ có tổng giá trị lớn hơn 0
@@ -91,8 +90,6 @@ class StatisticsRepository{
 
             return $sortedResult;
         }
-
-                
             //Thống kê hóa đơn
             Public function statisticInvoice(Request $request){
                 $startDate = $request->query('begin-date');
@@ -142,9 +139,9 @@ class StatisticsRepository{
                 $sumHistoryDone = $history->where('status',1)->count();
                 $sumHistoryCancel = History::whereBetween('created_at', [$startDate, $endDate])->where('status',2)->count();
                 $data = [
-                    ['title' => 'Tổng số lịch khám:','content' => $sumHistory,],
-                    ['title' => 'Số lịch khám hoàn thành:','content' => $sumHistoryDone,],
-                    ['title' => 'Số lịch khám bị hủy:','content' => $sumHistoryCancel]
+                    ['title' => 'Tổng số lịch khám:','content' => (int)$sumHistory,],
+                    ['title' => 'Số lịch khám hoàn thành:','content' => (int)$sumHistoryDone,],
+                    ['title' => 'Số lịch khám bị hủy:','content' => (int)$sumHistoryCancel]
                 ];
                 return $data;
             }
@@ -160,9 +157,9 @@ class StatisticsRepository{
                 $sumApoimentDone = $appointment->where('status',1)->count();
                 $sumAppointmentCancel = Appointment::whereBetween('created_at', [$startDate, $endDate])->where('status',2)->count();
                 $data = [
-                    ['title' => 'Tổng số lịch hẹn:','content' => $sumApoiment,],
-                    ['title' => 'Số lịch hẹn hoàn thành:','content' => $sumApoimentDone,],
-                    ['title' => 'Số lịch hẹn bị hủy:','content' => $sumAppointmentCancel,]
+                    ['title' => 'Tổng số lịch hẹn:','content' => (int)$sumApoiment,],
+                    ['title' => 'Số lịch hẹn hoàn thành:','content' => (int)$sumApoimentDone,],
+                    ['title' => 'Số lịch hẹn bị hủy:','content' => (int)$sumAppointmentCancel,]
                 ];
                 return $data;
             }

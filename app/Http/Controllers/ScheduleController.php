@@ -70,7 +70,7 @@ class ScheduleController extends Controller
                     ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
                     ->orderBy('date', 'ASC')
                     ->orderBy('doctor_id', 'ASC');
-        if(Auth::check() && Auth::user()->role_id == 1 ){
+        if(Auth::check() && Auth::user()->role_id == 3 ){
             $query->where('doctor_id',Auth::user()->id);
         }
         $schedules = $query->get();
@@ -170,7 +170,7 @@ class ScheduleController extends Controller
             if (!in_array($time, $uniqueTimes)) {
                 $uniqueTimes[] = $time;
                 $times[] = [
-                    'id' => $timeId,
+                    'id' =>(int)$timeId,
                     'time' => $time
                 ];
             }

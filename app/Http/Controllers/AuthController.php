@@ -98,7 +98,7 @@ class AuthController extends Controller
             'avatar' => $profile->avatar,
             'phone_number' => $profile->phone_number,
             'birthday' => $profile->birthday,
-            'gender' => $profile->gender,
+            'gender' => (int)$profile->gender,
             'address' => $profile->address,
             'role' => $profile->role->name,
         ];
@@ -117,7 +117,7 @@ class AuthController extends Controller
                 'avatar' => $profile->avatar,
                 'phone_number' => $profile->phone_number,
                 'birthday' => $profile->birthday,
-                'gender' => $profile->gender,
+                'gender' => (int)$profile->gender,
                 'address' => $profile->address,
                 'role' => $profile->role->name,
             ];
