@@ -36,7 +36,7 @@ class OverviewRepository{
             if ($difference > 0) {
                 $message = 'Tăng <span style ="color:blue;">'.$difference.'</span> lịch hẹn so với tháng trước.';
             } elseif ($difference < 0) {
-                $message = 'Giảm <span style ="color:blue;">'.$difference.'</span> lịch hẹn so với tháng trước.';
+                $message = 'Giảm <span style ="color:blue;">'.abs($difference).'</span> lịch hẹn so với tháng trước.';
             } else {
                 $message = 'Tăng <span style ="color:blue;">0</span> lịch hẹn so với tháng trước.';
             }
@@ -61,7 +61,7 @@ class OverviewRepository{
             if ($difference > 0) {
                 $message = 'Tăng <span style ="color:blue;">'.$difference.'</span> lịch khám so với tháng trước.';
             } elseif ($difference < 0) {
-                $message = 'Giảm <span style ="color:blue;">'.$difference. '</span> lịch khám so với tháng trước.';
+                $message = 'Giảm <span style ="color:blue;">'.abs($difference). '</span> lịch khám so với tháng trước.';
             } else {
                 $message = 'Tăng <span style ="color:blue;">0</span> lịch khám so với tháng trước.';
             }
