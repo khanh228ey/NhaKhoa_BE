@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\Controller;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\HistoryResource;
 use App\Models\History;
-use App\Repositories\HistoryRepository;
-use App\Repositories\InvoiceRepository;
+use App\Repositories\Manager\HistoryRepository;
+use App\Repositories\Manager\InvoiceRepository;
 use App\RequestValidations\HistoryValidation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;

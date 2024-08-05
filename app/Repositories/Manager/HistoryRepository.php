@@ -1,10 +1,10 @@
 <?php
-namespace App\Repositories;
+namespace App\Repositories\Manager;
 
 use App\Models\History;
 use App\Models\Service;
 use Carbon\Carbon;
-use App\Repositories\InvoiceRepository;
+use App\Repositories\Manager\InvoiceRepository;
 use Illuminate\Support\Facades\DB;
 
 class HistoryRepository{

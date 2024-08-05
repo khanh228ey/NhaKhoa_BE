@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;

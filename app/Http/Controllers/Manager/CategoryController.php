@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\Controller;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\DeleteResource;
 use App\Models\Category;
 use App\Models\Service;
-use App\Repositories\CategoryRepository;
+use App\Repositories\Manager\CategoryRepository;
 use App\RequestValidations\CategoryValidation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;

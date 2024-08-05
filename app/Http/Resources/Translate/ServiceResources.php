@@ -4,7 +4,7 @@ namespace App\Http\Resources\Translate;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryResource extends JsonResource
+class ServiceResources extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,25 +18,22 @@ class CategoryResource extends JsonResource
             'id' => (int)$this->id,
             'name' => $this->translation->name ?? $this->name,
             'image' => $this->image,
+            'quantity_sold' => (int)$this->quantity_sold,
+            'min_price' => (int)$this->min_price,
+            'unit' => $this->translation->unit ?? $this->unit, 
             'status' => (int)$this->status,
+            'category' =>[
+                'id' => (int)$this->category_id,
+                'name' => $this->category->translation->name,
+            ],
         ];
-    
-        if($request->route()->getName() === 'category.detail')  {
+        if ($request->route()->getName() === 'service.detail') {
             $data = array_merge($data, [
                 'description' => $this->translation->description ?? $this->description,
-                'services' => $this->services ? $this->services->map(function ($service) {
-                    return [
-                        'id' => (int)$service->id,
-                        'name' => $service->translation->name ?? $service->name,
-                        'image' => $service->image,
-                        'unit' => $service->translation->unit ?? $service->unit,
-                        'min_price' => (int)$service->min_price,
-                        'quantity_sold' => (int)$service->quantity_sold,
-                    ];
-                }) : null, 
+                'max_price' => (int)$this->max_price,
             ]);
         }
-    
+
         return $data;
     }
 }

@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\Controller;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
-use App\Repositories\StatisticsRepository;
+use App\Repositories\Manager\StatisticsRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 

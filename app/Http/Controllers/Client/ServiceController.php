@@ -1,45 +1,44 @@
 <?php
 
 namespace App\Http\Controllers\Client;
-
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ServiceClientResource;
+use App\Http\Resources\ServiceResource;
+use App\Http\Resources\Translate\ServiceResources;
 use App\Models\Service;
+use App\Repositories\Client\ServiceRepository;
 use Exception;
 
 class ServiceController extends Controller
 {
-    
-    public function getServices(Request $request)
+    protected $serviceRepo;
+    public function __construct(ServiceRepository $service)
+    {
+        $this->serviceRepo = $service; 
+    }
+    public function getServices(Request $request,$lang)
     {
         $perPage = $request->get('limit', 10);
-        $page = $request->get('page'); 
-        $category = $request->get('category_id');   
-        $query = Service::with('category')->where('status',1)->orderBy('quantity_sold','DESC');
-        if($category){
-            $query->where('category_id',  $category);
-        }
-        if (!is_null($page)) {
-            $data = $query->paginate($perPage, ['*'], 'page', $page);
-            $service = $data->items();
-        } else {
-            $service = $query->get();
-        }
-        $result = ServiceClientResource::collection($service);
+        $page = $request->get('page');
+        $query =  $this->serviceRepo->getServices();
+        $service = !is_null($page) ? $query->paginate($perPage, ['*'], 'page', $page) : $query->get();
+        $result = ($lang == 'vi') ? ServiceResource::collection($service) : ServiceResources::collection($service);
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
-        
     }
     
-    Public function serviceFindById($id){
+    Public function serviceFindById($lang,$id){
         try {
-            $service = Service::where('status',1)->findOrFail($id); 
-            $result = new ServiceClientResource($service);
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+            $category = $this->serviceRepo->findById($id);
+            if($category == false){
+                return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+            }
+            $result = ($lang == 'vi') ? new ServiceResource($category)
+             :new ServiceResources($category);
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
         } catch (Exception $e) {
-            return JsonResponse::error(404, ConstantsMessage::Not_Found, 404);
+            return JsonResponse::handle(404, ConstantsMessage::ERROR, null, 404);
         }
     }
 

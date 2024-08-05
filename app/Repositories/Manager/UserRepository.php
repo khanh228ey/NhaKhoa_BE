@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories;
+namespace App\Repositories\Manager;
 
 use App\Models\Role;
 use App\Models\User;

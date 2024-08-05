@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories;
+namespace App\Repositories\Manager;
 
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\HistoryResource;

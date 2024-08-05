@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
@@ -8,10 +8,11 @@ use App\Events\AppointmentCreatedEvent;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\DeleteResource;
 use App\Models\Appointment;
-use App\Repositories\AppointmentRepository;
+use App\Repositories\Manager\AppointmentRepository;
 use App\RequestValidations\AppointmentValidation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AppointmentController extends Controller
 {

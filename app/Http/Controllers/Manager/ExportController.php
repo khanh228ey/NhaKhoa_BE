@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\Controller;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
@@ -8,8 +9,8 @@ use App\Exports\AppointmentExport;
 use App\Exports\HistoryExport;
 use App\Exports\InvoiceExport;
 use App\Exports\ServicesExport;
-use App\Repositories\ExportRepository;
-use App\Repositories\StatisticsRepository;
+use App\Repositories\Manager\ExportRepository;
+use App\Repositories\Manager\StatisticsRepository;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;

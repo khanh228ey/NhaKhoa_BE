@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\Controller;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
-use App\Repositories\OverviewRepository;
+use App\Repositories\Manager\OverviewRepository;
 
 
 class OverviewController extends Controller

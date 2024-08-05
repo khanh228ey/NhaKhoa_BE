@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\Controller;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\InvoiceResource;
 use App\Models\Invoices;
-use App\Repositories\InvoiceRepository;
+use App\Repositories\Manager\InvoiceRepository;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Exception;

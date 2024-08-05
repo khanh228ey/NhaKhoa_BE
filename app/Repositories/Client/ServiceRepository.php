@@ -1,19 +1,19 @@
 <?php
 namespace App\Repositories\Client;
-use App\Models\Category;
+use App\Models\Service;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class CategoryRepository{
+class ServiceRepository{
 
-    public function getCategory(){
-        $query = Category::where('status',1);
+    public function getServices(){
+        $query = Service::where('status',1);
         return $query;
     }
 
     public function findById($id){
         try{
-            $category = Category::where('status',1)->findOrFail($id);
-            return $category;
+            $query = Service::where('status',1)->findOrFail($id);
+            return $query;
         }catch(ModelNotFoundException $e){
             return false;
         }

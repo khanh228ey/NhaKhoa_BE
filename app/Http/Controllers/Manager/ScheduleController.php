@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\Controller;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Models\Schedule;
-use App\Repositories\ScheduleRepository;
+use App\Repositories\Manager\ScheduleRepository;
 use App\RequestValidations\ScheduleValidation;
 use Illuminate\Http\Request;
 use Carbon\Carbon;

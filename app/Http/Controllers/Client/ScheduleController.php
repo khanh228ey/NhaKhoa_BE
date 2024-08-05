@@ -14,8 +14,9 @@ use Illuminate\Http\Request;
 class ScheduleController extends Controller
 {
     //
-    public function getDoctorTimeslotsByDate($id, $date)
+    public function getDoctorTimeslotsByDate($lang,$id, $date)
     {
+        $message = $lang=='vi' ?'Không có thời gian trong ngày':'There is no time of day';
         $schedule = Schedule::with('time')
             ->where('doctor_id', $id)
             ->where('date', $date)
@@ -23,7 +24,7 @@ class ScheduleController extends Controller
             ->get();
     
         if ($schedule->isEmpty()) {
-            return JsonResponse::handle(404, 'Không có thời gian trong ngày', null, 404);
+            return JsonResponse::handle(404, $message, null, 404);
         }
     
         $timeslots = $schedule->map(function ($item) {
@@ -34,10 +35,10 @@ class ScheduleController extends Controller
     }
     
     
-    public function getDoctorScheduleWithTimeslots($id) {
+    public function getDoctorScheduleWithTimeslots($lang,$id) {
         try {
-            $doctor = User::where('role_id', 1)->findOrFail($id);
-    
+            $message = $lang=='vi' ?'Không tìm thấy lịch làm việc của bác sĩ':'Doctors schedule could not be found';
+            $doctor = User::where('role_id', 3)->findOrFail($id);
             $schedules = Schedule::with('time')
                 ->where('doctor_id', $id)
                 ->where('status', 1)
@@ -46,7 +47,7 @@ class ScheduleController extends Controller
                 ->get();
     
             if ($schedules->isEmpty()) {
-                return JsonResponse::handle(404, 'Không tìm thấy lịch làm việc của bác sĩ', null, 404);
+                return JsonResponse::handle(404, $message, null, 404);
             }
             $datesProcessed = [];
             foreach ($schedules as $schedule) {

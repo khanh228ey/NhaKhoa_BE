@@ -1,24 +1,24 @@
 <?php
 
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Client\AppointmentController as ClientAppointmentController;
+use App\Http\Controllers\Manager\CategoryController;
 use App\Http\Controllers\Client\CategoryController as ClientCategoryController;
 use App\Http\Controllers\Client\DoctorController;
 use App\Http\Controllers\Client\ScheduleController as ClientScheduleController;
 use App\Http\Controllers\Client\ServiceController as ClientServiceController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\ExportController;
-use App\Http\Controllers\HistoryController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\OverviewController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\StatisticsController;
-use App\Http\Controllers\UploadController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Manager\AppointmentController;
+use App\Http\Controllers\Manager\AuthController;
+use App\Http\Controllers\Manager\CustomerController;
+use App\Http\Controllers\Manager\ExportController;
+use App\Http\Controllers\Manager\HistoryController;
+use App\Http\Controllers\Manager\InvoiceController;
+use App\Http\Controllers\Manager\OverviewController;
+use App\Http\Controllers\Manager\RoleController;
+use App\Http\Controllers\Manager\ScheduleController;
+use App\Http\Controllers\Manager\ServiceController;
+use App\Http\Controllers\Manager\StatisticsController;
+use App\Http\Controllers\Manager\UploadController;
+use App\Http\Controllers\Manager\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -116,17 +116,19 @@ Route::prefix('v1/role')->controller(RoleController::class)->group(function(){
     Route::get('/{id}','findByID');
     Route::put('/update/{id}','updatePermissions');
 });
-//datlich
-Route::prefix('v1')->controller(ClientController::class)->group(function(){
-    Route::prefix('doctor')->group(function(){
+//Hiển thị doctor trong đặt lịch
+Route::prefix('v1')->group(function(){
+    Route::prefix('/doctor')->controller(DoctorController::class)->group(function(){
         Route::get('/','getDoctor');
         Route::Get('/{id}','getDoctorDetail');
     });
-    Route::prefix('schedule')->group(function(){
+    //get lịch làm việc doctor
+    Route::prefix('/schedule')->controller(ClientScheduleController::class)->group(function(){
         Route::get('/{id}','getDoctorScheduleWithTimeslots');
         Route::get('/{id}/{date}','getDoctorTimeslotsByDate');
+      
     });
-    Route::get('/time','getTime');
+    Route::get('/time',[ClientScheduleController::class,'getTime']);
 });
 //tongquan
 Route::prefix('v1/overview')->controller(OverviewController::class)->group(function(){
@@ -166,9 +168,8 @@ Route::prefix('v2/{lang}')->group(function(){
     Route::prefix('/schedule')->controller(ClientScheduleController::class)->group(function(){
         Route::get('/{id}','getDoctorScheduleWithTimeslots');
         Route::get('/{id}/{date}','getDoctorTimeslotsByDate');
-        Route::get('/time','getTime');
     });
-    
+    Route::get('/time',[ClientScheduleController::class,'getTime']);
     //get Category
     Route::prefix('/category')->controller(ClientCategoryController::class)->group(function(){
         Route::get('/','getCategories');
@@ -181,5 +182,5 @@ Route::prefix('v2/{lang}')->group(function(){
         Route::Get('/{id}','serviceFindById')->name('service.detail');
        
     });
-    Route::post('/appointment',[AppointmentController::class,'createAppointment']);
+    Route::post('/appointment',[ClientAppointmentController::class,'createAppointment']);
 });

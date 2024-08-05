@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\Controller;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use App\Repositories\UserRepository;
+use App\Repositories\Manager\UserRepository;
 use App\RequestValidations\UserValidation;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;

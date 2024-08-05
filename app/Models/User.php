@@ -95,7 +95,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Schedule::class,'doctor_id');
     }
     Public function translation(){
-        return $this->hasMany(DoctorTranslation::class,'doctor_id');
+        return $this->hasOne(DoctorTranslation::class,'doctor_id');
     }
     public function getJWTIdentifier()
     {

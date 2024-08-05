@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Manager;
+use App\Http\Controllers\Controller;
 
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
@@ -10,7 +11,7 @@ use App\Models\Appointment_detail;
 use App\Models\Category;
 use App\Models\History_detail;
 use App\Models\Service;
-use App\Repositories\ServiceRepository;
+use App\Repositories\Manager\ServiceRepository;
 use App\RequestValidations\ServiceValidation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

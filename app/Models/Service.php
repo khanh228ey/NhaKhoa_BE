@@ -26,6 +26,6 @@ class Service extends Model
     }
 
     Public function translation(){
-        return $this->hasMany(ServiceTranslation::class,'service_id');
+        return $this->hasOne(ServiceTranslation::class,'service_id');
     }
 }

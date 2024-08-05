@@ -1,6 +1,5 @@
 <?php
-namespace App\Repositories;
-
+namespace App\Repositories\Manager;
 use App\Events\AppointmentCreatedEvent;
 use App\Models\Appointment; 
 use App\Models\Category;
