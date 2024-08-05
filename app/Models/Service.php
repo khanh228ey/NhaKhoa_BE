@@ -24,4 +24,8 @@ class Service extends Model
     {
         return $this->belongsToMany(Appointment::class, 'Appointment_detail', 'service_id', 'appointment_id');
     }
+
+    Public function translation(){
+        return $this->hasMany(ServiceTranslation::class,'service_id');
+    }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Collection;
+
 
 class ServiceResource extends JsonResource
 {
@@ -16,7 +16,7 @@ class ServiceResource extends JsonResource
             'quantity_sold' => (int)$this->quantity_sold,
             'min_price' => (int)$this->min_price,
             'unit' => $this->unit, 
-            'status' => $this->status,
+            'status' => (int)$this->status,
             'category' =>[
                 'id' => (int)$this->category_id,
                 'name' => $this->category->name,

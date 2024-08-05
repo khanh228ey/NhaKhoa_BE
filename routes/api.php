@@ -3,6 +3,10 @@
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Client\CategoryController as ClientCategoryController;
+use App\Http\Controllers\Client\DoctorController;
+use App\Http\Controllers\Client\ScheduleController as ClientScheduleController;
+use App\Http\Controllers\Client\ServiceController as ClientServiceController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ExportController;
@@ -124,7 +128,7 @@ Route::prefix('v1')->controller(ClientController::class)->group(function(){
     });
     Route::get('/time','getTime');
 });
-//OverView
+//tongquan
 Route::prefix('v1/overview')->controller(OverviewController::class)->group(function(){
     Route::get('/','totalOverView');
     Route::get('/invoice','monthlyStatistics');
@@ -132,49 +136,50 @@ Route::prefix('v1/overview')->controller(OverviewController::class)->group(funct
     
 });
 
-//Thống kê
-
-// });
-//Xuất file và int
-Route::prefix('v1')->controller(ExportController::class)->group(function(){
-    Route::prefix('export')->group(function(){
-        Route::post('/service','exportService');
-        Route::post('/invoice','exportInvoice');
-        Route::post('/appointment','exportAppointment');
-        Route::post('/history','exportHistory');
-    });
+//Xuất file excel
+Route::prefix('v1/export')->controller(ExportController::class)->group(function(){
+    Route::post('/service','exportService');
+    Route::post('/invoice','exportInvoice');
+    Route::post('/appointment','exportAppointment');
+    Route::post('/history','exportHistory');
 });
 
+//Thống kê
 Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(function(){
     Route::get('/invoice','getStatistics');
     Route::get('/service','getService');
     Route::get('/history','getHistories');
     Route::get('/appointment','getAppointment');
 });
+// });
+
 
 
 //route khách hàng
-Route::prefix('v2')->controller(ClientController::class)->group(function(){
-    Route::prefix('doctor')->group(function(){
+    //get Doctor
+Route::prefix('v2/{lang}')->group(function(){
+    Route::prefix('/doctor')->controller(DoctorController::class)->group(function(){
         Route::get('/','getDoctor');
         Route::Get('/{id}','getDoctorDetail');
     });
-    Route::prefix('schedule')->group(function(){
+    //get lịch làm việc doctor
+    Route::prefix('/schedule')->controller(ClientScheduleController::class)->group(function(){
         Route::get('/{id}','getDoctorScheduleWithTimeslots');
         Route::get('/{id}/{date}','getDoctorTimeslotsByDate');
+        Route::get('/time','getTime');
     });
-    Route::get('/time','getTime');
     
-    Route::prefix('category')->group(function(){
+    //get Category
+    Route::prefix('/category')->controller(ClientCategoryController::class)->group(function(){
         Route::get('/','getCategories');
         Route::Get('/{id}','categoryfindById')->name('category.detail');
        
     });
-    Route::prefix('service')->group(function(){
+    //get Service
+    Route::prefix('/service')->controller(ClientServiceController::class)->group(function(){
         Route::get('/','getServices');
         Route::Get('/{id}','serviceFindById')->name('service.detail');
        
     });
+    Route::post('/appointment',[AppointmentController::class,'createAppointment']);
 });
-Route::post('/v2/appointment',[AppointmentController::class,'createAppointment']);
-
