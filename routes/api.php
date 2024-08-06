@@ -188,9 +188,15 @@ Route::prefix('v2/{lang}')->group(function(){
 
 
 Route::prefix('v1/translate')->group(function(){
-    Route::get('/category/{id}',[CategoryController::class,'getCateTranslate']);
-    Route::post('/category',[CategoryController::class,'createCateTranslate']);
-    Route::put('/category/{id}',[CategoryController::class,'updateCateTranslate']);
-
+    Route::prefix('/category')->controller(CategoryController::class)->group(function(){
+        Route::get('/{id}','getCateTranslate');
+        Route::post('/','createCateTranslate');
+        Route::put('/{id}','updateCateTranslate');
+    });
+    Route::prefix('/service')->controller(ServiceController::class)->group(function(){
+        Route::get('/{id}','getServiceTrans');
+        Route::post('/','createServiceTranslate');
+        Route::put('/{id}','updateServiceTranslate');
+    });
 
 });

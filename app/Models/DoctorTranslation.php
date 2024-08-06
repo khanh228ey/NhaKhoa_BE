@@ -9,6 +9,7 @@ class DoctorTranslation extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
     protected $table = 'doctor_translation';
     protected $casts = [
         'id' => 'integer',

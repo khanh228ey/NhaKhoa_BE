@@ -14,6 +14,7 @@ use App\Models\Service;
 use App\Repositories\Manager\ServiceRepository;
 use App\RequestValidations\ServiceValidation;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -110,4 +111,39 @@ class ServiceController extends Controller
                 return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
         }
     }    
+
+
+
+    public function getServiceTrans($id){
+        try {
+            $serviceTrans = $this->serviceRepository->getServiceTrans($id);
+            if($serviceTrans == false) {
+                return JsonResponse::handle(404,ConstantsMessage::Not_Found,null,404);
+            }
+            return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$serviceTrans,200);
+        } catch (Exception $e) {
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }
+    }
+
+    public function createServiceTranslate(Request $request){
+        $data = $request->all();
+        $service = $this->serviceRepository->addservicegoryTrans($data);
+        if($service == false){
+            return JsonResponse::handle(200, ConstantsMessage::ERROR, null, 200);
+        } 
+         return JsonResponse::handle(200, ConstantsMessage::Add, $service, 200);
+    }
+
+    public function updateServiceTranslate(Request $request,$id){
+        try{
+            $data = $request->all();
+            $findService = $this->serviceRepository->getServiceTrans($id);
+            $service = $this->serviceRepository->updateservicegoryTrans($findService,$data);
+            return JsonResponse::handle(200, ConstantsMessage::Update, $service, 200);
+        }catch(Exception $e){
+            return JsonResponse::handle(500, ConstantsMessage::ERROR, null, 500);
+        }
+        
+    }
 }
