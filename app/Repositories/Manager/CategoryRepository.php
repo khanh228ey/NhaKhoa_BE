@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Manager;
 
+use App\Commons\Messages\ConstantsMessage;
 use App\Models\Category;
 use App\Models\CategoryTranslation;
 use Carbon\Carbon;
@@ -38,4 +39,31 @@ class CategoryRepository{
         return false;
     }
 
+
+    public function getCategoryTrans($id){
+        try {
+            $cateTranslate = CategoryTranslation::where('category_id', $id)->firstOrFail();
+            return $cateTranslate;
+        } catch (ModelNotFoundException $e) {
+            return false;
+        }
+    }
+
+    public function addCategoryTrans($data){
+        $cate = new CategoryTranslation();
+        $cate->name = $data['name'];
+        $cate->description = $data['description'];
+        $cate->category_id = $data['category_id'];
+        if($cate->save()){
+            return $cate;
+        }
+        return false;
+    }
+
+    public function updateCategoryTrans($cate,$data){
+        $cate->name = $data['name'];
+        $cate->description = $data['description'];
+        $cate->save();
+        return $cate;
+    }
 }

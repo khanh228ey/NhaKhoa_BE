@@ -189,4 +189,8 @@ Route::prefix('v2/{lang}')->group(function(){
 
 Route::prefix('v1/translate')->group(function(){
     Route::get('/category/{id}',[CategoryController::class,'getCateTranslate']);
+    Route::post('/category',[CategoryController::class,'createCateTranslate']);
+    Route::put('/category/{id}',[CategoryController::class,'updateCateTranslate']);
+
+
 });

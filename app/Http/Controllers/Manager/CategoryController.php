@@ -11,8 +11,10 @@ use App\Models\CategoryTranslation;
 use App\Models\Service;
 use App\Repositories\Manager\CategoryRepository;
 use App\RequestValidations\CategoryValidation;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use SebastianBergmann\Type\NullType;
 
 class CategoryController extends Controller
 {
@@ -110,13 +112,34 @@ class CategoryController extends Controller
 
     public function getCateTranslate($id){
         try {
-            $cateTranslate = CategoryTranslation::where('category_id', $id)->firstOrFail();
-            return JsonResponse::handle(404,ConstantsMessage::SUCCESS,$cateTranslate,404);
-        } catch (ModelNotFoundException $e) {
-            return JsonResponse::handle(404,ConstantsMessage::Not_Found,null,404);
+            $cateTranslate = $this->categoryRepository->getCategoryTrans($id);
+            if($cateTranslate == false) {
+                return JsonResponse::handle(404,ConstantsMessage::Not_Found,null,404);
+            }
+            return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$cateTranslate,200);
+        } catch (Exception $e) {
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }
     }
-    public function createCateTranslate(){
+
+    public function createCateTranslate(Request $request){
+        $data = $request->all();
+        $category = $this->categoryRepository->addCategoryTrans($data);
+        if($category == false){
+            return JsonResponse::handle(200, ConstantsMessage::ERROR, null, 200);
+        } 
+         return JsonResponse::handle(200, ConstantsMessage::Add, $category, 200);
+    }
+
+    public function updateCateTranslate(Request $request,$id){
+        try{
+            $data = $request->all();
+            $findCate = $this->categoryRepository->getCategoryTrans($id);
+            $category = $this->categoryRepository->updateCategoryTrans($findCate,$data);
+            return JsonResponse::handle(200, ConstantsMessage::Update, $category, 200);
+        }catch(Exception $e){
+            return JsonResponse::handle(500, ConstantsMessage::ERROR, null, 500);
+        }
         
     }
 }
