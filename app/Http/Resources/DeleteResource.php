@@ -15,7 +15,7 @@ class DeleteResource extends JsonResource
     public function toArray($request)
     {
         $data = [
-            'id' => (int)$this->id,
+            'id' => $this->id,
             
         ];
         return $data;

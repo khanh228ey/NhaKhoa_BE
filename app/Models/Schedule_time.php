@@ -10,5 +10,8 @@ class Schedule_time extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'schedule_time';
-    
+    protected $casts = [
+        'id' => 'integer',
+        'status' => 'integer',
+    ];
 }

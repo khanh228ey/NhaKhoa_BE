@@ -11,7 +11,10 @@ class History extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    
+    protected $casts = [
+        'id' => 'integer',
+        'status' => 'integer',
+    ];
     public function Customer(){
         return $this->belongsTo(Customer::class,'customer_id');
     }

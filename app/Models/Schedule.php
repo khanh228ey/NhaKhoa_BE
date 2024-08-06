@@ -10,6 +10,11 @@ class Schedule extends Model
     use HasFactory;
     protected $table = 'schedule';
     public $timestamps = false;
+    protected $casts = [
+        'id' => 'integer',
+        'time_id' => 'integer',
+        'status' => 'integer',
+    ];
     public function time()
     {
         return $this->belongsTo(Schedule_time::class,'time_id');

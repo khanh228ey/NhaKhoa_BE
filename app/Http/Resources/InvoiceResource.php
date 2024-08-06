@@ -15,17 +15,17 @@ class InvoiceResource extends JsonResource
     public function toArray($request)
     {
         $data = [
-            'id' => (int)$this->id,
+            'id' => $this->id,
             'customer' => [
                     'id' => $this->history->customer->id,
                     'name' => $this->history->customer->name,
                     'phone_number' => $this->history->customer->phone_number,
                     'birthday' => $this->history->customer->birthday,
-                    'gender' => (int)$this->history->customer->gender,
+                    'gender' => $this->history->customer->gender,
             ],
-            'total_price' => (int)$this->total_price,
-            'method_payment' => (int)$this->method_payment,
-            'status' => (int)$this->status,
+            'total_price' => $this->total_price,
+            'method_payment' => $this->method_payment,
+            'status' => $this->status,
         ];
         if($request->route()->getName() === 'invoice.detail')  {
             $data = array_merge($data, [
@@ -35,16 +35,16 @@ class InvoiceResource extends JsonResource
                     'phone_number' => $this->user->phone_number
                 ] : null,
                 'history' => $this->history ? [
-                        'id' => (int)$this->history->id,
+                        'id' => $this->history->id,
                         'date' => $this->history->date,
                         'time' => $this->history->time,
                     'services' => $this->history->services ? $this->history->services->map(function ($service) {
                         return [
-                            'id' =>(int) $service->id,
+                            'id' => $service->id,
                             'name' => $service->name,
                             'unit' => $service->unit,
-                            'quantity' =>(int)$service->pivot->quantity,
-                            'price' =>(int) $service->pivot->price,
+                            'quantity' =>$service->pivot->quantity,
+                            'price' => $service->pivot->price,
                         ];
                     })->toArray() : null,
                 ] : null,

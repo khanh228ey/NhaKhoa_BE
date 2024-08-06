@@ -2,6 +2,7 @@
 namespace App\Repositories\Manager;
 
 use App\Models\Category;
+use App\Models\CategoryTranslation;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -36,4 +37,5 @@ class CategoryRepository{
         }
         return false;
     }
+
 }

@@ -15,10 +15,10 @@ class CategoryResource extends JsonResource
     public function toArray($request)
     {
         $data = [
-            'id' => (int)$this->id,
+            'id' => $this->id,
             'name' => $this->translation->name ?? $this->name,
             'image' => $this->image,
-            'status' => (int)$this->status,
+            'status' => $this->status,
         ];
     
         if($request->route()->getName() === 'category.detail')  {
@@ -26,12 +26,12 @@ class CategoryResource extends JsonResource
                 'description' => $this->translation->description ?? $this->description,
                 'services' => $this->services ? $this->services->map(function ($service) {
                     return [
-                        'id' => (int)$service->id,
+                        'id' => $service->id,
                         'name' => $service->translation->name ?? $service->name,
                         'image' => $service->image,
                         'unit' => $service->translation->unit ?? $service->unit,
-                        'min_price' => (int)$service->min_price,
-                        'quantity_sold' => (int)$service->quantity_sold,
+                        'min_price' => $service->min_price,
+                        'quantity_sold' => $service->quantity_sold,
                     ];
                 }) : null, 
             ]);

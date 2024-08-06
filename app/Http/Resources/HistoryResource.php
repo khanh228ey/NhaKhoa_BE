@@ -15,16 +15,16 @@ class HistoryResource extends JsonResource
     public function toArray($request)
     {
         $data = [
-            'id' => (int)$this->id,
+            'id' => $this->id,
             'date' => $this->date,
             'time' => $this->time,
-            'status' => (int)$this->status,
+            'status' => $this->status,
             'customer' => [
                 'id' => $this->Customer->id,
                 'name' => $this->Customer->name,
                 'phone_number' => $this->Customer->phone_number,
                 'birthday' => $this->Customer->birthday,
-                'gender' => (int)$this->Customer->gender,
+                'gender' => $this->Customer->gender,
                 'address' => $this->Customer->address,
             ],
             'doctor' => [

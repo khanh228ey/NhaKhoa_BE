@@ -22,14 +22,14 @@ class UserResource extends JsonResource
             'birthday' => $this->birthday,
             'email' => $this->email,
             'role' => [
-                'id' => (int)$this->role_id,
+                'id' => $this->role_id,
                 'name' => $this->role->name,
             ],
-            'status' => (int)$this->status,
+            'status' => $this->status,
         ];
         if($request->route()->getName() === 'user.detail')  {
             $data = array_merge($data, [
-                'gender' => (int)$this->gender,
+                'gender' => $this->gender,
                 'address' => $this->address,
                 'description' => $this->description,
             ]);

@@ -9,7 +9,10 @@ class Appointment extends Model
 {
     use HasFactory;
     public $timestamps = false;
-
+    protected $casts = [
+        'id' => 'integer',
+        'status' => 'integer',
+    ];
     protected $fillable = ['name', 'date', 'time', 'phone'];
 
     public function Services(){
@@ -18,4 +21,5 @@ class Appointment extends Model
     public function Doctor(){
         return $this->belongsTo(User::class,'doctor_id');
     }
+   
 }

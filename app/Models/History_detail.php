@@ -10,7 +10,13 @@ class History_detail extends Model
     use HasFactory;
     public $timestamps = false;
     protected $table = 'history_detail';
-
+    protected $casts = [
+        'id' => 'integer',
+        'service_id' => 'integer',
+        'history_id' => 'integer',
+        'quantity' => 'integer',
+        'price' => 'integer',
+    ];
     public function service()
     {
         return $this->belongsTo(Service::class,'service_id');

@@ -10,5 +10,8 @@ class DoctorTranslation extends Model
     use HasFactory;
 
     protected $table = 'doctor_translation';
+    protected $casts = [
+        'id' => 'integer',
+    ];
 
 }

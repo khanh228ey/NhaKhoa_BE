@@ -13,6 +13,11 @@ class Customer extends Model
     protected $keyType = 'string'; 
     public $timestamps = false;
     protected $table = 'customers';
+
+    protected $casts = [
+        'gender' => 'integer',
+    ];
+
     protected static function boot()
     {
         parent::boot();

@@ -184,3 +184,9 @@ Route::prefix('v2/{lang}')->group(function(){
     });
     Route::post('/appointment',[ClientAppointmentController::class,'createAppointment']);
 });
+
+
+
+Route::prefix('v1/translate')->group(function(){
+    Route::get('/category/{id}',[CategoryController::class,'getCateTranslate']);
+});

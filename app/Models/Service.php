@@ -9,6 +9,14 @@ class Service extends Model
 {
     use HasFactory;
     public $timestamps = false;
+    protected $casts = [
+        'id' => 'integer',
+        'max_price' => 'integer',
+        'min_price' => 'integer',
+        'category_id' => 'integer',
+        'quantity_sold' => 'integer',
+        'status' => 'integer',
+    ];
     protected $fillable = ['name', 'status', 'min_price', 'max_price', 'image','unit', 'category_id','description','quantity_sold','updated_at'];
     public function category()
     {

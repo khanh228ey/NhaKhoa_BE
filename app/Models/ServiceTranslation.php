@@ -9,4 +9,7 @@ class ServiceTranslation extends Model
 {
     use HasFactory;
    protected $table = 'service_translations' ;
+   protected $casts = [
+        'id' => 'integer',
+    ];
 }

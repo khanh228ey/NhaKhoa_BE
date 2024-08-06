@@ -11,8 +11,14 @@ class Invoices extends Model
     use HasFactory;
 
     public $timestamps = false;
-    protected $table = 'Invoices';
+    protected $table = 'invoices';
     protected $fillable = ['method_payment','status'];
+    protected $casts = [
+        'id' => 'integer',
+        'history_id' => 'integer',
+        'method_payment' => 'integer',
+        'status' => 'integer',
+    ];
     public function History(){
         return $this->belongsTo(History::class,'history_id');
     }

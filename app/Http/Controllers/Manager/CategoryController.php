@@ -7,6 +7,7 @@ use App\Commons\Responses\JsonResponse;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\DeleteResource;
 use App\Models\Category;
+use App\Models\CategoryTranslation;
 use App\Models\Service;
 use App\Repositories\Manager\CategoryRepository;
 use App\RequestValidations\CategoryValidation;
@@ -105,5 +106,17 @@ class CategoryController extends Controller
         } catch (\Exception $e) {
         return JsonResponse::error(500, ConstantsMessage::ERROR, 500);
     }
+    }
+
+    public function getCateTranslate($id){
+        try {
+            $cateTranslate = CategoryTranslation::where('category_id', $id)->firstOrFail();
+            return JsonResponse::handle(404,ConstantsMessage::SUCCESS,$cateTranslate,404);
+        } catch (ModelNotFoundException $e) {
+            return JsonResponse::handle(404,ConstantsMessage::Not_Found,null,404);
+        }
+    }
+    public function createCateTranslate(){
+        
     }
 }

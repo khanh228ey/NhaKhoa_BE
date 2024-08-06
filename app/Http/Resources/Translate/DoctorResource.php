@@ -24,7 +24,7 @@ class DoctorResource extends JsonResource
         if ($request->route()->getName() === 'doctor.detail') {
             $data = array_merge($data, [
                 'email' => $this->email,
-                'gender' => (int)$this->gender,
+                'gender' => $this->gender,
             ]);
         }
 

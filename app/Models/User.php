@@ -56,6 +56,9 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'status' => 'integer',
+        'gender' => 'integer',
+        'role_id' => 'integer'
     ];
     protected static function boot()
     {

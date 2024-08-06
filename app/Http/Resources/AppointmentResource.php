@@ -16,12 +16,12 @@ class AppointmentResource extends JsonResource
     {
 
         $data = [
-                'id' => (int)$this->id,
+                'id' => $this->id,
                 'name' => $this->name,
                 'phone' => $this->phone,
                 'date' => $this->date,
                 'time' => $this->time,
-                'status'=> (int)$this->status,
+                'status'=> $this->status,
         ];
         if($request->route()->getName() === 'appointment.detail')  {
             $data = array_merge($data, [
@@ -32,11 +32,11 @@ class AppointmentResource extends JsonResource
                     ] : null,
                     'services' => $this->services ? $this->services->map(function ($service) {
                         return [
-                            'id' => (int)$service->id,
+                            'id' => $service->id,
                             'name' => $service->name,
                             'image' => $service->image,
                             'unit' => $service->unit,
-                            'min_price' => (int)$service->min_price
+                            'min_price' => $service->min_price
                         ];
                     }) : null,
             ]);

@@ -10,22 +10,22 @@ class ServiceResource extends JsonResource
     public function toArray($request)
     {
         $data = [
-            'id' => (int)$this->id,
+            'id' => $this->id,
             'name' => $this->name,
             'image' => $this->image,
-            'quantity_sold' => (int)$this->quantity_sold,
-            'min_price' => (int)$this->min_price,
+            'quantity_sold' => $this->quantity_sold,
+            'min_price' => $this->min_price,
             'unit' => $this->unit, 
-            'status' => (int)$this->status,
+            'status' => $this->status,
             'category' =>[
-                'id' => (int)$this->category_id,
+                'id' => $this->category_id,
                 'name' => $this->category->name,
             ],
         ];
         if ($request->route()->getName() === 'service.detail') {
             $data = array_merge($data, [
                 'description' => $this->description,
-                'max_price' => (int)$this->max_price,
+                'max_price' => $this->max_price,
             ]);
         }
 
