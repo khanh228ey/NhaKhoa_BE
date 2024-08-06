@@ -12,5 +12,6 @@ class ServiceTranslation extends Model
    protected $table = 'service_translations' ;
    protected $casts = [
         'id' => 'integer',
+        'service_id' => 'integer',
     ];
 }

@@ -9,7 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Repositories\Manager\UserRepository;
 use App\RequestValidations\UserValidation;
-
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -95,6 +95,40 @@ class UserController extends Controller
         }
     }
 
+
+    
+    public function getDoctorTrans($id){
+        try {
+            $serviceTrans = $this->userRepository->getDoctorTrans($id);
+            if($serviceTrans == false) {
+                return JsonResponse::handle(404,ConstantsMessage::Not_Found,null,404);
+            }
+            return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$serviceTrans,200);
+        } catch (Exception $e) {
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }
+    }
+
+    public function createDoctorTranslate(Request $request){
+        $data = $request->all();
+        $doctor = $this->userRepository->addDoctorTrans($data);
+        if($doctor == false){
+            return JsonResponse::handle(200, ConstantsMessage::ERROR, null, 200);
+        } 
+         return JsonResponse::handle(200, ConstantsMessage::Add, $doctor, 200);
+    }
+
+    public function updateDoctorTranslate(Request $request,$id){
+        try{
+            $data = $request->all();
+            $findDoctor = $this->userRepository->getDoctorTrans($id);
+            $doctor = $this->userRepository->updateDoctorTrans($findDoctor,$data);
+            return JsonResponse::handle(200, ConstantsMessage::Update, $doctor, 200);
+        }catch(Exception $e){
+            return JsonResponse::handle(500, ConstantsMessage::ERROR, null, 500);
+        }
+        
+    }
    
 }
     

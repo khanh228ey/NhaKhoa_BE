@@ -12,5 +12,6 @@ class CategoryTranslation extends Model
     protected $table = 'category_translations';
     protected $casts = [
         'id' => 'integer',
+        'category_id' => 'integer',
     ];
 }

@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories\Manager;
 
+use App\Models\DoctorTranslation;
 use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
@@ -67,5 +68,35 @@ class UserRepository{
         }
         return false;
     }
+
+
+    public function getDoctorTrans($id){
+        try {
+            $doctorTrans = DoctorTranslation::where('doctor_id', $id)->firstOrFail();
+            return $doctorTrans;
+        } catch (ModelNotFoundException $e) {
+            return false;
+        }
+    }
+
+    public function addDoctorTrans($data){
+        $doctor = new DoctorTranslation();
+        $doctor->name = $data['name'];
+        $doctor->description = $data['description'];
+        $doctor->doctor_id = $data['doctor_id'];
+        if($doctor->save()){
+            return $doctor;
+        }
+        return false;
+    }
+
+    public function updateDoctorTrans($doctor,$data){
+        $doctor->name = $data['name'];
+        $doctor->description = $data['description'];
+        $doctor->save();
+        return $doctor;
+    }
+
+    
 
 }

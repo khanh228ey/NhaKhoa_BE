@@ -198,5 +198,10 @@ Route::prefix('v1/translate')->group(function(){
         Route::post('/','createServiceTranslate');
         Route::put('/{id}','updateServiceTranslate');
     });
+    Route::prefix('/doctor')->controller(UserController::class)->group(function(){
+        Route::get('/{id}','getDoctorTrans');
+        Route::post('/','createDoctorTranslate');
+        Route::put('/{id}','updateDoctorTranslate');
+    });
 
 });
