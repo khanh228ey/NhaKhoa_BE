@@ -44,7 +44,7 @@ class ScheduleController extends Controller
         }
     }
 
-    Public function deleteSchedule($doctor_id,$date){
+    Public function deleteSchedule($date,$doctor_id){
         $schedules = Schedule::where('date',$date)->where('doctor_id',$doctor_id)->get();
         if($schedules->isNotEmpty()){
             $schedule = $this->ScheduleRepository->deleteSchedule($schedules);

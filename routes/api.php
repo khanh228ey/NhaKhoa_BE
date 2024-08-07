@@ -9,6 +9,7 @@ use App\Http\Controllers\Client\ServiceController as ClientServiceController;
 use App\Http\Controllers\Manager\AppointmentController;
 use App\Http\Controllers\Manager\AuthController;
 use App\Http\Controllers\Manager\CustomerController;
+use App\Http\Controllers\Manager\DoctorController as ManagerDoctorController;
 use App\Http\Controllers\Manager\ExportController;
 use App\Http\Controllers\Manager\HistoryController;
 use App\Http\Controllers\Manager\InvoiceController;
@@ -98,8 +99,7 @@ Route::prefix('v1/appointment')->controller(AppointmentController::class)->group
 Route::prefix('v1/schedule')->controller(ScheduleController::class)->group(function () {
     Route::get('/','getSchedule');
     Route::post('/','createSchedule');
-    Route::put('/{doctor_id}/{date}','updateSchedule');
-    Route::delete('/{doctor_id}/{date}','deleteSchedule');
+    Route::delete('/{date}/{doctor_id}','deleteSchedule');
 });
 //invoice
 Route::prefix('v1/invoice')->controller(InvoiceController::class)->group(function () {
@@ -118,17 +118,16 @@ Route::prefix('v1/role')->controller(RoleController::class)->group(function(){
 });
 //Hiển thị doctor trong đặt lịch
 Route::prefix('v1')->group(function(){
-    Route::prefix('/doctor')->controller(DoctorController::class)->group(function(){
+    Route::prefix('/doctor')->controller(ManagerDoctorController::class)->group(function(){
         Route::get('/','getDoctor');
-        Route::Get('/{id}','getDoctorDetail');
     });
     //get lịch làm việc doctor
-    Route::prefix('/schedule')->controller(ClientScheduleController::class)->group(function(){
+    Route::prefix('/schedule')->controller(ManagerDoctorController::class)->group(function(){
         Route::get('/{id}','getDoctorScheduleWithTimeslots');
         Route::get('/{id}/{date}','getDoctorTimeslotsByDate');
       
     });
-    Route::get('/time',[ClientScheduleController::class,'getTime']);
+    Route::get('/time',[ManagerDoctorController::class,'getTime']);
 });
 //tongquan
 Route::prefix('v1/overview')->controller(OverviewController::class)->group(function(){
@@ -162,7 +161,7 @@ Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(f
 Route::prefix('v2/{lang}')->group(function(){
     Route::prefix('/doctor')->controller(DoctorController::class)->group(function(){
         Route::get('/','getDoctor');
-        Route::Get('/{id}','getDoctorDetail');
+        Route::Get('/{id}','getDoctorDetail')->name('doctor.detail');
     });
     //get lịch làm việc doctor
     Route::prefix('/schedule')->controller(ClientScheduleController::class)->group(function(){
