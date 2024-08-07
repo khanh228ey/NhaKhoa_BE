@@ -92,7 +92,9 @@ class UserRepository{
 
     public function updateDoctorTrans($doctor,$data){
         $doctor->name = $data['name'];
-        $doctor->description = $data['description'];
+        if (isset($date['description']) && $data['description'] !== '') {
+            $doctor->description = $data['description'];
+        }
         $doctor->save();
         return $doctor;
     }
