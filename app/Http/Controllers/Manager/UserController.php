@@ -108,7 +108,7 @@ class UserController extends Controller
             return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }
     }
-    public function updateDoctorTranslate(Request $request,$id){
+    public function doctorTranslate(Request $request,$id){
         try{
             $data = $request->all();
             $findDoctor = $this->userRepository->getDoctorTrans($id);
