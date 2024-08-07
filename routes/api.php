@@ -49,8 +49,8 @@ Route::group([
     Route::get('profile', [AuthController::class,'profile']);
     Route::post('change-password', [AuthController::class,'changePassword']);
 });
-//Middelware check token đăng nhập
-// Route::middleware('check_token')->group(function () {
+// Middelware check token đăng nhập
+Route::middleware('check_token')->group(function () {
 Route::prefix('v1/user')->controller(UserController::class)->group(function(){
     Route::get('/','getUsers');
     Route::post('/','createUser');
@@ -152,9 +152,8 @@ Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(f
     Route::get('/history','getHistories');
     Route::get('/appointment','getAppointment');
 });
-// });
 
-
+});
 
 //route khách hàng
     //get Doctor
