@@ -31,16 +31,15 @@ class CategoryController extends Controller
     }
 
 
-
-        Public function categoryfindById($lang,$id){
-            try {
-                $category = $this->categoryRepo->findById($id);
-                if($category == false){
-                    return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
-                }
-                $result = ($lang == 'vi') ? new CategoryResource($category)
-                 :new TranslateCategoryResource($category);
-                return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
+    Public function categoryfindById($lang,$id){
+        try {
+            $category = $this->categoryRepo->findById($id);
+            if($category == false){
+                return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);
+            }
+            $result = ($lang == 'vi') ? new CategoryResource($category)
+            :new TranslateCategoryResource($category);
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS,  $result, 200);
             } catch (Exception $e) {
                 return JsonResponse::handle(404, ConstantsMessage::ERROR, null, 404);
             }

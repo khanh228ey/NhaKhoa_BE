@@ -122,24 +122,16 @@ class CategoryController extends Controller
         }
     }
 
-    public function createCateTranslate(Request $request){
-        $data = $request->all();
-        $category = $this->categoryRepository->addCategoryTrans($data);
-        if($category == false){
-            return JsonResponse::handle(200, ConstantsMessage::ERROR, null, 200);
-        } 
-         return JsonResponse::handle(200, ConstantsMessage::Add, $category, 200);
-    }
 
-    public function updateCateTranslate(Request $request,$id){
+    public function categoryTranslate(Request $request,$id){
         try{
             $data = $request->all();
             $findCate = $this->categoryRepository->getCategoryTrans($id);
-            $category = $this->categoryRepository->updateCategoryTrans($findCate,$data);
+            if($findCate == false){  $category = $this->categoryRepository->addCategoryTrans($id,$data); }
+            else{  $category = $this->categoryRepository->updateCategoryTrans($findCate,$data); }
             return JsonResponse::handle(200, ConstantsMessage::Update, $category, 200);
         }catch(Exception $e){
             return JsonResponse::handle(500, ConstantsMessage::ERROR, null, 500);
         }
-        
     }
 }

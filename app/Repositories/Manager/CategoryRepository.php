@@ -48,16 +48,14 @@ class CategoryRepository{
             return false;
         }
     }
-
-    public function addCategoryTrans($data){
+    
+    public function addCategoryTrans($id,$data){
         $cate = new CategoryTranslation();
         $cate->name = $data['name'];
         $cate->description = $data['description'];
-        $cate->category_id = $data['category_id'];
-        if($cate->save()){
-            return $cate;
-        }
-        return false;
+        $cate->category_id = $id;
+        $cate->save();
+        return $cate;
     }
 
     public function updateCategoryTrans($cate,$data){

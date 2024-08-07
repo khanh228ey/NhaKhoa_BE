@@ -190,8 +190,8 @@ Route::prefix('v2/{lang}')->group(function(){
 Route::prefix('v1/translate')->group(function(){
     Route::prefix('/category')->controller(CategoryController::class)->group(function(){
         Route::get('/{id}','getCateTranslate');
-        Route::post('/','createCateTranslate');
-        Route::put('/{id}','updateCateTranslate');
+        Route::patch('/{id}','categoryTranslate');
+        // Route::put('/{id}','updateCateTranslate');
     });
     Route::prefix('/service')->controller(ServiceController::class)->group(function(){
         Route::get('/{id}','getServiceTrans');
