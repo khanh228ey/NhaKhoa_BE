@@ -55,19 +55,19 @@ class ServiceRepository{
         }
     }
 
-    public function addservicegoryTrans($data){
+    public function addserviceTrans($id,$data){
         $service = new ServiceTranslation();
         $service->name = $data['name'];
         $service->description = $data['description'];
         $service->unit = $data['unit'];
-        $service->service_id = $data['service_id'];
+        $service->service_id = $id;
         if($service->save()){
             return $service;
         }
         return false;
     }
 
-    public function updateservicegoryTrans($service,$data){
+    public function updateserviceTrans($service,$data){
         $service->name = $data['name'];
         $service->description = $data['description'];
         $service->unit = $data['unit'];

@@ -191,17 +191,14 @@ Route::prefix('v1/translate')->group(function(){
     Route::prefix('/category')->controller(CategoryController::class)->group(function(){
         Route::get('/{id}','getCateTranslate');
         Route::patch('/{id}','categoryTranslate');
-        // Route::put('/{id}','updateCateTranslate');
     });
     Route::prefix('/service')->controller(ServiceController::class)->group(function(){
         Route::get('/{id}','getServiceTrans');
-        Route::post('/','createServiceTranslate');
-        Route::put('/{id}','updateServiceTranslate');
+        Route::patch('/{id}','serviceTranslate');
     });
     Route::prefix('/doctor')->controller(UserController::class)->group(function(){
         Route::get('/{id}','getDoctorTrans');
-        Route::post('/','createDoctorTranslate');
-        Route::put('/{id}','updateDoctorTranslate');
+        Route::patch('/{id}','doctorTranslate');
     });
 
 });

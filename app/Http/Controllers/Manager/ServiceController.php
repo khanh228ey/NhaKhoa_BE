@@ -126,20 +126,12 @@ class ServiceController extends Controller
         }
     }
 
-    public function createServiceTranslate(Request $request){
-        $data = $request->all();
-        $service = $this->serviceRepository->addservicegoryTrans($data);
-        if($service == false){
-            return JsonResponse::handle(200, ConstantsMessage::ERROR, null, 200);
-        } 
-         return JsonResponse::handle(200, ConstantsMessage::Add, $service, 200);
-    }
-
-    public function updateServiceTranslate(Request $request,$id){
+    public function serviceTranslate(Request $request,$id){
         try{
             $data = $request->all();
-            $findService = $this->serviceRepository->getServiceTrans($id);
-            $service = $this->serviceRepository->updateservicegoryTrans($findService,$data);
+            $findService = $this->serviceRepository->getServiceTrans($id); 
+            if($findService == false){ $service = $this->serviceRepository->addserviceTrans($id,$data);}
+            else{ $service = $this->serviceRepository->updateserviceTrans($findService,$data);}
             return JsonResponse::handle(200, ConstantsMessage::Update, $service, 200);
         }catch(Exception $e){
             return JsonResponse::handle(500, ConstantsMessage::ERROR, null, 500);

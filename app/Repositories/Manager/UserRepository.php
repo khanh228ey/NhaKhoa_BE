@@ -79,11 +79,11 @@ class UserRepository{
         }
     }
 
-    public function addDoctorTrans($data){
+    public function addDoctorTrans($id,$data){
         $doctor = new DoctorTranslation();
         $doctor->name = $data['name'];
         $doctor->description = $data['description'];
-        $doctor->doctor_id = $data['doctor_id'];
+        $doctor->doctor_id = $id;
         if($doctor->save()){
             return $doctor;
         }
