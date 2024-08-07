@@ -108,16 +108,6 @@ class UserController extends Controller
             return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
         }
     }
-
-    // public function createDoctorTranslate(Request $request){
-    //     $data = $request->all();
-    //     $doctor = $this->userRepository->addDoctorTrans($data);
-    //     if($doctor == false){
-    //         return JsonResponse::handle(200, ConstantsMessage::ERROR, null, 200);
-    //     } 
-    //      return JsonResponse::handle(200, ConstantsMessage::Add, $doctor, 200);
-    // }
-
     public function updateDoctorTranslate(Request $request,$id){
         try{
             $data = $request->all();

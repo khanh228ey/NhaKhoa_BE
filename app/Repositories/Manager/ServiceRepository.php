@@ -69,7 +69,9 @@ class ServiceRepository{
 
     public function updateserviceTrans($service,$data){
         $service->name = $data['name'];
-        $service->description = $data['description'];
+        if (isset($date['description']) && $data['description'] !== '') {
+            $service->description = $data['description'];
+        }
         $service->unit = $data['unit'];
         $service->save();
         return $service;
