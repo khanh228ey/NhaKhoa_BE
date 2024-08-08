@@ -29,7 +29,7 @@ class AppointmentRepository{
                $this->updateStatusSchedule($data);
             }
         if (isset($data['services']) && is_array($data['services'])) {
-                    $serviceIds = $this->appointmentDetail($data);
+                    $serviceIds = $this->appointmentDetail($data['services']);
                     $appointment->Services()->attach($serviceIds);
             }
 
@@ -53,7 +53,7 @@ class AppointmentRepository{
         }
         if (isset($data['doctor_id'])) {$this->updateStatusSchedule($data);}
         if (isset($data['services']) && is_array($data['services'])) {
-                $serviceIds = $this->appointmentDetail($data);
+                $serviceIds = $this->appointmentDetail($data['services']);
                 $appointment->services()->sync($serviceIds);
         } else {
                 $appointment->services()->detach();
@@ -61,7 +61,6 @@ class AppointmentRepository{
 
         return ['success' => true, 'appointment' => $appointment];
     }
-
 
 
     public function add($data){
