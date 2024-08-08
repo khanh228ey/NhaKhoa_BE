@@ -63,7 +63,7 @@ class DoctorController extends Controller
                     'phone_number' => $item->Doctor->phone_number,
                 ];
             })->unique('id')->values()->toArray();
-            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+            // return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
         }else{
             $doctor = User::where('role_id',3)->where('status',1)->get();
             $result =  $this->jsonDoctor($doctor);
