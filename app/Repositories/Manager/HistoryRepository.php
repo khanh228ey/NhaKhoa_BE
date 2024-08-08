@@ -14,12 +14,12 @@ class HistoryRepository{
         $history->customer_id = $data['customer_id'];
         $history->doctor_id = $data['doctor_id'];
         $history->noted = $data['note'];
-        $history->date=$data['date'];
-        $history->time=$data['time'];
+        $history->date= $data['date'];
+        $history->time= $data['time'];
         $history->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         if ($history->save()) {
-            if(isset($data['service'])){
-                $historyDetail = $this->dataHistoryDetail($data);
+            if(isset($data['services'])){
+                $historyDetail = $this->dataHistoryDetail($data['services']);
                 $history->services()->attach($historyDetail);
             }
             return $history;
@@ -33,7 +33,7 @@ class HistoryRepository{
         $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
         if ($history->save()) {
             if (isset($data['services'])) {
-                $historyDetail = $this->dataHistoryDetail($data);
+                $historyDetail = $this->dataHistoryDetail($data['services']);
                 $history->services()->sync($historyDetail);
             } else $history->services()->detach();
                     
@@ -42,9 +42,9 @@ class HistoryRepository{
         return false;
     }
     
-    public function dataHistoryDetail($data){
+    public function dataHistoryDetail($service){
             $historyDetail = [];
-            foreach ($data['services'] as $serviceData) {
+            foreach ($service as $serviceData) {
                 $serviceId = $serviceData['id'];
                 $service = Service::find($serviceId);
                 $price = $serviceData['price'] ?? $service->min_price;
