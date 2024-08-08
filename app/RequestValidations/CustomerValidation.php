@@ -8,7 +8,6 @@ class CustomerValidation{
     {
         $rules = [
             'name' => 'required|max:100',
-            'phone_number' => 'required|unique:customers,phone_number,'.request()->id.'|numeric',
             'birthday' => 'required',
         ];
         $messages = [
