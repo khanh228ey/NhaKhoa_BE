@@ -49,11 +49,9 @@ class DoctorController extends Controller
         return $result;
     }
     Public function getDoctor(Request $request){
-        $doctor = User::where('role_id',3)->where('status',1)->get();
-        $result =  $this->jsonDoctor($doctor);
-        if(isset($request)){
-            $date = $request->get('date');
-            $time = $request->get('time');
+        $date = $request->get('date');
+        $time = $request->get('time');
+        if(isset($date) && isset($time)){
             $doctor = Schedule::where('date', $date)->with(['time' => function($query) use ($time){
                 $query->where('time',$time);
             }])->get();
@@ -66,6 +64,9 @@ class DoctorController extends Controller
                 ];
             })->unique('id')->values()->toArray();
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+        }else{
+            $doctor = User::where('role_id',3)->where('status',1)->get();
+            $result =  $this->jsonDoctor($doctor);
         }
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }

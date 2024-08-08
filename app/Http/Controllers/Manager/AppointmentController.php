@@ -22,9 +22,7 @@ class AppointmentController extends Controller
     public function __construct(AppointmentValidation $appointmentValidation, AppointmentRepository $appointmentRepository)
     {
         $this->appointmentValidation = $appointmentValidation;
-        $this->appointmentRepository = $appointmentRepository; 
-        
-        
+        $this->appointmentRepository = $appointmentRepository;
     }
 
     Public function createAppointment(Request $request){
