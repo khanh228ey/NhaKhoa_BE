@@ -48,9 +48,25 @@ class DoctorController extends Controller
         ];
         return $result;
     }
-    Public function getDoctor(){
+    Public function getDoctor(Request $request){
         $doctor = User::where('role_id',3)->where('status',1)->get();
         $result =  $this->jsonDoctor($doctor);
+        if(isset($request)){
+            $date = $request->get('date');
+            $time = $request->get('time');
+            $doctor = Schedule::where('date', $date)->with(['time' => function($query) use ($time){
+                $query->where('time',$time);
+            }])->get();
+            $result = $doctor->map(function ($item) {
+                return [
+                    'id' => $item->Doctor->id,
+                    'name' => $item->Doctor->name,
+                    'avatar' => $item->Doctor->avatar,
+                    'phone_number' => $item->Doctor->phone_number,
+                ];
+            })->unique('id')->values()->toArray();
+            return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+        }
         return JsonResponse::handle(200,ConstantsMessage::SUCCESS,$result,200);
     }
 

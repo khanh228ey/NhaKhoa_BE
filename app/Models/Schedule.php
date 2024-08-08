@@ -22,7 +22,7 @@ class Schedule extends Model
 
     public function Doctor()
     {
-        return $this->belongsTo(User::class,'doctor_id')->select('id','name');
+        return $this->belongsTo(User::class,'doctor_id');
     }
 
 }

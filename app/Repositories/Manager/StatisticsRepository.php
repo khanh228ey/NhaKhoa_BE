@@ -154,8 +154,8 @@ class StatisticsRepository{
                 [$startDate,$endDate] = $this->getRequestDate($startDate,$endDate);
                 $appointment = Appointment::whereBetween('created_at', [$startDate, $endDate]);
                 $sumApoiment = $appointment->count();
-                $sumApoimentDone = $appointment->where('status',1)->count();
-                $sumAppointmentCancel = Appointment::whereBetween('created_at', [$startDate, $endDate])->where('status',2)->count();
+                $sumApoimentDone = $appointment->where('status',2)->count();
+                $sumAppointmentCancel = Appointment::whereBetween('created_at', [$startDate, $endDate])->where('status',3)->count();
                 $data = [
                     ['title' => 'Tổng số lịch hẹn:','content' => (int)$sumApoiment,],
                     ['title' => 'Số lịch hẹn hoàn thành:','content' => (int)$sumApoimentDone,],

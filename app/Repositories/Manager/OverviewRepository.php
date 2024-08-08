@@ -125,10 +125,12 @@ class OverviewRepository{
         }
  
         public function appointmentStatistics() {
-            
-            $totalCancel = Appointment::where('status', 2)->count();
-            $totalDone = Appointment::where('status', 1)->count();
-        
+            $date = Carbon::now('Asia/Ho_Chi_Minh');
+            $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d');
+            $endOfCurrentMonth = $date->endOfMonth()->format('Y-m-d'); 
+            $totalCancel = Appointment::where('status', 3)->whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->count();
+            $totalDone = Appointment::where('status', 2)->count();
+           
             $totals = [
                 $this->responseOverview('Số lịch hẹn đã bị hủy ',$totalCancel, 'Đã hủy'),
                 $this->responseOverview('Sô lịch hẹn hoàn thành ',$totalDone, 'Hoàn thành')

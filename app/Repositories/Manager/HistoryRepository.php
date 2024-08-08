@@ -14,52 +14,45 @@ class HistoryRepository{
         $history->customer_id = $data['customer_id'];
         $history->doctor_id = $data['doctor_id'];
         $history->noted = $data['note'];
-        $nowInHCM = Carbon::now('Asia/Ho_Chi_Minh');
-        $date = $nowInHCM->toDateString(); 
-        $time = $nowInHCM->format('H');
-        $startHour = $time . ':00';
-        $endHour = str_pad($time + 1, 2, '0', STR_PAD_LEFT) . ':00';
-        $timeFrame = $startHour . ' - ' . $endHour;
-        $history->date = $date;
-        $history->time = $timeFrame;
+        $history->date=$data['date'];
+        $history->time=$data['time'];
         $history->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         if ($history->save()) {
+            if(isset($data['service'])){
+                $historyDetail = $this->dataHistoryDetail($data);
+                $history->services()->attach($historyDetail);
+            }
             return $history;
         }
-    
         return false;
     }
     
     public function updateHistory($data, $history) {
-                if($data['status'] == 2){
-                    $history->status = $data['status'];
-                    $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-                    $history->save();
-                    return $history;
-                }
-                    $history->noted = $data['note'];
-                    $history->status = $data['status'];
-                    $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-                    if ($history->save()) {
-                        if (isset($data['services']) && is_array($data['services'])) {
-                            $historyDetail = [];
-                            foreach ($data['services'] as $serviceData) {
-                                $serviceId = $serviceData['id'];
-                                $service = Service::find($serviceId);
-                                $price = $serviceData['price'] ?? $service->min_price;
-                                $quantity = $serviceData['quantity'] ?? 1;
-                                $service->quantity_sold += $quantity;
-                                $service->save();
-                                $historyDetail[$serviceId] = ['quantity' => $quantity, 'price' => $price];
-                            }
-                            $history->services()->sync($historyDetail);
-                        } else {
-                            $history->services()->detach();
-                        }
-                        return $history;
-                    }
-                    return false;
+        $history->noted = $data['note'];
+        $history->status = $data['status'];
+        $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+        if ($history->save()) {
+            if (isset($data['services'])) {
+                $historyDetail = $this->dataHistoryDetail($data);
+                $history->services()->sync($historyDetail);
+            } else $history->services()->detach();
+                    
+            return $history;
+        }
+        return false;
     }
     
-    
+    public function dataHistoryDetail($data){
+            $historyDetail = [];
+            foreach ($data['services'] as $serviceData) {
+                $serviceId = $serviceData['id'];
+                $service = Service::find($serviceId);
+                $price = $serviceData['price'] ?? $service->min_price;
+                $quantity = $serviceData['quantity'] ?? 1;
+                $service->quantity_sold += $quantity;
+                $service->save();
+                $historyDetail[$serviceId] = ['quantity' => $quantity, 'price' => $price];
+            }
+            return $historyDetail;
+    }
 }
