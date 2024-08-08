@@ -10,71 +10,34 @@ class AppointmentRepository{
 
     public function addAppointment($data) {
         
-        $quantityDoctor = Schedule::with('time')
-            ->where('date',  $data['date'])
-            ->whereHas('time', function ($query) use ($data) {
+        $quantityDoctor = Schedule::with('time')->where('date',  $data['date'])
+        ->whereHas('time', function ($query) use ($data) {
                 $query->where('time', $data['time']); 
             })->count();
         // Kiểm tra số lượng cuộc hẹn đã có
         $quantityAppointment = Appointment::where('date',  $data['date'])->where('time', $data['time'])->where('status', '!=', 2)->count();
         // Kiểm tra điều kiện để thêm cuộc hẹn
         if($quantityDoctor == 0 && $quantityAppointment < 2){
-            $appointment = new Appointment();
-            $appointment->name = $data['name'];
-            $appointment->phone = $data['phone'];
-            $appointment->date = $data['date'];
-            $appointment->time = $data['time'];
-            if(isset($data['status'])){
-                $appointment->status = $data['status'];
-            }else{
-                $appointment->status = 0;
-            }
-            $appointment->note = $data['note'];
-            $appointment->created_at = Carbon::now('Asia/Ho_Chi_Minh');
+           $appointment = $this->add($data);
         }
         else if ($quantityAppointment < $quantityDoctor) {
-            $appointment = new Appointment();
-            $appointment->name = $data['name'];
-            $appointment->phone = $data['phone'];
-            $appointment->date =  $data['date'];
-            $appointment->time = $data['time'];
-            if(isset($data['status'])){
-                $appointment->status = $data['status'];
-            }else{
-                $appointment->status = 0;
-            }
-            $appointment->note = $data['note'];
-            $appointment->created_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $appointment = $this->add($data);
         } else{
             return ['success' => false, 'message' => "Lịch hẹn trong thời gian này đã đầy"];
         }
-            // Gán doctor_id nếu có
-            if (isset($data['doctor_id'])) {
-                $schedule = Schedule::with('time')->where('date',  $data['date'])
-                ->whereHas('time', function ($query) use ($data) {
-                    $query->where('time', $data['time']); 
-                })->where('doctor_id',$data['doctor_id'])->first();
-                if($schedule){
-                    $schedule->status = 0;
-                    $schedule->save();
-                }
-                $appointment->doctor_id = $data['doctor_id'];
+        if (isset($data['doctor_id'])) {
+               $this->updateStatusSchedule($data);
             }
-               
-            if ($appointment->save()) {
-                if (isset($data['services']) && is_array($data['services'])) {
-                    $serviceIds = collect($data['services'])->pluck('id')->toArray();
+        if (isset($data['services']) && is_array($data['services'])) {
+                    $serviceIds = $this->appointmentDetail($data);
                     $appointment->Services()->attach($serviceIds);
-                }
-                return ['success' => true, 'appointment' => $appointment];
             }
-      
-    
-        return ['success' => false, 'message' => "Đã xảy ra lỗi khi thêm cuộc hẹn"];
-        
+
+        return ['success' => true, 'appointment' => $appointment];
+   
     }
     
-    public function update($data, $appointment) {
+    public function updateAppointment($data, $appointment) {
         $quantityDoctor = Schedule::with('time')->where('date', $data['date'])
         ->whereHas('time', function ($query) use ($data) {
                 $query->where('time', $data['time']); })->count();
@@ -82,55 +45,65 @@ class AppointmentRepository{
         ->where('id', '!=', $appointment->id)->count();
         // Kiểm tra điều kiện để cập nhật cuộc hẹn
         if ($quantityDoctor == 0 && $quantityAppointment < 2) {
-            $appointment->name = $data['name'];
-            $appointment->phone = $data['phone'];
-            $appointment->date = $data['date'];
-            $appointment->time = $data['time'];
-            $appointment->status = isset($data['status']) ? $data['status'] : 0;
-            $appointment->note = $data['note'];
-            $appointment->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+           $appointment = $this->update($data,$appointment);
         } else if ($quantityAppointment < $quantityDoctor) {
-            $appointment->name = $data['name'];
-            $appointment->phone = $data['phone'];
-            $appointment->date = $data['date'];
-            $appointment->time = $data['time'];
-            $appointment->status = isset($data['status']) ? $data['status'] : 0;
-            $appointment->note = $data['note'];
-            $appointment->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $appointment = $this->update($data,$appointment);
         }else{
             return ['success' => false, 'message' => "Lịch hẹn trong thời gian này đã đầy"];
         }
-            if (isset($data['doctor_id'])) {
-                $schedule = Schedule::with('time')->where('date', $appointment->date)
-                    ->whereHas('time', function ($query) use ($appointment) {
-                        $query->where('time', $appointment->time);
-                    })->where('doctor_id', $data['doctor_id'])->first();
-                if ($schedule) {
-                    $schedule->status = 1;
-                    $schedule->save();
-                }
-                $schedule = Schedule::with('time')->where('date', $data['date'])->whereHas('time', function ($query) use ($data) {
-                    $query->where('time', $data['time']);
-                })->where('doctor_id', $data['doctor_id'])->first();
-                
-            if ($schedule && $data['status'] !=2) {
-                $schedule->status = 0;
-                $schedule->save();
-            }
-            $appointment->doctor_id = $data['doctor_id'];
-        }
-        if ($appointment->save()) {
-            if (isset($data['services']) && is_array($data['services'])) {
-                $serviceIds = collect($data['services'])->pluck('id')->toArray();
+        if (isset($data['doctor_id'])) {$this->updateStatusSchedule($data);}
+        if (isset($data['services']) && is_array($data['services'])) {
+                $serviceIds = $this->appointmentDetail($data);
                 $appointment->services()->sync($serviceIds);
-            } else {
+        } else {
                 $appointment->services()->detach();
-            }
-            
-            return ['success' => true, 'appointment' => $appointment];
         }
-    
-        return ['success' => false, 'message' => "Đã xảy ra lỗi khi cập nhật cuộc hẹn"];
+
+        return ['success' => true, 'appointment' => $appointment];
     }
-    
-}
+
+
+
+    public function add($data){
+        $appointment = new Appointment();
+        $appointment->name = $data['name'];
+        $appointment->phone = $data['phone'];
+        $appointment->date = $data['date'];
+        $appointment->time = $data['time'];
+        $appointment->status = isset($data['status']) ? $data['status'] : 0;
+        $appointment->note = $data['note'];
+        $appointment->created_at = Carbon::now('Asia/Ho_Chi_Minh');
+        $appointment->doctor_id = $data['doctor_id'];
+        $appointment->save();
+        return $appointment;
+    }
+
+
+    public function update($data,$appointment){
+        $appointment->name = $data['name'];
+        $appointment->phone = $data['phone'];
+        $appointment->date = $data['date'];
+        $appointment->time = $data['time'];
+        $appointment->status =  $data['status'];
+        $appointment->note = $data['note'];
+        $appointment->doctor_id = $data['doctor_id'];
+        $appointment->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+        $appointment->save();
+        return $appointment;
+    }
+
+
+    public function appointmentDetail($service){
+        $serviceIds = collect($service)->pluck('id')->toArray();
+        return $serviceIds;
+    }
+
+    public function updateStatusSchedule($data){
+        $schedule = Schedule::with('time')->where('date',  $data['date'])
+        ->whereHas('time', function ($query) use ($data) {
+            $query->where('time', $data['time']); 
+        })->where('doctor_id',$data['doctor_id'])->first();
+        $schedule->status = 0;
+        $schedule->save();
+    }
+};

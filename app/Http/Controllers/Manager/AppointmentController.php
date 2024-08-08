@@ -73,7 +73,7 @@ class AppointmentController extends Controller
                     $firstError = $validator->messages()->first();
                     return JsonResponse::handle(400, $firstError,$validator->messages(),400);
                 }
-                $appointment = $this->appointmentRepository->update($request->all(),$appointment);
+                $appointment = $this->appointmentRepository->updateAppointment($request->all(),$appointment);
                 if ($appointment['success'] == true) {
                     return JsonResponse::handle(200, ConstantsMessage::Update, $appointment['appointment'], 200);     
                 }
