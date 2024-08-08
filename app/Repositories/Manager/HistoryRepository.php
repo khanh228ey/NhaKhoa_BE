@@ -16,6 +16,7 @@ class HistoryRepository{
         $history->noted = $data['note'];
         $history->date= $data['date'];
         $history->time= $data['time'];
+        $history->status = 0;
         $history->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         if ($history->save()) {
             if(isset($data['services'])){
@@ -42,9 +43,9 @@ class HistoryRepository{
         return false;
     }
     
-    public function dataHistoryDetail($service){
+    public function dataHistoryDetail($services){
             $historyDetail = [];
-            foreach ($service as $serviceData) {
+            foreach ($services as $serviceData) {
                 $serviceId = $serviceData['id'];
                 $service = Service::find($serviceId);
                 $price = $serviceData['price'] ?? $service->min_price;
