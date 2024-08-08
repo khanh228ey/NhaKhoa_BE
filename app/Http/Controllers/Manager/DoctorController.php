@@ -52,9 +52,9 @@ class DoctorController extends Controller
         $date = $request->get('date');
         $time = $request->get('time');
         if(isset($date) && isset($time)){
-            $doctor = Schedule::where('date', $date)->with(['time' => function($query) use ($time){
+            $doctor = Schedule::where('date', $date)->whereHas('time', function($query) use ($time){
                 $query->where('time',$time);
-            }])->get();
+            })->get();
             $result = $doctor->map(function ($item) {
                 return [
                     'id' => $item->Doctor->id,
@@ -63,7 +63,9 @@ class DoctorController extends Controller
                     'phone_number' => $item->Doctor->phone_number,
                 ];
             })->unique('id')->values()->toArray();
-            // return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
+            if(empty($result)){
+                return JsonResponse::handle(404,"Không tìm thấy nha sĩ",$result,404);
+            }
         }else{
             $doctor = User::where('role_id',3)->where('status',1)->get();
             $result =  $this->jsonDoctor($doctor);
