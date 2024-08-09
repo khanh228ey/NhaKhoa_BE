@@ -13,6 +13,7 @@ use App\Http\Controllers\Manager\DoctorController as ManagerDoctorController;
 use App\Http\Controllers\Manager\ExportController;
 use App\Http\Controllers\Manager\HistoryController;
 use App\Http\Controllers\Manager\InvoiceController;
+use App\Http\Controllers\Manager\NotificationController;
 use App\Http\Controllers\Manager\OverviewController;
 use App\Http\Controllers\Manager\RoleController;
 use App\Http\Controllers\Manager\ScheduleController;
@@ -152,6 +153,11 @@ Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(f
     Route::get('/history','getHistories');
     Route::get('/appointment','getAppointment');
 });
+//Thong bao
+Route::prefix('v1/notify')->controller(NotificationController::class)->group(function(){
+    Route::get('/','getNoti');
+});
+
 
 // });
 

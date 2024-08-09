@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Events\AppointmentCreatedEvent;
+use App\Events\NotificationEvent;
 use App\Http\Resources\AppointmentResource;
 use App\Http\Resources\DeleteResource;
 use App\Models\Appointment;
@@ -13,6 +14,7 @@ use App\RequestValidations\AppointmentValidation;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\Manager\NotiRepository;
 
 class AppointmentController extends Controller
 {
@@ -33,8 +35,11 @@ class AppointmentController extends Controller
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {
-            event(new AppointmentCreatedEvent($appointment['appointment']));
             $appointment = new AppointmentResource($appointment['appointment']);
+            //tạo thông báo
+            $notiAppointment = new NotiRepository();
+            $noti = $notiAppointment->createNotiAppointment($appointment->id); 
+            event(new NotificationEvent($noti));
             return JsonResponse::handle(200, "Đặt lịch hẹn thành công", $appointment, 200);     
         }
         return JsonResponse::error(500,$appointment['message'],500);

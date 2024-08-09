@@ -6,6 +6,7 @@ use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Translate\DoctorResource;
+use App\Models\Appointment;
 use App\Models\Schedule;
 use App\Models\Schedule_time;
 use App\Models\User;
@@ -93,15 +94,20 @@ class DoctorController extends Controller
         $schedule = Schedule::with('time')
             ->where('doctor_id', $id)
             ->where('date', $date)
-            ->where('status', 1)
+            // ->where('status', 1)
             ->get();
     
         if ($schedule->isEmpty()) {
             return JsonResponse::handle(404, $message, null, 404);
         }
-    
-        $timeslots = $schedule->map(function ($item) {
-            return ['time' => $item->time->time];
+        
+        $timeslots = $schedule->map(function ($item) use ($date,$id){
+            $count = Appointment::where('date',$date)->where('time',$item->time->time)->where('doctor_id',$id)->count();
+                if($count >= 2){$status = 0;}else{$status=1;}
+            return [
+                    'time' => $item->time->time,
+                    'status' => $status
+                ];
         })->unique('time')->values()->toArray();
     
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $timeslots, 200);
@@ -114,7 +120,7 @@ class DoctorController extends Controller
             $doctor = User::where('role_id', 3)->findOrFail($id);
             $schedules = Schedule::with('time')
                 ->where('doctor_id', $id)
-                ->where('status', 1)
+                // ->where('status', 1)
                 ->where('date', '>=', now()->toDateString()) 
                 ->orderBy('date', 'Asc')
                 ->get();
@@ -125,15 +131,17 @@ class DoctorController extends Controller
             $datesProcessed = [];
             foreach ($schedules as $schedule) {
                 $date = $schedule->date;
-    
+                $count = Appointment::where('date',$date)->where('doctor_id',$id)->count();
+                if($count >= 2){$status = 0;}else{$status=1;}
                 if (!isset($datesProcessed[$date])) {
                     $datesProcessed[$date] = [
                         'date' => $date,
+                        'status' => $status,
                     ];
                 }
     
             }
-            $limitedScheduleData = array_slice(array_values($datesProcessed), 0, 7);
+            $limitedScheduleData = array_slice(array_values($datesProcessed), 0, 50);
             return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $limitedScheduleData, 200);
         } catch (ModelNotFoundException $e) {
             return JsonResponse::handle(404, ConstantsMessage::Not_Found, null, 404);

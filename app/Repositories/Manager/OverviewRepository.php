@@ -85,9 +85,9 @@ class OverviewRepository{
         $percentageChange = $totalPrevious > 0 ? (($totalCurrent - $totalPrevious) / $totalPrevious) * 100 : ($totalCurrent > 0 ? 100 : 0);
         $message = '';
         if ($percentageChange >= 0) {
-            $message = 'Tăng <span style ="color:blue;">'.number_format($percentageChange, 1).'%</span> doanh thu so với tháng trước.';
+            $message = 'Tăng <span style ="color:blue;">'.number_format($percentageChange).'%</span> doanh thu so với tháng trước.';
         } elseif ($percentageChange < 0) {
-            $message = 'Giảm <span style ="color:blue;">'.number_format(abs($percentageChange),1).'%</span> doanh thu so với tháng trước.';
+            $message = 'Giảm <span style ="color:blue;">'.number_format(abs($percentageChange)).'%</span> doanh thu so với tháng trước.';
         }
         return $this->responseOverview($title,number_format($totalCurrent),$message);
     }
