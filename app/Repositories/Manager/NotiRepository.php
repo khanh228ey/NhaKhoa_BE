@@ -8,8 +8,10 @@ class NotiRepository{
 
 
 
-    Public function getNotify(){
-        $notifications = Notification::orderBy('created_at','DESC')->GET();
+    Public function getNotify($limit,$page){
+        $getNotifications = Notification::orderBy('created_at', 'DESC')
+                                 ->paginate($limit, ['*'], 'page', $page);
+        $notifications =  collect($getNotifications->items());              
         return $notifications;
     }
     Public function createNotiAppointment($appointment_id){
@@ -32,3 +34,4 @@ class NotiRepository{
 
 
 }
+

@@ -18,8 +18,10 @@ class NotificationController extends Controller
         // $this->middleware('check.role:3')->except('getCategories');
     }
 
-    public function getNoti(){
-        $noti = $this->notifications->getNotify();
+    public function getNoti(Request $request){
+        $limit = $request->input('limit', 10);  
+        $page = $request->input('page', 1);   
+        $noti = $this->notifications->getNotify($limit,$page);
         $result = NotiResource::collection($noti);
         return $result;
     }
