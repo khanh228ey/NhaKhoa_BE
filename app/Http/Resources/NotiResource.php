@@ -19,6 +19,7 @@ class NotiResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'message' => $this->message,
+            'status' => $this->status,
             'appointment' => [
                 'id' => $this->appointment_id,
                 'name' => $this->appointment->name,

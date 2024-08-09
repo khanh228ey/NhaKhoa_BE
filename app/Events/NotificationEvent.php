@@ -29,7 +29,7 @@ class NotificationEvent
     public function __construct(Notification $noti)
     {
         $this->notification = $noti;
-        Log::info('Lịch hẹn đã được tạo ' . $noti->appointment->name);
+        Log::info('Lịch hẹn đã được tạo :' . $noti);
     }
 
     /**
@@ -44,14 +44,16 @@ class NotificationEvent
 
     public function broadcastWith()
     {
-        return [
+         $data =[
             'id' => (int)$this->notification->id,
             'message' => $this->notification->message,
+            'status' => $this->notification->status,
             'appointment' => [
                 'id' => $this->notification->appointment_id,
                 'name'=>$this->notification->appointment->name,
                 ]
         ];
+        return $data;
        
     }
 
