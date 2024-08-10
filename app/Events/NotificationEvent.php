@@ -49,7 +49,7 @@ class NotificationEvent
             'title' => $this->notification->title,
             'url' => $this->notification->url,
             'message' => $this->notification->message,
-            'status' => $this->notification->status,
+            'status' => (int)$this->notification->status,
         ];
         return $data;
        

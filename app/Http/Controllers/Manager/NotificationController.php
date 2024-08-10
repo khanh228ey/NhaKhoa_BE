@@ -36,4 +36,5 @@ class NotificationController extends Controller
         $notiUpdate = $this->notifications->updateNoti($getNoti);
         return $notiUpdate;
     }
+    
 }

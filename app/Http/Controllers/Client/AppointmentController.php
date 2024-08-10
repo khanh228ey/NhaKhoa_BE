@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Client;
 
 use App\Commons\Responses\JsonResponse;
 use App\Events\AppointmentCreatedEvent;
+use App\Events\NotificationEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AppointmentResource;
 use App\Repositories\Manager\AppointmentRepository;
+use App\Repositories\Manager\NotiRepository;
 use App\RequestValidations\AppointmentValidation;
 use Illuminate\Http\Request;
 
@@ -29,8 +31,11 @@ class AppointmentController extends Controller
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {
-            event(new AppointmentCreatedEvent($appointment['appointment']));
+            //tạo thông báo
             $appointment = new AppointmentResource($appointment['appointment']);
+            $notiAppointment = new NotiRepository();
+            $noti = $notiAppointment->createNotiAppointment($appointment); 
+            event(new NotificationEvent($noti));
             return JsonResponse::handle(200, $messsage, $appointment, 200);     
         }
         return JsonResponse::error(500,$appointment['message'],500);
