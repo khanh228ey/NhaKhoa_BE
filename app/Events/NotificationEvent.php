@@ -46,12 +46,10 @@ class NotificationEvent
     {
          $data =[
             'id' => (int)$this->notification->id,
+            'title' => $this->notification->title,
+            'url' => $this->notification->url,
             'message' => $this->notification->message,
             'status' => $this->notification->status,
-            'appointment' => [
-                'id' => $this->notification->appointment_id,
-                'name'=>$this->notification->appointment->name,
-                ]
         ];
         return $data;
        

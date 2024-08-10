@@ -16,14 +16,11 @@ class NotiResource extends JsonResource
     {
         // return parent::toArray($request);
         return [
-            'id' => $this->id,
+            'id' => (int)$this->id,
             'title' => $this->title,
+            'url' => $this->url,
             'message' => $this->message,
             'status' => $this->status,
-            'appointment' => [
-                'id' => $this->appointment_id,
-                'name' => $this->appointment->name,
-            ],
         ];
     }
 }

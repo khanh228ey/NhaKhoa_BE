@@ -154,8 +154,9 @@ Route::prefix('v1/statistics')->controller(StatisticsController::class)->group(f
     Route::get('/appointment','getAppointment');
 });
 //Thong bao
-Route::prefix('v1/notify')->controller(NotificationController::class)->group(function(){
+Route::prefix('v1/notification')->controller(NotificationController::class)->group(function(){
     Route::get('/','getNoti');
+    Route::put('/{id}','updateNotification');
 });
 
 
