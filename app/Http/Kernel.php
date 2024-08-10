@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'check_permission' => \App\Http\Middleware\CheckPermission::class,
         'check_token' => \App\Http\Middleware\CheckToken::class,
         'check.role' => \App\Http\Middleware\CheckRole::class,
+        'passes.appointment' => \App\Http\Middleware\PassesAppointment::class,
     ];
 }

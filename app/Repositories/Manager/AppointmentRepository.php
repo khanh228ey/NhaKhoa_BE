@@ -107,8 +107,9 @@ class AppointmentRepository{
     }
 
 
-    public function passes($data){
-        $check = Appointment::where('name',$data['name'])->where('phone',$data['phone'])
-        ->where();
-    }
+    // public function passes($data){
+    //     $check = Appointment::where('name',$data['name'])->where('phone',$data['phone'])
+    //     ->where('date',$data['date'])->where('time',$data['time'])->first();
+    //     if($check->empty)
+    // }
 };

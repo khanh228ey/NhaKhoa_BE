@@ -187,7 +187,7 @@ Route::prefix('v2/{lang}')->group(function(){
         Route::Get('/{id}','serviceFindById')->name('service.detail');
        
     });
-    Route::post('/appointment',[ClientAppointmentController::class,'createAppointment']);
+    Route::post('/appointment',[ClientAppointmentController::class,'createAppointment'])->middleware('passes.appointment');
 });
 
 
