@@ -108,6 +108,7 @@ class AppointmentRepository{
 
 
     public function passes($data){
-        $check = Appointment::where('name',$data['name'])->where('phone',$data['phone']);
+        $check = Appointment::where('name',$data['name'])->where('phone',$data['phone'])
+        ->where();
     }
 };

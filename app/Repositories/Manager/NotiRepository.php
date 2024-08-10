@@ -20,8 +20,10 @@ class NotiRepository{
     Public function createNotiAppointment($data){
         $noti = new Notification();
         $noti->title = "Lịch hẹn mới";
-        $noti->message = $data->name." đã đặt một lịch hẹn vào ngày " .$data->date .', khung giờ '.$data->time;
-        $noti->url = "/lich-hen/".$data->id;
+        $date =Carbon::createFromFormat('Y-m-d', $data->date, 'Asia/Ho_Chi_Minh');
+        $formattedDate = $date->format('d-m-Y'); 
+        $noti->message = $data->name." đã đặt một lịch hẹn vào ngày " .$formattedDate .', khung giờ '.$data->time;
+        $noti->url = "/lich-hen/sua/".$data->id;
         $noti->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $noti->save();
         return $noti;
