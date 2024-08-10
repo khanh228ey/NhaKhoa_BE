@@ -22,7 +22,6 @@ class NotificationController extends Controller
         $limit = $request->input('limit', 10);  
         $page = $request->input('page', 1);   
         $noti = $this->notifications->getNotify($limit,$page);
-       
         $result = NotiResource::collection($noti);
         return $result;
     }
@@ -36,5 +35,9 @@ class NotificationController extends Controller
         $notiUpdate = $this->notifications->updateNoti($getNoti);
         return $notiUpdate;
     }
-    
+
+    public function count(){
+        
+    }
+
 }

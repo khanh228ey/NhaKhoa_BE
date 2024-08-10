@@ -31,11 +31,13 @@ class AppointmentController extends Controller
         }
         $appointment = $this->appointmentRepository->addAppointment($request->all());
         if ($appointment['success'] == true) {
-            //tạo thông báo
+          
             $appointment = new AppointmentResource($appointment['appointment']);
+            //tạo thông báo
             $notiAppointment = new NotiRepository();
             $noti = $notiAppointment->createNotiAppointment($appointment); 
             event(new NotificationEvent($noti));
+
             return JsonResponse::handle(200, $messsage, $appointment, 200);     
         }
         return JsonResponse::error(500,$appointment['message'],500);

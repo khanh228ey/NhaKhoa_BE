@@ -105,4 +105,9 @@ class AppointmentRepository{
         $schedule->status = 0;
         $schedule->save();
     }
+
+
+    public function passes($data){
+        $check = Appointment::where('name',$data['name'])->where('phone',$data['phone']);
+    }
 };

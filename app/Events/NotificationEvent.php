@@ -15,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
 
-class NotificationEvent
+class NotificationEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -29,7 +29,7 @@ class NotificationEvent
     public function __construct(Notification $noti)
     {
         $this->notification = $noti;
-        Log::info('Lịch hẹn đã được tạo :' . $noti);
+        // Log::info('Lịch hẹn đã được tạo :' . $noti);
     }
 
     /**
