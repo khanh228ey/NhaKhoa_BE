@@ -38,7 +38,7 @@ class AppointmentController extends Controller
             $appointment = new AppointmentResource($appointment['appointment']);
             //tạo thông báo
             $notiAppointment = new NotiRepository();
-            $noti = $notiAppointment->createNotiAppointment($appointment->id); 
+            $noti = $notiAppointment->createNotiAppointment($appointment); 
             event(new NotificationEvent($noti));
             return JsonResponse::handle(200, "Đặt lịch hẹn thành công", $appointment, 200);     
         }

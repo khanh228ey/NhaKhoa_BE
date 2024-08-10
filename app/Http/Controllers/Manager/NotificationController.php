@@ -30,7 +30,10 @@ class NotificationController extends Controller
     // public function createNotifi($data){
         
     // }
-    public function updateNotification($id){
 
+    public function updateNotification($id){
+        $getNoti = $this->notifications->findById($id);
+        $notiUpdate = $this->notifications->updateNoti($getNoti);
+        return $notiUpdate;
     }
 }

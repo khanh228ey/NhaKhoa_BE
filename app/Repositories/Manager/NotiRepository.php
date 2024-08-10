@@ -17,11 +17,11 @@ class NotiRepository{
         return $notifications;
     }
 
-    Public function createNotiAppointment($appointment_id){
+    Public function createNotiAppointment($data){
         $noti = new Notification();
         $noti->title = "Lịch hẹn";
-        $noti->message = "đã đặt một lịch hẹn mới";
-        $noti->url = "/lich-hen/".$appointment_id;
+        $noti->message = $data->name." đã đặt một lịch hẹn mới";
+        $noti->url = "/lich-hen/".$data->id;
         $noti->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $noti->save();
         return $noti;
@@ -32,6 +32,11 @@ class NotiRepository{
         $notifications->status = 0;
         $notifications->save();
         return $notifications;
+    }
+    
+    Public function findById($id){
+        $noti = Notification::findOrFail($id);
+        return $noti;
     }
 
 
