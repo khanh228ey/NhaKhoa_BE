@@ -14,7 +14,7 @@ class Notification extends Model
     protected $fillable = ['title', 'status', 'message','created_at','appointment_id'];
     protected $casts = [
         'id' => 'integer',
-        'appointment_id' => 'integer',
+        'status' => 'integer',
     ];
 
     Public function appointment(){

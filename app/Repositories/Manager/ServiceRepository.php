@@ -17,7 +17,7 @@ class ServiceRepository{
         $service->description = $data['description'];
         $service->status= $data['status'];
         $service->image = $data['image'];
-        $service->servicegory_id = $data['servicegory_id'];
+        $service->category_id = $data['category_id'];
         $service->max_price = $data['max_price'];
         $service->min_price = $data['min_price'];
         $service->unit = $data['unit'];
@@ -33,7 +33,7 @@ class ServiceRepository{
     }
 
     Public function updateService(Request $request,$service){
-        $data = $request->only(['name', 'status', 'min_price', 'max_price', 'image','unit', 'servicegory_id','quantity_sold']);
+        $data = $request->only(['name', 'status', 'min_price', 'max_price', 'image','unit', 'category_id','quantity_sold']);
             $data['updated_at'] = Carbon::now('Asia/Ho_Chi_Minh');
             if (isset($request->description) && $request->description !== '') {
                 $data['description'] = $request->description;
@@ -69,8 +69,8 @@ class ServiceRepository{
 
     public function updateserviceTrans($service,$data){
         $service->name = $data['name'];
-        if (isset($date['description']) && $data['description'] !== '') {
-            $service->description = $data['description'];
+        if (!empty($des)) {
+            $service->description = $des;
         }
         $service->unit = $data['unit'];
         $service->save();

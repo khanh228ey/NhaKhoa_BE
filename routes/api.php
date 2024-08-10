@@ -51,7 +51,7 @@ Route::group([
     Route::post('change-password', [AuthController::class,'changePassword']);
 });
 // Middelware check token đăng nhập
-Route::middleware('check_token')->group(function () {
+// Route::middleware('check_token')->group(function () {
 Route::prefix('v1/user')->controller(UserController::class)->group(function(){
     Route::get('/','getUsers');
     Route::post('/','createUser');
@@ -160,7 +160,7 @@ Route::prefix('v1/notification')->controller(NotificationController::class)->gro
 });
 
 
-});
+// });
 
 //route khách hàng
     //get Doctor
