@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Commons\Messages\ConstantsMessage;
+use App\Commons\Responses\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\NotiResource;
 use App\Repositories\Manager\NotiRepository;
+use Exception;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -15,7 +18,6 @@ class NotificationController extends Controller
     public function __construct(NotiRepository $notifications)
     {
         $this->notifications = $notifications; 
-        // $this->middleware('check.role:3')->except('getCategories');
     }
 
     public function getNoti(Request $request){
@@ -26,18 +28,13 @@ class NotificationController extends Controller
         return $result;
     }
 
-    // public function createNotifi($data){
-        
-    // }
-
     public function updateNotification($id){
-        $getNoti = $this->notifications->findById($id);
-        $notiUpdate = $this->notifications->updateNoti($getNoti);
-        return $notiUpdate;
+        try{
+            $getNoti = $this->notifications->findById($id);
+            $notiUpdate = $this->notifications->updateNoti($getNoti);
+            return JsonResponse::handle(200,ConstantsMessage::SUCCESS, $notiUpdate,200);
+        }catch(Exception){
+            return JsonResponse::handle(500,ConstantsMessage::ERROR,null,500);
+        }
     }
-
-    public function count(){
-        
-    }
-
 }
