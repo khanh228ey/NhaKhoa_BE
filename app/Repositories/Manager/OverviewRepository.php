@@ -71,28 +71,6 @@ class OverviewRepository{
         return $this->responseOverview($title,$totalAppointmentCurrentMonth,$message);
     }
 
-    // Public function totalTurnover(){
-    //     $title = "Tổng doanh thu (VND):";
-    //     $date = Carbon::now('Asia/Ho_Chi_Minh');
-    //     //Tháng hiện tại
-    //     $startOfCurrentMonth = $date->startOfMonth()->format('Y-m-d H:i:s');
-    //     $endOfCurrentMonth = $date->endOfMonth()->format('Y-m-d H:i:s'); 
-    //     $totalCurrent = Invoices::where('status',1)->whereBetween('created_at', [$startOfCurrentMonth, $endOfCurrentMonth])->sum('total_price');
-    //     // Tháng trước
-    //     $startOfPreviousMonth = $date->subMonthsNoOverflow(1)->startOfMonth()->format('Y-m-d H:i:s');
-    //     $endOfPreviousMonth = $date->subMonthsNoOverflow(0)->endOfMonth()->format('Y-m-d H:i:s'); 
-    //     $totalPrevious = Invoices::whereBetween('created_at', [$startOfPreviousMonth, $endOfPreviousMonth])->sum('total_price');
-    //     $percentageChange = $totalPrevious > 0 ? (($totalCurrent - $totalPrevious) / $totalPrevious) * 100 : ($totalCurrent > 0 ? 100 : 0);
-    //     $message = '';
-    //     if ($percentageChange >= 0) {
-    //         $message = 'Tăng <span style ="color:blue;">'.number_format($percentageChange,1).'%</span> doanh thu so với tháng trước.';
-    //     } elseif ($percentageChange < 0) {
-    //         $message = 'Giảm <span style ="color:blue;">'.number_format(abs($percentageChange),1).'%</span> doanh thu so với tháng trước.';
-    //     }
-    //     $formattedTotalCurrent = number_format($totalCurrent, 0, '.', '.'); // Không dùng phân cách thập phân, dùng dấu chấm cho hàng nghìn
-
-    //     return $this->responseOverview($title, $formattedTotalCurrent, $message);
-    // }
     public function totalTurnover() {
         $title = "Tổng doanh thu (VND):";
         $date = Carbon::now('Asia/Ho_Chi_Minh');

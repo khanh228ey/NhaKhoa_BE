@@ -29,6 +29,12 @@ class HistoryRepository{
     }
     
     public function updateHistory($data, $history) {
+        if($data['status'] == 2){
+            $history->status = $data['status'];
+            $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $history->save();
+            return $history;
+        }
         $history->noted = $data['note'];
         $history->status = $data['status'];
         $history->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
