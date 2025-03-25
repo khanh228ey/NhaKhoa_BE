@@ -1,15 +1,22 @@
 <?php
 namespace App\Commons\Cache;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
-class HandleCache{
+Trait HandleCache
+{
+    public static function rememberCache($cacheKey, $callback, $ttl = 60) {
+        return Cache::remember($cacheKey, now()->addMinutes($ttl), function () use ($callback) {
+            return $callback();
+        });
+    }
+    public static function addDataCache($cacheKey, $data, $ttl = 60)
+    {
+        $cachedData = Cache::get($cacheKey, []);
+        $cachedData[] = new $data;
 
-    // public function getDataCache($cacheKey,$data,$time){
-    //     $dataCache = Cache::remember($cacheKey, $time, function ($data) {
-    //         return $data; // Lấy toàn bộ danh mục
-    //     });
-    //     return $dataCache;
-    // }
+        Cache::put($cacheKey, $cachedData, Carbon::now()->addMinutes($ttl));
+    }
     
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Commons\Cache\HandleCache;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Cache;
 
 class CategoryController extends Controller
 {
-    
+    use HandleCache;
     protected $categoryRepo;
     public function __construct(CategoryRepository $categoryRepository)
     {
@@ -25,13 +26,9 @@ class CategoryController extends Controller
     {
         $perPage = $request->get('limit', 10);
         $page = $request->get('page');
-        // $query =  $this->categoryRepo->getCategory();
-        // $category = !is_null($page) ? $query->paginate($perPage, ['*'], 'page', $page) : $query->get();
-        // $result = ($lang == 'vi') ? CategoryResource::collection($category) : TranslateCategoryResource::collection($category);
-        // return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
         $cacheKey = "categories:all:lang_{$lang}";
-        $categories = Cache::remember($cacheKey, now()->addMinutes(60), function () {
-            return $this->categoryRepo->getCategory()->get(); // Lấy toàn bộ danh mục
+        $categories = HandleCache::rememberCache( $cacheKey, function () {
+            return $this->categoryRepo->getCategory()->get();
         });
         $paginated = collect($categories)->forPage($page, $perPage)->values();
         $result = CategoryResource::collection($paginated);

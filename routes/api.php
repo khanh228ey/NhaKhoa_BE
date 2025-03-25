@@ -6,6 +6,7 @@ use App\Http\Controllers\Client\CategoryController as ClientCategoryController;
 use App\Http\Controllers\Client\DoctorController;
 use App\Http\Controllers\Client\ScheduleController as ClientScheduleController;
 use App\Http\Controllers\Client\ServiceController as ClientServiceController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\Manager\AppointmentController;
 use App\Http\Controllers\Manager\AuthController;
 use App\Http\Controllers\Manager\CustomerController;
@@ -38,6 +39,8 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 Route::post('v1/upload', [UploadController::class, 'uploadImage']);
+Route::post('/send-mail',[EmailController::class,'send']);
+
 Route::group([
 
     'middleware' => 'api',
@@ -206,3 +209,4 @@ Route::prefix('v1/translate')->group(function(){
     });
 
 });
+

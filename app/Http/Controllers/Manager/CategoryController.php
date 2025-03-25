@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Manager;
+
+use App\Commons\Cache\HandleCache;
 use App\Http\Controllers\Controller;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
@@ -19,6 +21,7 @@ use SebastianBergmann\Type\NullType;
 
 class CategoryController extends Controller
 {
+    use HandleCache;
     //
     protected $categoryRepository;
     protected $categoryValidation;
@@ -58,12 +61,12 @@ class CategoryController extends Controller
         if ($category == false) {
                 return JsonResponse::error(401,ConstantsMessage::ERROR,401);
         }
-        Cache::put('categories:all', function () use ($category) {
-            $categories = Cache::get('categories:all', []);
-            $categories[] = new CategoryResource($category);
-            return $categories;
-        }, now()->addMinutes(60)); 
-    
+        // Cache::put('categories:all', function () use ($category) {
+        //     $categories = Cache::get('categories:all', []);
+        //     $categories[] = new CategoryResource($category);
+        //     return $categories;
+        // }, now()->addMinutes(60)); 
+        $category = Category::addDataCache('categories:all', $category);
         $category = new CategoryResource($category);
         return JsonResponse::handle(200, ConstantsMessage::Add, $category, 200);
     }
