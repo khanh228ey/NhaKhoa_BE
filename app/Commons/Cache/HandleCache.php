@@ -3,11 +3,12 @@ namespace App\Commons\Cache;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 Trait HandleCache
 {
-    public static function rememberCache($cacheKey, $callback, $ttl = 60) {
-        return Cache::remember($cacheKey, now()->addMinutes($ttl), function () use ($callback) {
+    public static function rememberCache($cacheKey, $callback, $ttl) {
+        return Cache::remember($cacheKey, $ttl, function () use ($callback) {
             return $callback();
         });
     }
@@ -16,7 +17,7 @@ Trait HandleCache
         $cachedData = Cache::get($cacheKey, []);
         $cachedData[] = new $data;
 
-        Cache::put($cacheKey, $cachedData, Carbon::now()->addMinutes($ttl));
+        Cache::remember($cacheKey, $cachedData, $ttl);
     }
     
 }
