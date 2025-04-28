@@ -17,7 +17,7 @@
 - Tải hoặc clone nhánh [main](https://github.com/khanh228ey/NhaKhoa_BE.git) 
 - Chạy `composer install`
 - Setup file `.env` và config database
-- env: Setup pusher, Clouldinary...
+- env: Setup pusher, Clouldinary,Redis...
 - Chạy lệnh `php artisan migrate` để chạy migrate và thêm `--seed` đằng sau nếu muốn tạo dữ liệu có sẵn.
 
 ### Link git FE 

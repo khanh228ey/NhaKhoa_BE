@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Commons\Cache\HandleCache;
 use App\Commons\Messages\ConstantsMessage;
 use App\Commons\Responses\JsonResponse;
 use Illuminate\Http\Request;
@@ -10,10 +11,12 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Resources\Translate\CategoryResource as TranslateCategoryResource;
 use App\Repositories\Client\CategoryRepository;
 use Exception;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class CategoryController extends Controller
 {
-    
+    use HandleCache;
     protected $categoryRepo;
     public function __construct(CategoryRepository $categoryRepository)
     {
@@ -21,12 +24,15 @@ class CategoryController extends Controller
     }
 
     public function getCategories(Request $request, $lang)
-    {
+    {       
         $perPage = $request->get('limit', 10);
         $page = $request->get('page');
-        $query =  $this->categoryRepo->getCategory();
-        $category = !is_null($page) ? $query->paginate($perPage, ['*'], 'page', $page) : $query->get();
-        $result = ($lang == 'vi') ? CategoryResource::collection($category) : TranslateCategoryResource::collection($category);
+        $cacheKey = "category1";
+        $categories = HandleCache::rememberCache($cacheKey, function () {
+            return $this->categoryRepo->getCategory()->get();
+        }, 600);
+        $paginated = collect($categories)->forPage($page, $perPage)->values();
+        $result = CategoryResource::collection($paginated);
         return JsonResponse::handle(200, ConstantsMessage::SUCCESS, $result, 200);
     }
 
